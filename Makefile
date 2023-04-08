@@ -73,7 +73,7 @@ CFLAGS	=	-W -Wall -Wextra
 
 LDLIBS	=	-lcriterion -lgcov
 
-NAME	=	mysh
+NAME	=	42sh
 
 NAME_TESTS	=	unit_tests
 
