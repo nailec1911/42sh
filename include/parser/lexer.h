@@ -25,6 +25,7 @@
     token_t token_redirect_in(lexer_t *lex);
     token_t token_redirect_out(lexer_t *lex);
     token_t token_pipe(lexer_t *lex);
+    token_t token_and(lexer_t *lex);
     token_t token_semicolon(lexer_t *lex);
     token_t multiple_char_token(lexer_t *lex);
     token_t token_end_line(lexer_t *lex);
