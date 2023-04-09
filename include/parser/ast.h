@@ -38,6 +38,7 @@
 
     typedef struct grocommand_s {
         int nb_command;
+        tokentype_t type;
         command_t *tab_command;
     } grocommand_t;
 

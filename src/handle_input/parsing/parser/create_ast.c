@@ -10,6 +10,7 @@
 #include "parser/ast.h"
 #include "macro_errors.h"
 grocommand_t get_grocommand(parser_t *parser);
+bool is_end_command(token_t token);
 
 static int add_elt_in_tab(ast_t *ast, grocommand_t new_command)
 {
@@ -37,14 +38,13 @@ static int fill_tab_grocommand(parser_t *parser, ast_t *ast)
         if (parser->list_tokens[parser->cursor].type == END_LINE)
             return SUCCESS;
         ast->nb_grocommand += 1;
-        if (add_elt_in_tab(ast, get_grocommand(parser)) == ERROR) {
+        if (add_elt_in_tab(ast, get_grocommand(parser)) == ERROR)
             parser->error = ERROR;
-            return ERROR;
-        }
-        if (parser->list_tokens[parser->cursor].type != END_LINE
-        && parser->list_tokens[parser->cursor].type != SEMICOLON) {
+        if (parser->error != 0)
+            return parser->error;
+        if (is_end_command(parser->list_tokens[parser->cursor]) == false) {
             parser->error = FAILURE;
-            return EXIT;
+            return parser->error;
         }
     }
     return SUCCESS;

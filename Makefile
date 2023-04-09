@@ -18,6 +18,7 @@ SRC	=	mysh.c		\
 		handle_input/parsing/lexer/single_mul_char_tokens.c	\
 		handle_input/parsing/lexer/multiple_char_tokens.c	\
 		handle_input/parsing/parser/create_ast.c			\
+		handle_input/parsing/parser/token_is_type.c		\
 		handle_input/parsing/parser/get_grocommand.c		\
 		handle_input/parsing/parser/get_command.c			\
 		handle_input/get_path.c					\
