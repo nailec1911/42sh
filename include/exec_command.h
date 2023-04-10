@@ -10,6 +10,7 @@
 
     #include "all_args.h"
 
+    int exec_grocommand(all_args_t *all_args, grocommand_t to_exec);
     int exec_command(all_args_t *all_args, command_t to_exec);
     int exec_builtins(all_args_t *all_args, command_t to_exec);
     int handle_errors(int status);

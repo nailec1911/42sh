@@ -5,31 +5,14 @@
 ** mysh
 */
 
+#include <fcntl.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include "launch_command.h"
 #include "builtins/env.h"
 #include "str_func.h"
 #include "macro_errors.h"
-#include <fcntl.h>
-#include <stdio.h>
-
-static int go_throught_grocommand(all_args_t *all_args)
-{
-    int res = 0;
-    int exit = 0;
-
-    for (int i = 0; i < all_args->ast.nb_grocommand; i += 1) {
-        all_args->to_return = all_args->last_status;
-        all_args->last_status = 0;
-        res = exec_grocommand(all_args, all_args->ast.tab_grocommands[i]);
-        if (res == ERROR)
-            return ERROR;
-        if (res == EXIT)
-            exit = EXIT;
-    }
-    return exit;
-}
 
 static int loop_sh(all_args_t *all_args, char *input)
 {

@@ -23,6 +23,7 @@ SRC	=	mysh.c		\
 		handle_input/parsing/parser/get_command.c			\
 		handle_input/get_path.c					\
 		handle_input/set_fd_for_exec.c				\
+		exec_command/go_throught_grocommand.c		\
 		exec_command/exec_command.c		\
 		exec_command/exec_grocommand.c		\
 		exec_command/handle_errors.c	\

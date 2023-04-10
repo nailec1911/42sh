@@ -11,7 +11,7 @@
     #include "all_args.h"
 
     char *get_input(void);
-    int exec_grocommand(all_args_t *all_args, grocommand_t to_exec);
+    int go_throught_grocommand(all_args_t *all_args);
     int parse_input(char *input, all_args_t *all_args);
     void free_ast(ast_t ast);
 
