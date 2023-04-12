@@ -23,7 +23,6 @@ a.out
 README
 tester.sh
 tester.tgz
-tests
 *.ppm
 output
 mysh

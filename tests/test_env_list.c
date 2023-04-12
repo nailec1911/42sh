@@ -10,9 +10,9 @@
 #include <criterion/redirect.h>
 #include "macro_errors.h"
 #include "list_env.h"
-#include "all_args.h"
+#include "mysh.h"
 env_var_t *create_list_env(char * const env[]);
-int modify_env_var(char *to_change, all_args_t *all_args, char *new_value);
+int modify_env_var(char *to_change, mysh_t *mysh, char *new_value);
 char **set_new_env(env_var_t *env_list);
 
 Test(create_list_env1, standar_env){
@@ -51,7 +51,7 @@ Test(create_list_env3, null_env){
 
 Test(modify_env_var1, modify_existing_var){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[]){"setenv", "hello"};
     cr_assert_eq(modify_env_var("hello", &args, "itsme"), SUCCESS);
@@ -60,7 +60,7 @@ Test(modify_env_var1, modify_existing_var){
 
 Test(modify_env_var2, not_existing_var){
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[]){"setenv", "wait"};
     cr_assert_eq(modify_env_var("wait", &args, "what?"), SUCCESS);

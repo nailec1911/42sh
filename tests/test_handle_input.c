@@ -9,13 +9,13 @@
 #include <criterion/redirect.h>
 #include <unistd.h>
 #include "macro_errors.h"
-#include "all_args.h"
+#include "mysh.h"
 #include "builtins/env.h"
-int handle_input(all_args_t *all_args);
+int handle_input(mysh_t *mysh);
 
 Test(handle_input1, builtin_exit){
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[2]){"exit"};
     args.last_status = 0;
@@ -27,7 +27,7 @@ Test(handle_input1, builtin_exit){
 Test(handle_input2, hello_world){
     cr_redirect_stdout();
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[2]){"./tests/hello_world"};
     args.last_status = 0;
@@ -41,7 +41,7 @@ Test(handle_input2, hello_world){
 Test(handle_input3, seggfault){
     cr_redirect_stderr();
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[2]){"./tests/seggfault"};
     args.last_status = 0;

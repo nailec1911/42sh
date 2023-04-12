@@ -10,17 +10,17 @@
 #include <unistd.h>
 #include "macro_errors.h"
 #include "list_env.h"
-#include "all_args.h"
+#include "mysh.h"
 env_var_t *create_list_env(char * const env[]);
-int do_setenv(all_args_t *all_args, command_t to_exec);
-int do_env(all_args_t *all_args, command_t to_exec);
-int do_unsetenv(all_args_t *all_args, command_t to_exec);
-int do_exit(all_args_t *all_args, command_t to_exec);
+int do_setenv(mysh_t *mysh, command_t to_exec);
+int do_env(mysh_t *mysh, command_t to_exec);
+int do_unsetenv(mysh_t *mysh, command_t to_exec);
+int do_exit(mysh_t *mysh, command_t to_exec);
 
 Test(env1, normal_env){
     cr_redirect_stdout();
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
 
     args.list_env = create_list_env(env);
     args.command = (char *[2]){"env"};
@@ -33,7 +33,7 @@ Test(env1, normal_env){
 }
 
 Test(env2, env_null){
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = NULL;
     args.command = (char *[2]){"env"};
     command_t command = {0};
@@ -45,7 +45,7 @@ Test(env2, env_null){
 Test(env3, too_much_args){
     cr_redirect_stderr();
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[3]){"env", "hello"};
     args.last_status = 0;
@@ -60,7 +60,7 @@ Test(env3, too_much_args){
 
 Test(setenv1, not_existing_var){
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[4]){"setenv", "wait", "what?"};
 
@@ -73,7 +73,7 @@ Test(setenv1, not_existing_var){
 
 Test(setenv2, modify_existing_var){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[4]){"setenv", "hello", "itsme"};
     command_t command = {0};
@@ -84,7 +84,7 @@ Test(setenv2, modify_existing_var){
 
 Test(setenv3, modify_existing_var_no_value){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[3]){"setenv", "hello"};
 
@@ -95,7 +95,7 @@ Test(setenv3, modify_existing_var_no_value){
 }
 
 Test(setenv4, env_is_null){
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = NULL;
     args.command = (char *[4]){"setenv", "wait", "what?"};
 
@@ -109,7 +109,7 @@ Test(setenv4, env_is_null){
 Test(setenv5, non_alphanum_char){
     cr_redirect_stderr();
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[4]){"setenv", "hz;s,zd", "itsme"};
 
@@ -123,7 +123,7 @@ Test(setenv5, non_alphanum_char){
 Test(setenv6, too_much_argument){
     cr_redirect_stderr();
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[4]){"setenv", "hello", "itsme", "hey"};
 
@@ -137,7 +137,7 @@ Test(setenv6, too_much_argument){
 Test(setenv7, no_args){
     cr_redirect_stdout();
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[2]){"setenv"};
 
@@ -152,7 +152,7 @@ Test(setenv7, no_args){
 Test(unsetenv1, single_existing_var){
     cr_redirect_stderr();
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[4]){"unsetenv", "hello"};
 
@@ -169,7 +169,7 @@ Test(unsetenv1, single_existing_var){
 Test(unsetenv2, unset_first_var){
     cr_redirect_stderr();
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[4]){"unsetenv", "test"};
 
@@ -187,7 +187,7 @@ Test(unsetenv2, unset_first_var){
 
 Test(unsetenv3, unset_multiple_existing_var){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[4]){"unsetenv", "test", "third"};
 
@@ -203,7 +203,7 @@ Test(unsetenv3, unset_multiple_existing_var){
 
 Test(unsetenv4, unset_not_existing_var){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[4]){"unsetenv", "dumb"};
 
@@ -224,7 +224,7 @@ Test(unsetenv4, unset_not_existing_var){
 Test(unsetenv5, no_arg){
     cr_redirect_stderr();
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[2]){"unsetenv"};
 
@@ -244,7 +244,7 @@ Test(unsetenv5, no_arg){
 }
 
 Test(unsetenv6, no_env){
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = NULL;
     args.command = (char *[4]){"unsetenv", "test"};
 
@@ -259,7 +259,7 @@ Test(unsetenv6, no_env){
 
 Test(unsetenv5, longer_value_than_searched){
     char *env[4] = {"testaaaa=12AZ", "helloaaa=world", "thirdaaa=time"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[5]){"unsetenv", "hello", "third", "test"};
 
@@ -279,7 +279,7 @@ Test(unsetenv5, longer_value_than_searched){
 
 Test(exit1, exit_standar){
     cr_redirect_stderr();
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.command = (char *[2]){"exit"};
     args.last_status = 0;
 
@@ -291,7 +291,7 @@ Test(exit1, exit_standar){
 
 Test(exit2, exit_to_many_args){
     cr_redirect_stderr();
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.command = (char *[3]){"exit", "test"};
     args.last_status = 0;
 

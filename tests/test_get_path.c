@@ -9,14 +9,14 @@
 #include <criterion/redirect.h>
 #include <unistd.h>
 #include "macro_errors.h"
-#include "all_args.h"
+#include "mysh.h"
 #include "builtins/env.h"
 #include "str_func.h"
-int get_path(all_args_t *all_args, char **path);
+int get_path(mysh_t *mysh, char **path);
 
 Test(get_path1, existing_absolute){
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[2]){"./Makefile"};
     args.last_status = 0;
@@ -30,7 +30,7 @@ Test(get_path1, existing_absolute){
 
 Test(get_path2, not_existing_absolute){
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[2]){"./tests/yhaaa"};
     args.last_status = 0;
@@ -44,7 +44,7 @@ Test(get_path2, not_existing_absolute){
 
 Test(get_path3, doesnt_exist){
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[2]){"yhaaa"};
     args.last_status = 0;
@@ -62,7 +62,7 @@ Test(get_path4, is_in_PATH){
     char *path_var = my_strcat_dup(actual, "/tests:");
 
     char *env[3] = {"test=12AZ", "hello=world"};
-    all_args_t args = {0};
+    mysh_t args = {0};
     args.list_env = create_list_env(env);
     args.command = (char *[2]){"hello_world"};
     args.last_status = 0;
