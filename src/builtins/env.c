@@ -8,18 +8,18 @@
 #include <stddef.h>
 #include <unistd.h>
 #include "str_func.h"
-#include "all_args.h"
+#include "mysh.h"
 #include "macro_errors.h"
 
-int do_env(all_args_t *all_args, command_t to_exec)
+int do_env(mysh_t *mysh, command_t to_exec)
 {
-    env_var_t *temp = all_args->list_env;
+    env_var_t *temp = mysh->list_env;
 
     if (to_exec.command[1] != NULL) {
         my_putstr("env: ‘", 2);
         my_putstr(to_exec.command[1], 2);
         my_putstr("’: No such file or directory\n", 2);
-        all_args->last_status = 127;
+        mysh->last_status = 127;
         return SUCCESS;
     }
     for (int i = 0; temp != NULL; i += 1){
@@ -27,6 +27,6 @@ int do_env(all_args_t *all_args, command_t to_exec)
         write(to_exec.fd_out, "\n", 1);
         temp = temp->next;
     }
-    all_args->last_status = 0;
+    mysh->last_status = 0;
     return SUCCESS;
 }

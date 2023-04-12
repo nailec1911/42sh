@@ -14,21 +14,21 @@
 #include "str_func.h"
 #include "macro_errors.h"
 
-static int loop_sh(all_args_t *all_args, char *input)
+static int loop_sh(mysh_t *mysh, char *input)
 {
     int res = 0;
 
     if (input[0] == '\n')
         return SUCCESS;
-    if ((res = parse_input(input, all_args)) == ERROR)
+    if ((res = parse_input(input, mysh)) == ERROR)
         return ERROR;
     if (res != SUCCESS)
         return SUCCESS;
 
-    if ((res = go_throught_grocommand(all_args)) == ERROR)
+    if ((res = go_throught_grocommand(mysh)) == ERROR)
         return ERROR;
 
-    free_ast(all_args->ast);
+    free_ast(mysh->ast);
     return res;
 }
 
@@ -36,8 +36,8 @@ int mysh(char * const env[])
 {
     int res = 0;
     char *input = "\0";
-    all_args_t all_args = {0};
-    if ((all_args.list_env = create_list_env(env)) == NULL && env[0] != NULL)
+    mysh_t mysh = {0};
+    if ((mysh.list_env = create_list_env(env)) == NULL && env[0] != NULL)
         return ERROR;
     while (res == 0) {
         if (isatty(0) == 1)
@@ -46,12 +46,12 @@ int mysh(char * const env[])
             res = EXIT;
             break;
         }
-        res = loop_sh(&all_args, input);
+        res = loop_sh(&mysh, input);
     }
     if (res == EXIT && isatty(0) == 1)
         write(1, "exit\n", 5);
     if (res == ERROR)
         return ERROR;
-    free_env(&all_args);
-    return all_args.to_return;
+    free_env(&mysh);
+    return mysh.to_return;
 }

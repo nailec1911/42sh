@@ -11,37 +11,37 @@
 #include "str_func.h"
 #include "macro_errors.h"
 
-static char *get_home_path(all_args_t *all_args)
+static char *get_home_path(mysh_t *mysh)
 {
-    char *home_path = get_env_var(all_args->list_env, "HOME=");
+    char *home_path = get_env_var(mysh->list_env, "HOME=");
     char *new_path;
 
     if (home_path == NULL) {
         my_putstr("cd: No home directory.\n", 2);
-        all_args->last_status = 1;
+        mysh->last_status = 1;
         return NULL;
     }
-    if (all_args->command[1] == NULL)
+    if (mysh->command[1] == NULL)
         return home_path;
     if ((new_path =
-    my_strcat_dup(home_path, all_args->command[1] + 1)) == NULL) {
-        all_args->last_status = FAILURE;
+    my_strcat_dup(home_path, mysh->command[1] + 1)) == NULL) {
+        mysh->last_status = FAILURE;
         return NULL;
     }
     return new_path;
 }
 
-char *get_path_to_go(all_args_t *all_args)
+char *get_path_to_go(mysh_t *mysh)
 {
-    char *path = all_args->command[1];
+    char *path = mysh->command[1];
 
-    if (all_args->command[1] == NULL || all_args->command[1][0] == '~')
-        return get_home_path(all_args);
-    if (all_args->command[1][0] == '-' && all_args->command[1][1] == '\0')
-        path = get_env_var(all_args->list_env, "OLDPWD=");
+    if (mysh->command[1] == NULL || mysh->command[1][0] == '~')
+        return get_home_path(mysh);
+    if (mysh->command[1][0] == '-' && mysh->command[1][1] == '\0')
+        path = get_env_var(mysh->list_env, "OLDPWD=");
     if (path == NULL) {
         my_putstr(": No such file or directory.\n", 2);
-        all_args->last_status = 1;
+        mysh->last_status = 1;
     }
     return path;
 }

@@ -5,34 +5,34 @@
 ** go_throught_grocommand
 */
 
-#include "all_args.h"
+#include "mysh.h"
 #include "macro_errors.h"
 #include "exec_command.h"
 
-static bool do_exec(all_args_t *all_args, int i, bool prev_executed)
+static bool do_exec(mysh_t *mysh, int i, bool prev_executed)
 {
-    if (all_args->ast.tab_grocommands[i].type == SEMICOLON)
+    if (mysh->ast.tab_grocommands[i].type == SEMICOLON)
         return true;
-    if (all_args->ast.tab_grocommands[i].type == OPERATOR_OR
-    && all_args->last_status != 0)
+    if (mysh->ast.tab_grocommands[i].type == OPERATOR_OR
+    && mysh->last_status != 0)
         return true;
-    if (all_args->ast.tab_grocommands[i].type == OPERATOR_AND
-    && all_args->last_status == 0 && prev_executed)
+    if (mysh->ast.tab_grocommands[i].type == OPERATOR_AND
+    && mysh->last_status == 0 && prev_executed)
         return true;
     return false;
 }
 
-int go_throught_grocommand(all_args_t *all_args)
+int go_throught_grocommand(mysh_t *mysh)
 {
     int res = 0;
     int exit = 0;
     bool prev_executed = false;
 
-    for (int i = 0; i < all_args->ast.nb_grocommand; i += 1) {
-        if (do_exec(all_args, i, prev_executed)) {
-            all_args->to_return = all_args->last_status;
-            all_args->last_status = 0;
-            res = exec_grocommand(all_args, all_args->ast.tab_grocommands[i]);
+    for (int i = 0; i < mysh->ast.nb_grocommand; i += 1) {
+        if (do_exec(mysh, i, prev_executed)) {
+            mysh->to_return = mysh->last_status;
+            mysh->last_status = 0;
+            res = exec_grocommand(mysh, mysh->ast.tab_grocommands[i]);
             prev_executed = true;
         } else {
             prev_executed = false;

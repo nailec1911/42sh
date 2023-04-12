@@ -7,10 +7,10 @@
 
 #include <stdlib.h>
 #include "parser/parse.h"
-#include "all_args.h"
+#include "mysh.h"
 #include "macro_errors.h"
 
-static int get_ast(all_args_t *all_args, char *input)
+static int get_ast(mysh_t *mysh, char *input)
 {
     int res = 0;
     token_t *list_token = lexer(input);
@@ -18,25 +18,25 @@ static int get_ast(all_args_t *all_args, char *input)
     free(input);
     if (list_token == NULL)
         return ERROR;
-    res = create_ast(list_token, &(all_args->ast));
+    res = create_ast(list_token, &(mysh->ast));
     if (res == FAILURE) {
-        free_ast(all_args->ast);
-        all_args->last_status = 1;
+        free_ast(mysh->ast);
+        mysh->last_status = 1;
     }
     if (res == ERROR)
-        all_args->last_status = ERROR;
+        mysh->last_status = ERROR;
     free(list_token);
     return res;
 }
 
-int parse_input(char *input, all_args_t *all_args)
+int parse_input(char *input, mysh_t *mysh)
 {
     int res = 0;
 
-    if ((res = get_ast(all_args, input)) != SUCCESS)
+    if ((res = get_ast(mysh, input)) != SUCCESS)
         return res;
-    if ((res = set_all_ast(&(all_args->ast))) != SUCCESS) {
-        all_args->last_status = res;
+    if ((res = set_all_ast(&(mysh->ast))) != SUCCESS) {
+        mysh->last_status = res;
         return res;
     }
 

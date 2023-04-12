@@ -6,12 +6,12 @@
 */
 
 #include <stdlib.h>
-#include "all_args.h"
+#include "mysh.h"
 
-void free_env(all_args_t *all_args)
+void free_env(mysh_t *mysh)
 {
     env_var_t *to_free;
-    env_var_t *temp = all_args->list_env;
+    env_var_t *temp = mysh->list_env;
 
     while (temp != NULL) {
         to_free = temp;

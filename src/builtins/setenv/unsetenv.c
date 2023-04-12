@@ -20,17 +20,17 @@ static void remove_first(env_var_t **list)
 }
 
 static int remove_from_env
-(all_args_t *all_args, int len_search, char *to_remove)
+(mysh_t *mysh, int len_search, char *to_remove)
 {
-    env_var_t *temp = all_args->list_env;
+    env_var_t *temp = mysh->list_env;
     env_var_t *to_free = temp;
 
-    if (my_strncmp(to_remove, all_args->list_env->var, len_search) == 0
-    && all_args->list_env->var[len_search] == '='){
+    if (my_strncmp(to_remove, mysh->list_env->var, len_search) == 0
+    && mysh->list_env->var[len_search] == '='){
         remove_first(&temp);
-        all_args->list_env = temp;
+        mysh->list_env = temp;
     }
-    temp = all_args->list_env;
+    temp = mysh->list_env;
     while (temp != NULL && temp->next != NULL){
         if (my_strncmp(to_remove, (temp)->next->var, len_search) == 0
         && (temp)->next->var[len_search] == '='){
@@ -44,20 +44,20 @@ static int remove_from_env
     return SUCCESS;
 }
 
-int do_unsetenv(all_args_t *all_args, command_t to_exec)
+int do_unsetenv(mysh_t *mysh, command_t to_exec)
 {
     int len_search = 0;
 
     if (to_exec.command[1] == NULL) {
         my_putstr("unsetenv: Too few arguments.\n", 2);
-        all_args->last_status = 1;
+        mysh->last_status = 1;
         return SUCCESS;
     }
-    if (all_args->list_env == NULL)
+    if (mysh->list_env == NULL)
         return SUCCESS;
     for (int i = 1; to_exec.command[i] != NULL; i += 1) {
         len_search = my_strlen(to_exec.command[i]);
-        remove_from_env(all_args, len_search, to_exec.command[i]);
+        remove_from_env(mysh, len_search, to_exec.command[i]);
     }
     return SUCCESS;
 }

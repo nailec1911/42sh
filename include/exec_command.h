@@ -8,16 +8,16 @@
 #ifndef EXEC_COMMAND_H_
     #define EXEC_COMMAND_H_
 
-    #include "all_args.h"
+    #include "mysh.h"
 
-    int exec_grocommand(all_args_t *all_args, grocommand_t to_exec);
-    int exec_command(all_args_t *all_args, command_t to_exec);
-    int exec_builtins(all_args_t *all_args, command_t to_exec);
+    int exec_grocommand(mysh_t *mysh, grocommand_t to_exec);
+    int exec_command(mysh_t *mysh, command_t to_exec);
+    int exec_builtins(mysh_t *mysh, command_t to_exec);
     int handle_errors(int status);
     int set_fd_input(command_t *command);
     int set_fd_output(command_t *command);
     int handle_errors(int status);
-    int exec_builtins(all_args_t *all_args, command_t to_exec);
-    int get_path(all_args_t *all_args, char **path);
+    int exec_builtins(mysh_t *mysh, command_t to_exec);
+    int get_path(mysh_t *mysh, char **path);
 
 #endif /* !EXEC_COMMAND_H_ */

@@ -26,17 +26,17 @@ static int check_args(char **command)
     return SUCCESS;
 }
 
-int do_setenv(all_args_t *all_args, command_t to_exec)
+int do_setenv(mysh_t *mysh, command_t to_exec)
 {
     if (check_args(to_exec.command) != SUCCESS) {
-        all_args->last_status = 1;
+        mysh->last_status = 1;
         return SUCCESS;
     }
-    if (all_args->command[1] == NULL || all_args->command[1][0] == '\0')
-        return do_env(all_args, to_exec);
+    if (mysh->command[1] == NULL || mysh->command[1][0] == '\0')
+        return do_env(mysh, to_exec);
     if (modify_env_var
-    (to_exec.command[1], all_args, to_exec.command[2]) == ERROR)
+    (to_exec.command[1], mysh, to_exec.command[2]) == ERROR)
         return ERROR;
-    all_args->last_status = 0;
+    mysh->last_status = 0;
     return SUCCESS;
 }

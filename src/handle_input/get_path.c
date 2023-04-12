@@ -7,7 +7,7 @@
 
 #include <unistd.h>
 #include <stdlib.h>
-#include "all_args.h"
+#include "mysh.h"
 #include "builtins/env.h"
 #include "str_func.h"
 #include "macro_errors.h"
@@ -39,21 +39,21 @@ static int try_all_paths(char **all_prefixes, char **path)
     return FAILURE;
 }
 
-int get_path(all_args_t *all_args, char **path)
+int get_path(mysh_t *mysh, char **path)
 {
     char *env_path = NULL;
     char **all_prefix = NULL;
     int res_all_try = 0;
 
-    if ((*path = my_str_dup(all_args->command[0])) == NULL)
+    if ((*path = my_str_dup(mysh->command[0])) == NULL)
         return ERROR;
     if (is_absolute_path(*path) == SUCCESS) {
-        if (access(all_args->command[0], F_OK) == 0)
+        if (access(mysh->command[0], F_OK) == 0)
             return SUCCESS;
         return FAILURE;
     }
 
-    if ((env_path = get_env_var(all_args->list_env, "PATH=")) == NULL)
+    if ((env_path = get_env_var(mysh->list_env, "PATH=")) == NULL)
         return FAILURE;
     if ((all_prefix = input_to_array(env_path, ":")) == NULL)
         return ERROR;

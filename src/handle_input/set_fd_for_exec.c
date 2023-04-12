@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "all_args.h"
+#include "mysh.h"
 #include "macro_errors.h"
 #include "str_func.h"
 

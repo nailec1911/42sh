@@ -8,10 +8,10 @@
 #ifndef HANDLE_INPUT_H_
     #define HANDLE_INPUT_H_
 
-    #include "all_args.h"
+    #include "mysh.h"
 
-    int try_command_with_path(all_args_t *all_args);
-    int handle_input(all_args_t *all_args);
-    int get_path(all_args_t *all_args, char **path);
+    int try_command_with_path(mysh_t *mysh);
+    int handle_input(mysh_t *mysh);
+    int get_path(mysh_t *mysh, char **path);
 
 #endif /* !HANDLE_INPUT_H_ */

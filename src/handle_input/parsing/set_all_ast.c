@@ -7,7 +7,7 @@
 
 #include <unistd.h>
 #include <str_func.h>
-#include "all_args.h"
+#include "mysh.h"
 #include "macro_errors.h"
 
 static int error_redirect(int type)

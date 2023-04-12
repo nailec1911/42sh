@@ -8,11 +8,11 @@
 #ifndef LAUNCH_COMMAND_H_
     #define LAUNCH_COMMAND_H_
 
-    #include "all_args.h"
+    #include "mysh.h"
 
     char *get_input(void);
-    int go_throught_grocommand(all_args_t *all_args);
-    int parse_input(char *input, all_args_t *all_args);
+    int go_throught_grocommand(mysh_t *mysh);
+    int parse_input(char *input, mysh_t *mysh);
     void free_ast(ast_t ast);
 
 #endif /* !LAUNCH_COMMAND_H_ */

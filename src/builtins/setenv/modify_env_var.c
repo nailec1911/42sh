@@ -7,20 +7,20 @@
 
 #include <stdlib.h>
 #include "builtins/env.h"
-#include "all_args.h"
+#include "mysh.h"
 #include "str_func.h"
 #include "macro_errors.h"
 
-int modify_env_var(char *to_change, all_args_t *all_args, char *new_value)
+int modify_env_var(char *to_change, mysh_t *mysh, char *new_value)
 {
     char *new_var = NULL;
     int len_search = 0;
-    env_var_t *temp = all_args->list_env;
-    env_var_t *temp2 = all_args->list_env;
+    env_var_t *temp = mysh->list_env;
+    env_var_t *temp2 = mysh->list_env;
 
     if ((new_var = my_strcat_with_char(to_change, new_value, '=')) == NULL)
         return ERROR;
-    len_search = my_strlen(all_args->command[1]) + 1;
+    len_search = my_strlen(mysh->command[1]) + 1;
     for (; temp != NULL; temp = temp->next) {
         if (my_strncmp(new_var, temp->var, len_search) == 0){
             free(temp->var);
@@ -30,6 +30,6 @@ int modify_env_var(char *to_change, all_args_t *all_args, char *new_value)
     }
     if (put_elt_in_list(&temp2, new_var) == ERROR)
         return ERROR;
-    all_args->list_env = temp2;
+    mysh->list_env = temp2;
     return SUCCESS;
 }

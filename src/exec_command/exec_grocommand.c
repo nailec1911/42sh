@@ -25,7 +25,7 @@ static void close_all_fd_except(grocommand_t to_exec, int except)
     }
 }
 
-static int fork_before_exec(all_args_t *all_args, grocommand_t to_exec, int i)
+static int fork_before_exec(mysh_t *mysh, grocommand_t to_exec, int i)
 {
     int cpid = 0;
 
@@ -33,30 +33,30 @@ static int fork_before_exec(all_args_t *all_args, grocommand_t to_exec, int i)
         return ERROR;
     if (cpid == 0) {
         close_all_fd_except(to_exec, i);
-        if (exec_command(all_args, to_exec.tab_command[i]) == ERROR) {
+        if (exec_command(mysh, to_exec.tab_command[i]) == ERROR) {
             exit(0);
         }
-        exit(all_args->last_status);
+        exit(mysh->last_status);
     }
     return SUCCESS;
 }
 
-static int exec_all_function(all_args_t *all_args, grocommand_t to_exec)
+static int exec_all_function(mysh_t *mysh, grocommand_t to_exec)
 {
     int res = 0;
 
     for (int i = 0; i < to_exec.nb_command -1; i += 1) {
-        if (fork_before_exec(all_args, to_exec, i) == ERROR)
+        if (fork_before_exec(mysh, to_exec, i) == ERROR)
             return ERROR;
     }
     close_all_fd_except(to_exec, to_exec.nb_command - 1);
-    if ((res = exec_command(all_args,
+    if ((res = exec_command(mysh,
     to_exec.tab_command[to_exec.nb_command - 1])) != SUCCESS)
         return res;
     return SUCCESS;
 }
 
-int exec_grocommand(all_args_t *all_args, grocommand_t to_exec)
+int exec_grocommand(mysh_t *mysh, grocommand_t to_exec)
 {
     int res = 0;
 
@@ -66,7 +66,7 @@ int exec_grocommand(all_args_t *all_args, grocommand_t to_exec)
         return ERROR;
     if (set_fd_output(&(to_exec.tab_command[to_exec.nb_command - 1])) == ERROR)
         return ERROR;
-    if ((res = exec_all_function(all_args, to_exec)) != SUCCESS)
+    if ((res = exec_all_function(mysh, to_exec)) != SUCCESS)
         return res;
 
     return SUCCESS;
