@@ -54,7 +54,7 @@ static int fill_tab_command(parser_t *parser, or_command_t *or_command)
         if (parser->error != 0)
             return parser->error;
         if (is_end_and_command(parser->list_tokens[parser->cursor]) == false
-        && parser->list_tokens[parser->cursor].type != PIPE) {
+        && parser->list_tokens[parser->cursor].type != OPERATOR_AND) {
             parser->error = FAILURE;
             return parser->error;
         }

@@ -52,7 +52,7 @@ static int fill_tab_command(parser_t *parser, grocommand_t *grocommand)
         if (parser->error != 0)
             return parser->error;
         if (is_end_grocommand(parser->list_tokens[parser->cursor]) == false
-        && parser->list_tokens[parser->cursor].type != PIPE) {
+        && parser->list_tokens[parser->cursor].type != OPERATOR_OR) {
             parser->error = FAILURE;
             return parser->error;
         }
