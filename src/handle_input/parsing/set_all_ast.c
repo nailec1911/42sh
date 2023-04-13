@@ -32,7 +32,7 @@ static int set_redirect_command(command_t *command, int red_in, int red_out)
     return SUCCESS;
 }
 
-static int set_grocommand(grocommand_t *grocommand)
+static int set_and_command(and_command_t *grocommand)
 {
     int pipefd[2];
     int last = STDIN_FILENO;
@@ -56,12 +56,23 @@ static int set_grocommand(grocommand_t *grocommand)
     return SUCCESS;
 }
 
+static int set_or_command(or_command_t *or_command)
+{
+    for (int i = 0; i < or_command->nb_command; i += 1) {
+        if (set_and_command(&(or_command->tab_command[i])) == ERROR)
+            return ERROR;
+    }
+    return SUCCESS;
+}
+
 int set_all_ast(ast_t *ast)
 {
     int res = 0;
 
     for (int i = 0; i < ast->nb_grocommand; i += 1) {
-        res = set_grocommand(&(ast->tab_grocommands[i]));
+        for (int j = 0; j < ast->tab_grocommands[i].nb_command
+            && res == SUCCESS; j += 1)
+            res = set_or_command(&(ast->tab_grocommands[i].tab_command[j]));
         if (res != SUCCESS)
             return res;
     }

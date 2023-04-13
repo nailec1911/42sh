@@ -20,12 +20,14 @@ SRC	=	mysh.c		\
 		handle_input/parsing/parser/create_ast.c			\
 		handle_input/parsing/parser/token_is_type.c		\
 		handle_input/parsing/parser/get_grocommand.c		\
+		handle_input/parsing/parser/get_or_command.c		\
+		handle_input/parsing/parser/get_and_command.c		\
 		handle_input/parsing/parser/get_command.c			\
 		handle_input/get_path.c					\
 		handle_input/set_fd_for_exec.c				\
-		exec_command/go_throught_grocommand.c		\
+		exec_command/go_through_grocommand.c		\
 		exec_command/exec_command.c		\
-		exec_command/exec_grocommand.c		\
+		exec_command/exec_grocommand.c	\
 		exec_command/handle_errors.c	\
 		exec_command/exec_builtins.c	\
 		str_func/my_strlen.c		\
