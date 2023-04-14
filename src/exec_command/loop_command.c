@@ -2,15 +2,14 @@
 ** EPITECH PROJECT, 2023
 ** 42sh
 ** File description:
-** go_through_grocommand
+** loop_grocommand
 */
 
 #include "mysh.h"
 #include "macro_errors.h"
 #include "exec_command.h"
-int exec_and_command(mysh_t *mysh, and_command_t *to_exec);
 
-static int go_through_and_command(mysh_t *mysh, or_command_t *or_command)
+static int loop_and_command(mysh_t *mysh, or_command_t *or_command)
 {
     int res = 0;
     int exit = 0;
@@ -29,7 +28,7 @@ static int go_through_and_command(mysh_t *mysh, or_command_t *or_command)
     return exit;
 }
 
-static int go_through_or_command(mysh_t *mysh, grocommand_t *grocommand)
+static int loop_or_command(mysh_t *mysh, grocommand_t *grocommand)
 {
     int res = 0;
     int exit = 0;
@@ -37,7 +36,7 @@ static int go_through_or_command(mysh_t *mysh, grocommand_t *grocommand)
 
     do {
         mysh->last_status = SUCCESS;
-        res = go_through_and_command(mysh, &(grocommand->tab_command[i]));
+        res = loop_and_command(mysh, &(grocommand->tab_command[i]));
         if (res == ERROR)
             return ERROR;
         if (res == EXIT)
@@ -48,7 +47,7 @@ static int go_through_or_command(mysh_t *mysh, grocommand_t *grocommand)
     return exit;
 }
 
-int go_through_grocommand(mysh_t *mysh)
+int loop_grocommand(mysh_t *mysh)
 {
     int res = 0;
     int exit = 0;
@@ -57,7 +56,7 @@ int go_through_grocommand(mysh_t *mysh)
         mysh->to_return = mysh->last_status;
     for (int i = 0; i < mysh->ast.nb_grocommand; i += 1) {
         mysh->last_status = 0;
-        res = go_through_or_command(mysh, &(mysh->ast.tab_grocommands[i]));
+        res = loop_or_command(mysh, &(mysh->ast.tab_grocommands[i]));
         if (res == ERROR)
             return ERROR;
         if (res == EXIT)

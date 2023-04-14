@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2023
 ** B-PSU-200-BDX-2-1-minishell2-celian.lombardot
 ** File description:
-** exec_grocommand
+** exec_pipes
 */
 
 #include <stdlib.h>

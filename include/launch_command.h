@@ -11,7 +11,7 @@
     #include "mysh.h"
 
     char *get_input(void);
-    int go_through_grocommand(mysh_t *mysh);
+    int loop_grocommand(mysh_t *mysh);
     int parse_input(char *input, mysh_t *mysh);
     void free_ast(ast_t ast);
 

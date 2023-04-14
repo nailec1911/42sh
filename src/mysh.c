@@ -24,8 +24,7 @@ static int loop_sh(mysh_t *mysh, char *input)
         return ERROR;
     if (res != SUCCESS)
         return SUCCESS;
-
-    if ((res = go_through_grocommand(mysh)) == ERROR)
+    if ((res = loop_grocommand(mysh)) == ERROR)
         return ERROR;
 
     free_ast(mysh->ast);

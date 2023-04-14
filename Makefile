@@ -25,11 +25,11 @@ SRC	=	mysh.c		\
 		handle_input/parsing/parser/get_command.c			\
 		handle_input/get_path.c					\
 		handle_input/set_fd_for_exec.c				\
-		exec_command/go_through_grocommand.c		\
+		exec_command/loop_command.c		\
+		exec_command/exec_pipes.c	\
 		exec_command/exec_command.c		\
-		exec_command/exec_grocommand.c	\
-		exec_command/handle_errors.c	\
 		exec_command/exec_builtins.c	\
+		exec_command/handle_errors.c	\
 		str_func/my_strlen.c		\
 		str_func/is_in.c			\
 		str_func/my_strcat_dup.c	\
