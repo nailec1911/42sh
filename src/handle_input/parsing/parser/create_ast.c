@@ -42,7 +42,8 @@ static int fill_tab_grocommand(parser_t *parser, ast_t *ast)
             parser->error = ERROR;
         if (parser->error != 0)
             return parser->error;
-        if (is_end_command(parser->list_tokens[parser->cursor]) == false) {
+        if (parser->list_tokens[parser->cursor].type != END_LINE
+        && parser->list_tokens[parser->cursor].type != SEMICOLON) {
             parser->error = FAILURE;
             return parser->error;
         }
