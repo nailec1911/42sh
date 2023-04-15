@@ -41,6 +41,7 @@ SRC	=	mysh.c		\
 		str_func/free_array.c		\
 		str_func/str_is_alphanum.c	\
 		str_func/input_to_array.c	\
+		str_func/my_strstrlen.c	\
 		builtins/cd/cd.c				\
 		builtins/cd/get_path_to_go.c 	\
 		builtins/setenv/setenv.c			\
@@ -74,7 +75,7 @@ OBJ_TEST = $(addprefix $(SOURCE_DIR), $(SRC:.c=.o)) $(TO_TEST:.c=.o)
 
 CPPFLAGS	=	-I./include
 
-CFLAGS	=	-W -Wall -Wextra
+CFLAGS	=	-W -Wall -Wextra -g3
 
 LDLIBS	=	-lcriterion -lgcov
 
