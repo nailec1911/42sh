@@ -11,16 +11,15 @@
 #include "macro_errors.h"
 #include "list_env.h"
 #include "mysh.h"
-env_var_t *create_list_env(char * const env[]);
+char **init_mysh_env(char * const env[]);
 char *get_path_to_go(mysh_t *mysh);
 int do_cd(mysh_t *mysh, command_t command);
-char *get_env_var(env_var_t *list_env, char *var);
 int my_strlen(char const *str);
 
 Test(get_path_cd1, correct_path){
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[2]){"cd", "tests"};
     args.last_status = 0;
 
@@ -32,7 +31,7 @@ Test(get_path_cd1, correct_path){
 Test(get_path_cd2, home_path){
     char *env[3] = {"test=12AZ", "HOME=/home/usr"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[2]){"cd"};
     args.last_status = 0;
 
@@ -44,7 +43,7 @@ Test(get_path_cd2, home_path){
 Test(get_path_cd3, home_path_wave){
     char *env[3] = {"test=12AZ", "HOME=/home/usr"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[2]){"cd", "~/src"};
     args.last_status = 0;
 
@@ -56,7 +55,7 @@ Test(get_path_cd3, home_path_wave){
 Test(get_path_cd4, get_oldpwd){
     char *env[3] = {"test=12AZ", "OLDPWD=/src"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[2]){"cd", "-"};
     args.last_status = 0;
 
@@ -69,7 +68,7 @@ Test(get_path_cd4, oldpwd_not_set){
     cr_redirect_stderr();
     char *env[3] = {"test=12AZ"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[2]){"cd", "-"};
     args.last_status = 0;
 
@@ -83,7 +82,7 @@ Test(get_path_cd5, home_not_set){
     cr_redirect_stderr();
     char *env[3] = {"test=12AZ"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[2]){"cd"};
     args.last_status = 0;
 
@@ -96,7 +95,7 @@ Test(get_path_cd5, home_not_set){
 Test(get_path_cd4, wrong_minishell){
     char *env[3] = {"test=12AZ"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[2]){"cd", "-dsqdsq"};
     args.last_status = 0;
 
@@ -109,7 +108,7 @@ Test(cd_1, too_many_args){
     cr_redirect_stderr();
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[3]){"cd", "tests", "too_many"};
     args.last_status = 0;
 
@@ -126,7 +125,7 @@ Test(cd_2, no_oldpwd){
     cr_redirect_stderr();
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[3]){"cd", "-"};
     args.last_status = 0;
 
@@ -143,7 +142,7 @@ Test(cd_3, not_a_directory){
     cr_redirect_stderr();
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[3]){"cd", "Makefile"};
     args.last_status = 0;
 
@@ -160,7 +159,7 @@ Test(cd_4, wrongly_named){
     cr_redirect_stderr();
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[3]){"cd", "YMCA"};
     args.last_status = 0;
 
@@ -177,7 +176,7 @@ Test(cd_4, wrongly_named){
 Test(cd_5, working_cd){
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[3]){"cd", "tests"};
     args.last_status = 0;
 
@@ -201,7 +200,7 @@ Test(cd_5, working_cd){
 Test(cd_6, working_cd){
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[3]){"cd", "tests"};
     args.last_status = 0;
 
