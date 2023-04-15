@@ -14,11 +14,13 @@
     env_var_t *create_list_env(char * const env[]);
     int put_elt_in_list(env_var_t **list, char *str);
     char **set_new_env(env_var_t *env_list);
-    int modify_env_var(char *to_change, mysh_t *mysh, char *new_value);
     int do_env(mysh_t *mysh, command_t command);
-    char *get_env_var(env_var_t *list_env, char *var);
+    char *get_env_var(mysh_t *mysh, char *var);
     void free_env(mysh_t *mysh);
     int put_elt_in_list(env_var_t **list, char *str);
     char *my_str_dup(char const *src);
+
+    char **init_mysh_env(char * const env[]);
+    int modify_env_var(char *to_change, mysh_t *mysh, char *new_value);
 
 #endif /* !ENV_H_ */

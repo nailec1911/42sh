@@ -6,58 +6,56 @@
 */
 
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include "builtins/env.h"
 #include "str_func.h"
 #include "macro_errors.h"
 
-static void remove_first(env_var_t **list)
+static char **remove_from_env(char **env, int idx)
 {
-    env_var_t *to_free = *list;
+    int i = 0;
+    int temp = 0;
+    int len = my_strstrlen(env);
+    char **result = malloc(sizeof(char *) * (len));
 
-    (*list) = (*list)->next;
-    free(to_free->var);
-    free(to_free);
+    result[len - 1] = NULL;
+
+    for (; i < idx; ++i) result[i] = strdup(env[i]);
+
+    temp = i + 1;
+    for (; i < len - 1; ++i) {
+        result[i] = strdup(env[temp]);
+        temp++;
+    }
+
+    free_array(env);
+    return result;
 }
 
-static int remove_from_env
-(mysh_t *mysh, int len_search, char *to_remove)
+static int get_var_idx(char *env[], char *var)
 {
-    env_var_t *temp = mysh->list_env;
-    env_var_t *to_free = temp;
-
-    if (my_strncmp(to_remove, mysh->list_env->var, len_search) == 0
-    && mysh->list_env->var[len_search] == '='){
-        remove_first(&temp);
-        mysh->list_env = temp;
+    int len = strlen(var);
+    for (int i = 0; env[i]; ++i) {
+        if (strncmp(env[i], var, len) == 0)
+            return i;
     }
-    temp = mysh->list_env;
-    while (temp != NULL && temp->next != NULL){
-        if (my_strncmp(to_remove, (temp)->next->var, len_search) == 0
-        && (temp)->next->var[len_search] == '='){
-            to_free = temp->next;
-            (temp)->next = (temp)->next->next;
-            free(to_free->var);
-            free(to_free);
-        }
-        temp = temp->next;
-    }
-    return SUCCESS;
+    return -1;
 }
 
 int do_unsetenv(mysh_t *mysh, command_t to_exec)
 {
-    int len_search = 0;
+    int idx = 0;
 
     if (to_exec.command[1] == NULL) {
-        my_putstr("unsetenv: Too few arguments.\n", 2);
+        fprintf(stderr, "unsetenv; Too few arguments.\n");
         mysh->last_status = 1;
         return SUCCESS;
     }
-    if (mysh->list_env == NULL)
-        return SUCCESS;
     for (int i = 1; to_exec.command[i] != NULL; i += 1) {
-        len_search = my_strlen(to_exec.command[i]);
-        remove_from_env(mysh, len_search, to_exec.command[i]);
+        idx = get_var_idx(mysh->env, to_exec.command[i]);
+        if (idx != -1)
+            mysh->env = remove_from_env(mysh->env, idx);
     }
     return SUCCESS;
 }

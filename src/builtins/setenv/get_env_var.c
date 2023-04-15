@@ -6,19 +6,19 @@
 */
 
 #include <stddef.h>
+#include <string.h>
+#include <stdio.h>
 #include "list_env.h"
 #include "macro_errors.h"
+#include "mysh.h"
 #include "str_func.h"
 
-char *get_env_var(env_var_t *list_env, char *var)
+char *get_env_var(mysh_t *mysh, char *var)
 {
-    int i = 0;
     int len_var = my_strlen(var);
 
-    for (; list_env != NULL; i += 1) {
-        if (my_strncmp(var, list_env->var, len_var) == SUCCESS)
-            return list_env->var + len_var;
-        list_env = list_env->next;
-    }
+    for (int i = 0; mysh->env[i] != NULL; ++i)
+        if (strncmp(var, mysh->env[i], len_var) == SUCCESS)
+            return mysh->env[i] + len_var;
     return NULL;
 }

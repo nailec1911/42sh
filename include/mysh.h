@@ -13,6 +13,7 @@
 
     typedef struct mysh_s {
         env_var_t *list_env;
+        char **env;
         char **command;
         int last_status;
         int to_return;

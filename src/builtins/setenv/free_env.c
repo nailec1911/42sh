@@ -10,13 +10,9 @@
 
 void free_env(mysh_t *mysh)
 {
-    env_var_t *to_free;
-    env_var_t *temp = mysh->list_env;
+    if (mysh == NULL)
+        return;
 
-    while (temp != NULL) {
-        to_free = temp;
-        temp = temp->next;
-        free(to_free->var);
-        free(to_free);
-    }
+    for (int i = 0; mysh->env[i]; ++i)
+        free(mysh->env[i]);
 }

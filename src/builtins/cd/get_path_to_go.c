@@ -13,7 +13,7 @@
 
 static char *get_home_path(mysh_t *mysh)
 {
-    char *home_path = get_env_var(mysh->list_env, "HOME=");
+    char *home_path = get_env_var(mysh, "HOME=");
     char *new_path;
 
     if (home_path == NULL) {
@@ -38,7 +38,7 @@ char *get_path_to_go(mysh_t *mysh)
     if (mysh->command[1] == NULL || mysh->command[1][0] == '~')
         return get_home_path(mysh);
     if (mysh->command[1][0] == '-' && mysh->command[1][1] == '\0')
-        path = get_env_var(mysh->list_env, "OLDPWD=");
+        path = get_env_var(mysh, "OLDPWD=");
     if (path == NULL) {
         my_putstr(": No such file or directory.\n", 2);
         mysh->last_status = 1;

@@ -53,13 +53,14 @@ static void parent_fork(mysh_t *mysh, int cpid, command_t command)
 static int get_res_command(mysh_t *mysh, char * const env[], command_t command)
 {
     pid_t  cpid;
+    (void)(env);
 
     if ((cpid = fork()) == -1)
         return ERROR;
     if (cpid == 0) {
         dup2(command.fd_out, STDOUT_FILENO);
         dup2(command.fd_in, STDIN_FILENO);
-        execve(command.to_exec, command.command, env);
+        execve(command.to_exec, command.command, mysh->env);
         display_error_exec(errno, command.command[0]);
         exit(errno);
     }

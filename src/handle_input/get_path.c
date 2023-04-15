@@ -53,7 +53,7 @@ int get_path(mysh_t *mysh, char **path)
         return FAILURE;
     }
 
-    if ((env_path = get_env_var(mysh->list_env, "PATH=")) == NULL)
+    if ((env_path = get_env_var(mysh, "PATH=")) == NULL)
         return FAILURE;
     if ((all_prefix = input_to_array(env_path, ":")) == NULL)
         return ERROR;

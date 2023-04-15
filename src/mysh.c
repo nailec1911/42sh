@@ -36,11 +36,14 @@ int mysh(char * const env[])
     int res = 0;
     char *input = "\0";
     mysh_t mysh = {0};
+    /*
     if ((mysh.list_env = create_list_env(env)) == NULL && env[0] != NULL)
         return ERROR;
+    */
+    mysh.env = init_mysh_env(env);
     while (res == 0) {
         if (isatty(0) == 1)
-            write(1, "$> ", 3);
+            write(1, ":) ", 3);
         if ((input = get_input()) == NULL) {
             res = EXIT;
             break;

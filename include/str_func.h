@@ -19,5 +19,6 @@
     int str_is_alphanum(char *str);
     void free_array(char **array);
     int is_in(char c, char *str);
+    int my_strstrlen(char *str[]);
 
 #endif /* !STR_FUNC_H_ */
