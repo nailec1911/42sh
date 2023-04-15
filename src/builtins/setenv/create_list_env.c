@@ -33,6 +33,9 @@ env_var_t *create_list_env(char * const env[])
 static int get_strstr_len(char * const env[])
 {
     int len = 0;
+
+    if (env == NULL)
+        return 0;
     for (int i = 0; env[i] != NULL; i += 1)
         len += 1;
     return len;
@@ -42,13 +45,16 @@ char **init_mysh_env(char * const env[])
 {
     int len = get_strstr_len(env);
     int sub_len = 0;
-
     char **result = malloc(sizeof(char*) * (len + 1));
-    result[len] = NULL;
 
+    result[len] = NULL;
+    if (env == NULL)
+        return result;
     for (int i = 0; i < len; i += 1) {
         sub_len = strlen(env[i]);
         result[i] = malloc(sizeof(char) * (sub_len + 1));
+        if (result[i] == NULL)
+            return NULL;
         result[i][sub_len] = '\0';
         for (int j = 0; j < sub_len; j += 1)
             result[i][j] = env[i][j];

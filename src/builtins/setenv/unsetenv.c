@@ -37,7 +37,7 @@ static int get_var_idx(char *env[], char *var)
 {
     int len = strlen(var);
     for (int i = 0; env[i]; ++i) {
-        if (strncmp(env[i], var, len) == 0)
+        if (strncmp(env[i], var, len) == 0 && env[i][len] == '=')
             return i;
     }
     return -1;
@@ -48,7 +48,7 @@ int do_unsetenv(mysh_t *mysh, command_t to_exec)
     int idx = 0;
 
     if (to_exec.command[1] == NULL) {
-        fprintf(stderr, "unsetenv; Too few arguments.\n");
+        fprintf(stderr, "unsetenv: Too few arguments.\n");
         mysh->last_status = 1;
         return SUCCESS;
     }

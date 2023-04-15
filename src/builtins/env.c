@@ -15,7 +15,7 @@
 int do_env(mysh_t *mysh, command_t to_exec)
 {
     if (to_exec.command[1] != NULL) {
-        fprintf(stderr, "env: '%s': No such file or directory",
+        fprintf(stderr, "env: ‘%s’: No such file or directory\n",
                 to_exec.command[1]);
         mysh->last_status = 127;
         return SUCCESS;

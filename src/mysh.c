@@ -36,7 +36,8 @@ int mysh(char * const env[])
     int res = 0;
     char *input = "\0";
     mysh_t mysh = {0};
-    mysh.env = init_mysh_env(env);
+    if ((mysh.env = init_mysh_env(env)) == NULL)
+        return ERROR;
     while (res == 0) {
         if (isatty(0) == 1)
             write(1, ":) ", 3);
