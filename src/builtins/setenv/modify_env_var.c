@@ -43,15 +43,10 @@ static char **add_var(char **env, char *to_change, char *new_value, int len)
     if (new_value == NULL)
         new_value = "";
 
-    for (int i = 0; i < len; i += 1) {
-        new_env[i] = malloc(sizeof(char) * (my_strlen(env[i]) + 1));
-        new_env[i][my_strlen(env[i])] = '\0';
+    for (int i = 0; i < len; ++i) new_env[i] = strdup(env[i]);
 
-        for (int j = 0; j < my_strlen(env[i]); j += 1) {
-            new_env[i][j] = env[i][j];
-        }
-    }
     new_env[len] = my_strcat_with_char(to_change, new_value, '=');
+
     free_array(env);
     return new_env;
 }
