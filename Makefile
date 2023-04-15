@@ -69,13 +69,14 @@ TO_TEST	=	tests/test_lexer.c	\
 			tests/test_handle_error.c	\
 			tests/test_input_to_array.c	\
 			tests/test_get_path.c	\
-			tests/test_full_sh.c
+			tests/test_full_sh.c	\
+			tests/test_full_sh_operators.c
 
 OBJ_TEST = $(addprefix $(SOURCE_DIR), $(SRC:.c=.o)) $(TO_TEST:.c=.o)
 
 CPPFLAGS	=	-I./include
 
-CFLAGS	=	-W -Wall -Wextra -g3
+CFLAGS	=	-W -Wall -Wextra
 
 LDLIBS	=	-lcriterion -lgcov
 

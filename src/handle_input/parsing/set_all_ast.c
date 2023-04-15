@@ -58,9 +58,11 @@ static int set_and_command(and_command_t *grocommand)
 
 static int set_or_command(or_command_t *or_command)
 {
+    int res = SUCCESS;
+
     for (int i = 0; i < or_command->nb_command; i += 1) {
-        if (set_and_command(&(or_command->tab_command[i])) == ERROR)
-            return ERROR;
+        if ((res = set_and_command(&(or_command->tab_command[i]))) != SUCCESS)
+            return res;
     }
     return SUCCESS;
 }

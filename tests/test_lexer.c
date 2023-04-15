@@ -113,3 +113,24 @@ Test(lexer8, empty){
 
     cr_assert_eq(tokens[0].type, END_LINE);
 }
+
+Test(lexer9, operators_tokens){
+    token_t *tokens = lexer("ls && ls || ls; ls||ls &&ls &&ls || ls\n");
+
+    cr_assert_eq(tokens[0].type, IDENTIFIER);
+    cr_assert_eq(tokens[1].type, OPERATOR_AND);
+    cr_assert_eq(tokens[2].type, IDENTIFIER);
+    cr_assert_eq(tokens[3].type, OPERATOR_OR);
+    cr_assert_eq(tokens[4].type, IDENTIFIER);
+    cr_assert_eq(tokens[5].type, SEMICOLON);
+    cr_assert_eq(tokens[6].type, IDENTIFIER);
+    cr_assert_eq(tokens[7].type, OPERATOR_OR);
+    cr_assert_eq(tokens[8].type, IDENTIFIER);
+    cr_assert_eq(tokens[9].type, OPERATOR_AND);
+    cr_assert_eq(tokens[10].type, IDENTIFIER);
+    cr_assert_eq(tokens[11].type, OPERATOR_AND);
+    cr_assert_eq(tokens[12].type, IDENTIFIER);
+    cr_assert_eq(tokens[13].type, OPERATOR_OR);
+    cr_assert_eq(tokens[14].type, IDENTIFIER);
+    cr_assert_eq(tokens[15].type, END_LINE);
+}

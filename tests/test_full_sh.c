@@ -141,6 +141,7 @@ Test(mysh10, redirect){
 
     fwrite("hello_world > tests/temp\n", 1, 25, inputs);
     fwrite("hello_world < tests/temp\n", 1, 25, inputs);
+    fwrite("exit\n", 1, 5, inputs);
 
     fclose(inputs);
     cr_assert_eq(mysh(env), SUCCESS);
