@@ -64,7 +64,8 @@ int exec_and_command(mysh_t *mysh, and_command_t *to_exec)
         return SUCCESS;
     if (res == ERROR)
         return ERROR;
-    if (set_fd_output(&(to_exec->tab_command[to_exec->nb_command - 1])) == ERROR)
+    if (set_fd_output(&(to_exec->tab_command[to_exec->nb_command - 1]))
+            == ERROR)
         return ERROR;
     if ((res = exec_all_function(mysh, *to_exec)) != SUCCESS)
         return res;

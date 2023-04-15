@@ -18,20 +18,20 @@ static char *edit_var(char *to_change, char *new_value)
     int i = 0;
     char *result = NULL;
 
+    if (new_value == NULL)
+        return my_strcat_dup(to_change, "=");
+
     for (; to_change[i] != '\0' && to_change[i] != '='; ++i);
-    /*
-    if ((result = (char*) calloc(i + 1, sizeof(char))) == NULL)
-        return NULL;
-    */
+
     if ((result = malloc(sizeof(char) * (i + 1))) == NULL)
         return NULL;
+
     result[i] = '\0';
-    for (int j = 0; j < i; ++j)
-        result[i] = to_change[i];
+
+    for (int j = 0; j < i; ++j) result[i] = to_change[i];
 
     if ((result = my_strcat_with_char(to_change, new_value, '=')) == NULL)
         return NULL;
-
     return result;
 }
 
@@ -39,6 +39,9 @@ static char **add_var(char **env, char *to_change, char *new_value, int len)
 {
     char **new_env = malloc(sizeof(char*) * (len + 2));
     new_env[len + 1] = NULL;
+
+    if (new_value == NULL)
+        new_value = "";
 
     for (int i = 0; i < len; i += 1) {
         new_env[i] = malloc(sizeof(char) * (my_strlen(env[i]) + 1));
@@ -60,15 +63,14 @@ static char **init_env(char *to_change, char *new_value)
     char **env = (char**) malloc(2 * sizeof(char));
     if (env == NULL)
         return NULL;
-    //env[0] = (char*) calloc(len + 1, sizeof(char));
     env[0] = malloc(sizeof(char) * (len + 1));
     if (env[0] == NULL)
         return NULL;
 
     for (int i = 0; i < len; ++i)
         env[0][i] = to_change[i];
-    free(to_change);
 
+    free(to_change);
     return env;
 }
 
@@ -76,12 +78,12 @@ int modify_env_var(char *to_change, mysh_t *mysh, char *new_value)
 {
     int len = strlen(to_change);
     int i = 0;
-    
-    if (new_value == NULL)
-        new_value = "";
+
     for (; mysh->env[i] != NULL; ++i) {
-        if (strncmp(mysh->env[i], to_change, len) == 0)
-            mysh->env[i] = edit_var(mysh->env[i], new_value);
+        if (strncmp(mysh->env[i], to_change, len) == 0) {
+            mysh->env[i] = edit_var(to_change, new_value);
+            return SUCCESS;
+        }
     }
     if (i == 0) {
         if ((mysh->env = init_env(to_change, new_value)) == NULL)

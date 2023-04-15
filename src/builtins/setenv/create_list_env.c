@@ -30,7 +30,6 @@ env_var_t *create_list_env(char * const env[])
     return list;
 }
 
-
 static int get_strstr_len(char * const env[])
 {
     int len = 0;
