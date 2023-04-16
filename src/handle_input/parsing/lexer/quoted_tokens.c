@@ -10,8 +10,10 @@
 #include "str_func.h"
 #include "parser/lexer.h"
 
-static void set_new(lexer_t *lex, token_t *new)
+static void set_new(lexer_t *lex, token_t *new, char quote)
 {
+    if (quote == '`')
+        new->size_val += 1;
     if ((new->value = malloc(sizeof(char) * (new->size_val + 1))) == NULL) {
         new->type = T_ERROR;
         return;
@@ -19,7 +21,9 @@ static void set_new(lexer_t *lex, token_t *new)
     for (int i = 0; i < new->size_val; i += 1)
         new->value[i] = lexer_get(lex);
     new->value[new->size_val] = '\0';
-    lexer_get(lex);
+
+    if (quote != '`')
+        lexer_get(lex);
 }
 
 token_t quoted_tokens(lexer_t *lex)
@@ -38,6 +42,6 @@ token_t quoted_tokens(lexer_t *lex)
         return new;
     }
     lex->cursor = temp_cursor;
-    set_new(lex, &new);
+    set_new(lex, &new, quote);
     return new;
 }
