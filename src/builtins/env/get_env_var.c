@@ -8,7 +8,6 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>
-#include "list_env.h"
 #include "macro_errors.h"
 #include "mysh.h"
 #include "str_func.h"

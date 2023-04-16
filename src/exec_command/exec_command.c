@@ -50,10 +50,9 @@ static void parent_fork(mysh_t *mysh, int cpid, command_t command)
         mysh->last_status = status;
 }
 
-static int get_res_command(mysh_t *mysh, char * const env[], command_t command)
+static int exec_binary(mysh_t *mysh, command_t command)
 {
     pid_t  cpid;
-    (void)(env);
 
     if ((cpid = fork()) == -1)
         return ERROR;
@@ -65,20 +64,6 @@ static int get_res_command(mysh_t *mysh, char * const env[], command_t command)
         exit(errno);
     }
     parent_fork(mysh, cpid, command);
-    return SUCCESS;
-}
-
-int exec_binary(mysh_t *mysh, command_t to_exec)
-{
-    char **env = set_new_env(mysh->list_env);
-
-    if (env == NULL)
-        return ERROR;
-
-    if ((get_res_command(mysh, env, to_exec)) == ERROR)
-        return ERROR;
-
-    free(env);
     return SUCCESS;
 }
 

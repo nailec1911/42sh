@@ -9,7 +9,6 @@
 #include <criterion/redirect.h>
 #include <unistd.h>
 #include "macro_errors.h"
-#include "list_env.h"
 #include "mysh.h"
 char **init_mysh_env(char * const env[]);
 char *get_path_to_go(mysh_t *mysh);

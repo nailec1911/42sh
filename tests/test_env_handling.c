@@ -9,7 +9,6 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include "macro_errors.h"
-#include "list_env.h"
 #include "mysh.h"
 int modify_env_var(char *to_change, mysh_t *mysh, char *new_value);
 char **init_mysh_env(char * const env[]);

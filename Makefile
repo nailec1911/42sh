@@ -44,16 +44,14 @@ SRC	=	mysh.c		\
 		str_func/my_strstrlen.c	\
 		builtins/cd/cd.c				\
 		builtins/cd/get_path_to_go.c 	\
-		builtins/setenv/setenv.c			\
-		builtins/setenv/unsetenv.c			\
-		builtins/setenv/get_env_var.c		\
-		builtins/setenv/modify_env_var.c	\
-		builtins/setenv/create_list_env.c	\
-		builtins/setenv/set_new_env.c		\
-		builtins/setenv/put_in_list.c		\
-		builtins/setenv/free_env.c		\
-		builtins/exit.c				\
-		builtins/env.c
+		builtins/env/setenv.c			\
+		builtins/env/unsetenv.c			\
+		builtins/env/get_env_var.c		\
+		builtins/env/modify_env_var.c	\
+		builtins/env/init_mysh_env.c	\
+		builtins/env/free_env.c		\
+		builtins/env/env.c			\
+		builtins/exit.c
 
 SRC_MAIN	=	src/main.c
 

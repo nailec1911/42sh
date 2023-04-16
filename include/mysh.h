@@ -8,11 +8,9 @@
 #ifndef MYSH_H_
     #define MYSH_H_
 
-    #include "list_env.h"
     #include "parser/ast.h"
 
     typedef struct mysh_s {
-        env_var_t *list_env;
         char **env;
         char **command;
         int last_status;
