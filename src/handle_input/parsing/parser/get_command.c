@@ -84,17 +84,17 @@ command_t get_command(parser_t *parser)
 
     while (parser->list_tokens[parser->cursor].type == REDIRECT
     || parser->list_tokens[parser->cursor].type == IDENTIFIER) {
-
         if (parser->list_tokens[parser->cursor].type == IDENTIFIER
         && add_elt_in_tab(parser, &new) == ERROR) {
             parser->error = ERROR;
             return new;
         }
-
         if (parser->list_tokens[parser->cursor].type == REDIRECT)
             handle_redirect(parser, &new);
     }
-    if (new.command == NULL) {
+    if (parser->list_tokens[parser->cursor].type == UNMATCHED_QUOTE) {
+        parser->error = 1;
+    } else if (new.command == NULL) {
         parser->error = 1;
         my_putstr("Invalid null command.\n", 2);
     }

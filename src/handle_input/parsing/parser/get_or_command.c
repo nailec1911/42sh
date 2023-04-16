@@ -16,7 +16,8 @@ static bool is_end_and_command(token_t token)
 {
     if (token.type == END_LINE
     || token.type == SEMICOLON
-    || token.type == OPERATOR_OR)
+    || token.type == OPERATOR_OR
+    || token.type == UNMATCHED_QUOTE)
         return true;
     return false;
 }

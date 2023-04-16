@@ -18,6 +18,8 @@
         PIPE,
         REDIRECT,
         IDENTIFIER,
+        S_QUOTE,
+        UNMATCHED_QUOTE,
         T_ERROR
     } tokentype_t;
 

@@ -14,7 +14,8 @@ or_command_t get_or_command(parser_t *parser);
 static bool is_end_grocommand(token_t token)
 {
     if (token.type == END_LINE
-    || token.type == SEMICOLON)
+    || token.type == SEMICOLON
+    || token.type == UNMATCHED_QUOTE)
         return true;
     return false;
 }

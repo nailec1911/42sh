@@ -29,15 +29,12 @@ static token_t single_char_token(lexer_t *lex)
 
 static token_t get_token(lexer_t *lex)
 {
-    token_t end = {END_LINE, 0, 0};
     while (lexer_peek(lex) == '\t' || lexer_peek(lex) == ' ')
         lexer_get(lex);
-    if (lexer_peek(lex) == '\n') {
-        lexer_get(lex);
-        return end;
-    }
     if (is_in(lexer_peek(lex), SINGLE_CHAR) == 0)
         return single_char_token(lex);
+    if (is_in(lexer_peek(lex), QUOTED) == 0)
+        return quoted_tokens(lex);
     return multiple_char_token(lex);
 }
 
