@@ -18,5 +18,6 @@
     int set_fd_output(command_t *command);
     int handle_errors(int status);
     int get_path(mysh_t *mysh, char **path);
+    int set_magic_quote(mysh_t *mysh, and_command_t *actual);
 
 #endif /* !EXEC_COMMAND_H_ */

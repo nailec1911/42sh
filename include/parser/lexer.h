@@ -11,7 +11,8 @@
     #include "token.h"
 
     #define SEPARATORS ";&><| \t\n\0"
-    #define SINGLE_CHAR ";&><|"
+    #define SINGLE_CHAR ";&><|\n"
+    #define QUOTED "'\"(`"
 
     typedef struct lexer_s {
         char *input;
@@ -27,7 +28,8 @@
     token_t token_pipe(lexer_t *lex);
     token_t token_and(lexer_t *lex);
     token_t token_semicolon(lexer_t *lex);
-    token_t multiple_char_token(lexer_t *lex);
     token_t token_end_line(lexer_t *lex);
+    token_t multiple_char_token(lexer_t *lex);
+    token_t quoted_tokens(lexer_t *lex);
 
 #endif /* !LEXER_H_ */

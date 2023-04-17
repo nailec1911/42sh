@@ -189,3 +189,31 @@ Test(mysh13, error_zero_divide){
     cr_assert_eq(mysh(env), 136);
     cr_assert_stderr_eq_str("Floating exception (core dumped)\n");
 }
+
+Test(mysh14, quotes){
+    cr_redirect_stdout();
+    cr_redirect_stderr();
+    FILE *inputs = cr_get_redirected_stdin();
+    char *const env[4] = {"PATH=tests/", "hello", "third"};
+
+    fwrite("./tests/disp_args 'hello world' hi\n", 1, 35, inputs);
+    fwrite("exit\n", 1, 5, inputs);
+
+    fclose(inputs);
+    cr_assert_eq(mysh(env), 0);
+    cr_assert_stdout_eq_str("./tests/disp_args\nhello world\nhi\n");
+}
+
+Test(mysh15, backticks){
+    cr_redirect_stdout();
+    cr_redirect_stderr();
+    FILE *inputs = cr_get_redirected_stdin();
+    char *const env[4] = {"PATH=tests/", "hello", "third"};
+
+    fwrite("./tests/disp_args `env`\n", 1, 35, inputs);
+    fwrite("exit\n", 1, 5, inputs);
+
+    fclose(inputs);
+    cr_assert_eq(mysh(env), 0);
+    cr_assert_stdout_eq_str("./tests/disp_args\nPATH=tests/\nhello\nthird\n");
+}

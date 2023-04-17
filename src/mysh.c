@@ -14,7 +14,7 @@
 #include "str_func.h"
 #include "macro_errors.h"
 
-static int loop_sh(mysh_t *mysh, char *input)
+int loop_sh(mysh_t *mysh, char *input)
 {
     int res = 0;
 
