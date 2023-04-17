@@ -279,3 +279,28 @@ Test(parser12, all_operators){
     cr_assert_eq(mysh.ast.tab_grocommands[1].tab_command[2].nb_command, 1);
     assert_command_ok(mysh.ast.tab_grocommands[1].tab_command[2].tab_command[0]);
 }
+
+Test(parser13, quotes){
+    mysh_t mysh = {0};
+
+    char *input = my_str_dup("ls -l 'ds ds' `ddd`\n");
+    cr_assert_eq(parse_input(input, &mysh), SUCCESS);
+
+    cr_assert_eq(mysh.ast.nb_grocommand, 1);
+    cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
+    cr_assert_eq(mysh.ast.tab_grocommands[0].tab_command[0].nb_command, 1);
+    and_command_t tree_leef = mysh.ast.tab_grocommands[0].tab_command[0].tab_command[0];
+
+    cr_assert_eq(tree_leef.nb_command, 1);
+    cr_assert_eq(tree_leef.tab_command[0].is_last, true);
+    cr_assert_eq(tree_leef.tab_command[0].fd_in, STDIN_FILENO);
+    cr_assert_eq(tree_leef.tab_command[0].fd_out, STDOUT_FILENO);
+
+    cr_assert_eq(tree_leef.tab_command[0].redirect_out.type, NO_REDIRECT);
+    cr_assert_eq(tree_leef.tab_command[0].redirect_in.type, NO_REDIRECT);
+    cr_assert_eq(tree_leef.tab_command[0].nb_command, 4);
+    cr_assert_str_eq(tree_leef.tab_command[0].command[0], "ls");
+    cr_assert_str_eq(tree_leef.tab_command[0].command[1], "-l");
+    cr_assert_str_eq(tree_leef.tab_command[0].command[2], "ds ds");
+    cr_assert_str_eq(tree_leef.tab_command[0].command[3], "ddd`");
+}

@@ -95,7 +95,6 @@ Test(lexer6, pipe){
     cr_assert_eq(tokens[5].type, END_LINE);
 }
 
-
 Test(lexer7, redirect){
     token_t *tokens = lexer(">><< < > temp\n");
 
@@ -133,4 +132,24 @@ Test(lexer9, operators_tokens){
     cr_assert_eq(tokens[13].type, OPERATOR_OR);
     cr_assert_eq(tokens[14].type, IDENTIFIER);
     cr_assert_eq(tokens[15].type, END_LINE);
+}
+
+Test(lexer10, quote){
+    token_t *tokens = lexer("\"t|;>\" 'dsd' `dsdsd`\n");
+
+    cr_assert_eq(tokens[0].type, IDENTIFIER);
+    cr_assert_str_eq(tokens[0].value, "t|;>");
+    cr_assert_eq(tokens[1].type, IDENTIFIER);
+    cr_assert_str_eq(tokens[1].value, "dsd");
+    cr_assert_eq(tokens[2].type, IDENTIFIER);
+    cr_assert_str_eq(tokens[2].value, "dsdsd`");
+    cr_assert_eq(tokens[3].type, END_LINE);
+}
+
+Test(lexer11, missing_quote){
+    cr_redirect_stderr();
+    token_t *tokens = lexer("\"t|;`\n");
+
+    cr_assert_eq(tokens[0].type, UNMATCHED_QUOTE);
+    cr_assert_stderr_eq_str("Unmatched '\"'.\n");
 }
