@@ -13,6 +13,8 @@
 #include "builtins/env.h"
 #include "str_func.h"
 #include "macro_errors.h"
+#include "mysh.h"
+#include "init.h"
 
 static int loop_sh(mysh_t *mysh, char *input)
 {
@@ -20,6 +22,10 @@ static int loop_sh(mysh_t *mysh, char *input)
 
     if (input[0] == '\n')
         return SUCCESS;
+    if (add_in_history(mysh, input) == ERROR)
+        return ERROR;
+    if (is_alias(mysh, &input) == ERROR)
+        return ERROR;
     if ((res = parse_input(input, mysh)) == ERROR)
         return ERROR;
     if (res != SUCCESS)
@@ -32,12 +38,23 @@ static int loop_sh(mysh_t *mysh, char *input)
     return res;
 }
 
+int init_all(mysh_t *mysh, char * const env[])
+{
+    if ((mysh->list_env = create_list_env(env)) == NULL && env[0] != NULL)
+        return ERROR;
+    if (init_history(mysh) == ERROR)
+        return ERROR;
+    if (init_alias(mysh) == ERROR)
+        return ERROR;
+    return SUCCESS;
+}
+
 int mysh(char * const env[])
 {
     int res = 0;
     char *input = "\0";
     mysh_t mysh = {0};
-    if ((mysh.list_env = create_list_env(env)) == NULL && env[0] != NULL)
+    if (init_all(&mysh, env) == ERROR)
         return ERROR;
     while (res == 0) {
         if (isatty(0) == 1)

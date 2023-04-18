@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include "mysh.h"
+#include <unistd.h>
 
 void free_env(mysh_t *mysh)
 {
@@ -19,4 +20,8 @@ void free_env(mysh_t *mysh)
         free(to_free->var);
         free(to_free);
     }
+    fclose(mysh->history->fd_file);
+    close(mysh->history->fd_history_file);
+    fclose(mysh->alias->fd_file);
+    close(mysh->alias->fd_alias_file);
 }
