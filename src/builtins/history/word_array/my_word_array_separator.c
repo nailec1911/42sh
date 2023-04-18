@@ -25,7 +25,8 @@ int where_is_start(char *separator, char *str)
 
 char **my_str_to_word_array_separator(char *str, char *separator)
 {
-    int nb_word = nbr_word_separator(str, separator); ; int index_str = 0;
+    int nb_word = nbr_word_separator(str, separator);
+    int index_str = 0;
     char **tab = malloc(sizeof(char *) * (nb_word + 1));
     int index = where_is_start(separator, str);
     int len_word = 0;

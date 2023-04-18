@@ -24,6 +24,10 @@ void free_env(mysh_t *mysh)
     fclose(mysh->alias.fd_file);
     close(mysh->alias.fd_alias_file);
     free(mysh->history.command);
-    free_array(mysh->alias.tab_file);
-    free_array(mysh->history.tab_file);
+    if (mysh->alias.tab_file != NULL) {
+        free_array(mysh->alias.tab_file);
+    }
+    if (mysh->history.tab_file != NULL) {
+        free_array(mysh->history.tab_file);
+    }
 }

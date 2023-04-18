@@ -44,7 +44,9 @@ SRC	=	mysh.c		\
 		str_func/str_is_alphanum.c	\
 		str_func/input_to_array.c	\
 		builtins/alias/init_alias.c\
+		builtins/alias/builtins_alias.c\
 		builtins/alias/remake_input.c\
+		builtins/alias/display_alias.c\
 		builtins/unalias/remove_alias.c\
 		builtins/history/functions_history.c\
 		builtins/history/builtins_history.c\

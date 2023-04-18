@@ -24,7 +24,6 @@ int replace_last_line(mysh_t *mysh, char *input)
 {
     int l_tab = length_tab(mysh->history.tab_file);
     char *command = create_line_history(mysh, input);
-    free(mysh->history.tab_file[l_tab - 1]);
     mysh->history.tab_file[l_tab - 1] = my_strcat_dup(command, "\n");
     write_in_file(mysh->history.tab_file, mysh->history.fd_file);
     free(input);

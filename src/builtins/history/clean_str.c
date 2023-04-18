@@ -15,14 +15,17 @@ char *clean_str(char *input)
 {
     char **tab = my_str_to_word_array_separator(input, " \n");
     char *final_input = strdup(tab[0]);
+    int i = 1;
+    char *temp = NULL;
     if (tab[1] == NULL) {
         free_array(tab);
         return final_input;
     }
-    int i = 1;
     for (; tab[i] != NULL; i += 1) {
-        final_input = my_strcat_dup(final_input, " ");
-        final_input = my_strcat_dup(final_input, tab[i]);
+        temp = my_strcat_dup(final_input, " ");
+        free(final_input);
+        final_input = my_strcat_dup(temp, tab[i]);
+        free(temp);
     }
     free_array(tab);
     return final_input;
@@ -30,13 +33,18 @@ char *clean_str(char *input)
 
 char *remake_command(char **tab)
 {
-    if (length_tab(tab) < 3)
-        return strdup(tab[1]);
-    char *final_input = strdup(tab[2]);
+    char *final_input = NULL;
+    char *temp = NULL;
     int i = 3;
+    if (length_tab(tab) < 3) {
+        return strdup(tab[1]);
+    }
+    final_input = strdup(tab[2]);
     for (; tab[i] != NULL; i += 1) {
-        final_input = my_strcat_dup(final_input, " ");
-        final_input = my_strcat_dup(final_input, tab[i]);
+        temp = my_strcat_dup(final_input, " ");
+        free(final_input);
+        final_input = my_strcat_dup(temp, tab[i]);
+        free(temp);
     }
     return final_input;
 }
@@ -69,8 +77,8 @@ char *clean_last_input(char *last_input, char **tab_alias)
 {
     char *to_free = last_input;
 
-    last_input = remake_command(tab_alias);
-    last_input = my_strcat_dup(last_input, "\n");
+    to_free = remake_command(tab_alias);
+    last_input = my_strcat_dup(to_free, "\n");
     free(to_free);
     return last_input;
 }

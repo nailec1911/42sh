@@ -38,4 +38,5 @@ int add_elem_tab(history_t *history, char *to_add);
 char *num_to_str(int num);
 char **file_to_tab(char *filepath);
 char *remake_command(char **tab);
+char **file_to_tab_bis(char *filepath);
 #endif /* !HISTORY_H_ */
