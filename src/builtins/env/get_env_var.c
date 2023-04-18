@@ -14,7 +14,7 @@
 
 char *get_env_var(mysh_t *mysh, char *var)
 {
-    int len_var = my_strlen(var);
+    int len_var = strlen(var);
 
     for (int i = 0; mysh->env[i] != NULL; ++i)
         if (strncmp(var, mysh->env[i], len_var) == SUCCESS)

@@ -6,6 +6,7 @@
 */
 
 #include <stddef.h>
+#include <stdio.h>
 #include "builtins/env.h"
 #include "str_func.h"
 #include "macro_errors.h"
@@ -15,12 +16,12 @@ static int check_args(char **command)
     if (command[1] == NULL)
         return SUCCESS;
     if (command[2] != NULL && command[3] != NULL) {
-        my_putstr("setenv: Too many arguments.\n", 2);
+        fprintf(stderr, "setenv: Too many arguments.\n");
         return FAILURE;
     }
     if (str_is_alphanum(command[1]) != SUCCESS) {
-        my_putstr
-        ("setenv: Variable name must contain alphanumeric characters.\n", 2);
+        fprintf(stderr,
+        "setenv: Variable name must contain alphanumeric characters.\n");
         return FAILURE;
     }
     return SUCCESS;

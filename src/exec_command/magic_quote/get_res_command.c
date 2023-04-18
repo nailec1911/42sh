@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <sys/wait.h>
+#include <string.h>
 #include "macro_errors.h"
 #include "magic_quote.h"
 #include "str_func.h"
@@ -26,7 +27,7 @@ FILE *get_file_res_command(mysh_t *mysh, char *quoted)
     pid_t pid;
     FILE *res;
 
-    quoted[my_strlen(quoted) - 1] = '\n';
+    quoted[strlen(quoted) - 1] = '\n';
     if (pipe(pipefd) == -1 || (pid = fork()) == -1)
         return NULL;
     if (pid == 0)

@@ -8,12 +8,12 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include <unistd.h>
+#include <string.h>
 #include "macro_errors.h"
 #include "mysh.h"
 char **init_mysh_env(char * const env[]);
 char *get_path_to_go(mysh_t *mysh);
 int do_cd(mysh_t *mysh, command_t command);
-int my_strlen(char const *str);
 
 Test(get_path_cd1, correct_path){
     char *env[3] = {"test=12AZ", "hello=world"};
@@ -181,7 +181,7 @@ Test(cd_5, working_cd){
 
     char *actual = NULL;
     actual = getcwd(actual, 0);
-    int len = my_strlen(actual);
+    int len = strlen(actual);
 
     command_t command = {0};
     command.command = (char *[3]){"cd", "tests"};

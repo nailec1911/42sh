@@ -58,7 +58,7 @@ static char **init_env(char *to_change, char *new_value)
     int len = 0;
 
     to_change = my_strcat_with_char(to_change, new_value, '=');
-    len = my_strlen(to_change);
+    len = strlen(to_change);
     if (env == NULL || to_change == NULL)
         return NULL;
     if ((env[0] = malloc(sizeof(char) * (len + 1))) == NULL)

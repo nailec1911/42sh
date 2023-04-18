@@ -9,6 +9,7 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include <unistd.h>
+#include <string.h>
 #include "macro_errors.h"
 #include "all_args.h"
 #include "builtins/env.h"
@@ -32,7 +33,7 @@ Test(try_command2, hello_world){
     cr_redirect_stdout();
     char *actual = NULL;
     actual = getcwd(actual, 0);
-    int len = my_strlen(actual);
+    int len = strlen(actual);
     char *path_var = my_strcat_dup(actual, "/tests:");
 
     char *env[3] = {"test=12AZ", "hello=world"};

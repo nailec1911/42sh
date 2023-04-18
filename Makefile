@@ -35,14 +35,11 @@ SRC	=	mysh.c		\
 		exec_command/exec_command.c		\
 		exec_command/exec_builtins.c	\
 		exec_command/handle_errors.c	\
-		str_func/my_strlen.c		\
 		str_func/is_in.c			\
 		str_func/my_strcat_dup.c	\
 		str_func/my_strcat_with_char.c	\
 		str_func/my_strcmp.c		\
-		str_func/my_str_dup.c		\
 		str_func/my_strncmp.c		\
-		str_func/my_putstr.c		\
 		str_func/free_array.c		\
 		str_func/str_is_alphanum.c	\
 		str_func/input_to_array.c	\

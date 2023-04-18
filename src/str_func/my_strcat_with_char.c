@@ -6,12 +6,12 @@
 */
 
 #include <stdlib.h>
-int my_strlen(char const *str);
+#include <string.h>
 
 char *my_strcat_with_char(char *dest, char const *src, char c)
 {
     int i = 0;
-    char *res = malloc(sizeof(char) * (my_strlen(dest) + my_strlen(src) + 2));
+    char *res = malloc(sizeof(char) * (strlen(dest) + strlen(src) + 2));
 
     if (res == NULL)
         return NULL;

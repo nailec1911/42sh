@@ -8,10 +8,7 @@
 #ifndef STR_FUNC_H_
     #define STR_FUNC_H_
 
-    int my_strlen(char const *str);
-    void my_putstr(char *str, int output);
     char **input_to_array(char const *str, char *separator);
-    char *my_str_dup(char const *src);
     char *my_strcat_dup(char *dest, char *src);
     char *my_strcat_with_char(char *dest, char const *src, char c);
     int my_strcmp(char const *s1, char const *s2);

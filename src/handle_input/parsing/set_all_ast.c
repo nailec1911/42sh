@@ -6,6 +6,7 @@
 */
 
 #include <unistd.h>
+#include <stdio.h>
 #include <str_func.h>
 #include "mysh.h"
 #include "macro_errors.h"
@@ -13,9 +14,9 @@
 static int error_redirect(int type)
 {
     if (type == IN_1 || type == IN_2)
-        my_putstr("Ambiguous input redirect.\n", 2);
+        fprintf(stderr, "Ambiguous input redirect.\n");
     if (type == OUT_1 || type == OUT_2)
-        my_putstr("Ambiguous output redirect.\n", 2);
+        fprintf(stderr, "Ambiguous output redirect.\n");
     return FAILURE;
 }
 

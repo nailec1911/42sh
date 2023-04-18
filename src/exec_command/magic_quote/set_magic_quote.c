@@ -5,6 +5,7 @@
 ** set_magic_quote
 */
 
+#include <string.h>
 #include "macro_errors.h"
 #include "mysh.h"
 #include "str_func.h"
@@ -27,7 +28,7 @@ static int set_magic_command(mysh_t *mysh, command_t *command)
     int res = SUCCESS;
 
     for (int i = 0; i < command->nb_command; i += 1) {
-        if (command->command[i][my_strlen(command->command[i]) - 1] == '`')
+        if (command->command[i][strlen(command->command[i]) - 1] == '`')
             res = set_new_params(mysh, command, i);
         if (res != SUCCESS)
             return res;

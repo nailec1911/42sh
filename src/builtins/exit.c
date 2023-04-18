@@ -6,6 +6,7 @@
 */
 
 #include <stddef.h>
+#include <stdio.h>
 #include "mysh.h"
 #include "str_func.h"
 #include "macro_errors.h"
@@ -13,7 +14,7 @@
 int do_exit(mysh_t *mysh, command_t to_exec)
 {
     if (to_exec.command[1] != NULL) {
-        my_putstr("exit: Expression Syntax.\n", 2);
+        fprintf(stderr, "exit: Expression Syntax.\n");
         mysh->last_status = 1;
         return SUCCESS;
     }

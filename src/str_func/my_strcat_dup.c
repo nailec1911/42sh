@@ -6,13 +6,12 @@
 */
 
 #include <stdlib.h>
-
-int my_strlen(char const *str);
+#include <string.h>
 
 char *my_strcat_dup(char *dest, char *src)
 {
-    int len_dest = my_strlen(dest);
-    int len_src = my_strlen(src);
+    int len_dest = strlen(dest);
+    int len_src = strlen(src);
     char *res = malloc(sizeof(char) * (len_dest + len_src + 2));
     int i = 0;
 

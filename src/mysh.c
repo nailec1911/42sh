@@ -40,7 +40,7 @@ int mysh(char * const env[])
         return ERROR;
     while (res == 0) {
         if (isatty(0) == 1)
-            write(1, ":) ", 3);
+            fprintf(stdout, ":) ");
         if ((input = get_input()) == NULL) {
             res = EXIT;
             break;
@@ -48,7 +48,7 @@ int mysh(char * const env[])
         res = loop_sh(&mysh, input);
     }
     if (res == EXIT && isatty(0) == 1)
-        write(1, "exit\n", 5);
+        fprintf(stdout, "exit\n");
     if (res == ERROR)
         return ERROR;
     free_env(&mysh);

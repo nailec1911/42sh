@@ -21,8 +21,7 @@ int do_env(mysh_t *mysh, command_t to_exec)
         return SUCCESS;
     }
     for (int i = 0; mysh->env[i]; ++i) {
-        my_putstr(mysh->env[i], to_exec.fd_out);
-        write(to_exec.fd_out, "\n", 1);
+        dprintf(to_exec.fd_out, "%s\n", mysh->env[i]);
     }
     mysh->last_status = 0;
 

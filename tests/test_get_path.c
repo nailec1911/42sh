@@ -8,6 +8,7 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include <unistd.h>
+#include <string.h>
 #include "macro_errors.h"
 #include "mysh.h"
 #include "builtins/env.h"
@@ -70,8 +71,8 @@ Test(get_path4, is_in_PATH){
 
     modify_env_var("PATH", &args, path_var);
     char *path = NULL;
-    char *result = my_str_dup(get_env_var(&args, "PATH="));
-    result[my_strlen(result) - 1] = '\0';
+    char *result = strdup(get_env_var(&args, "PATH="));
+    result[strlen(result) - 1] = '\0';
     result = my_strcat_with_char(result, "hello_world", '/');
     cr_assert_eq(get_path(&args, &path), SUCCESS);
     cr_assert_str_eq(path, result);

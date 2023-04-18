@@ -22,12 +22,12 @@ static int fill_file_from_input(redirect_t redirect)
 
     if (to_comp == NULL || pipe(pipefd) == -1)
         return ERROR;
-    write(1, "? ", 2);
+    fprintf(stdout, "? ");
     getline(&line, &len, stdin);
 
     while (my_strcmp(line, to_comp) != 0){
-        write(1, "? ", 2);
-        my_putstr(line, pipefd[1]);
+        fprintf(stdout, "? ");
+        dprintf(pipefd[1], line);
         getline(&line, &len, stdin);
     }
     free(to_comp);

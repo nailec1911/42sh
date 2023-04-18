@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
-int my_strlen(char const *str);
+#include <string.h>
 
 static bool is_separator(char c, char *separator)
 {
@@ -54,12 +54,12 @@ static int len_malloc(const char *str, char *separator)
 char **input_to_array(char const *str, char *separator)
 {
     char **arr;
-    int i = 0;
-    int n = 0;
-    int j = 0;
+    size_t i = 0;
+    size_t n = 0;
+    size_t j = 0;
 
     arr = malloc(sizeof(char *) * (len_malloc(str, separator) + 1));
-    while (i < my_strlen(str)){
+    while (i < strlen(str)){
         n = i;
         while (!is_separator(str[n], separator)
         && str[n] != '\n' && str[n] != '\0')

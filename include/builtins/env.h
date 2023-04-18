@@ -14,7 +14,6 @@
     int do_env(mysh_t *mysh, command_t command);
     char *get_env_var(mysh_t *mysh, char *var);
     int modify_env_var(char *to_change, mysh_t *mysh, char *new_value);
-    char *my_str_dup(char const *src);
     void free_env(mysh_t *mysh);
 
 #endif /* !ENV_H_ */

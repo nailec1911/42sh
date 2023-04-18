@@ -7,9 +7,9 @@
 
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
+#include <string.h>
 #include "macro_errors.h"
 char **input_to_array(char const *str, char *separator);
-int my_strlen(char const *str);
 
 Test(input_to_array_1, two_words){
     char **result = input_to_array("ls -l", " ");
@@ -54,12 +54,4 @@ Test(input_to_array_5, multiple_separator){
     cr_assert_str_eq(result[2], "-a");
     cr_assert_str_eq(result[3], "test");
     cr_assert_null(result[4]);
-}
-
-Test(my_strlen1, normal_len){
-    cr_assert_eq(my_strlen("123456"), 6);
-}
-
-Test(my_strlen2, null_str){
-    cr_assert_eq(my_strlen(NULL), 0);
 }
