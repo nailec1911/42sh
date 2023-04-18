@@ -10,6 +10,7 @@
 char lexer_get(lexer_t *lex)
 {
     lex->cursor += 1;
+    lex->context = 0;
     return lex->input[lex->cursor - 1];
 }
 

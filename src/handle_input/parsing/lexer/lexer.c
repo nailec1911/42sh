@@ -31,6 +31,11 @@ static token_t get_token(lexer_t *lex)
 {
     while (lexer_peek(lex) == '\t' || lexer_peek(lex) == ' ')
         lexer_get(lex);
+    if (lexer_peek(lex) == '\\'){
+        lexer_get(lex);
+        lex->context = 1;
+        return multiple_char_token(lex);
+    }
     if (is_in(lexer_peek(lex), SINGLE_CHAR) == 0)
         return single_char_token(lex);
     if (is_in(lexer_peek(lex), QUOTED) == 0)
@@ -57,7 +62,7 @@ static token_t *add_elt_in_tab(lexer_t *lex, token_t to_add, token_t *old)
 
 token_t *lexer(char *input)
 {
-    lexer_t lex = {input, 0, 0, 0};
+    lexer_t lex = {input, 0, 0, 0, 0};
     token_t *list_token = NULL;
 
     for (; lex.input[lex.len_input] != '\n'; lex.len_input += 1);
