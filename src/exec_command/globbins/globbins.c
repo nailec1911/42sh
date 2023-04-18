@@ -15,7 +15,7 @@
 static int is_globbing(char *arg)
 {
     int has_bracket = 0;
-    
+
     for (int i = 0; arg[i]; i++) {
         char const ch = arg[i];
         if (ch == '*' || ch == '?')
