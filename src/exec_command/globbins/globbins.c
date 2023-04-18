@@ -15,24 +15,23 @@
 static int is_globbing(char *arg)
 {
     int has_bracket = 0;
+    
     for (int i = 0; arg[i]; i++) {
         char const ch = arg[i];
         if (ch == '*' || ch == '?')
             return 1;
-
         if (ch == '[' || ch == ']')
             has_bracket |= (ch == '[') ? 1 << 0 : 1 << 1;
     }
-
     return (has_bracket & 1 << 0) && (has_bracket & 1 << 1);
 }
 
 static int get_glob_data(char *buf, glob_t *out)
 {
     int ret = glob(buf, 0, 0, out);
+
     if (ret != 0)
         return ERROR;
-
     return SUCCESS;
 }
 
