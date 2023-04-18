@@ -25,14 +25,14 @@ static int add_elt_in_tab(grocommand_t *grocommand, or_command_t new_command)
     or_command_t * temp = grocommand->tab_command;
 
     if ((grocommand->tab_command =
-    malloc(sizeof(or_command_t) * grocommand->nb_command)) == NULL)
+    malloc(sizeof(or_command_t) * (grocommand->nb_command + 1))) == NULL)
         return ERROR;
 
     for (int i = 0; i < grocommand->nb_command - 1; i += 1)
         grocommand->tab_command[i] = temp[i];
 
     grocommand->tab_command[grocommand->nb_command - 1] = new_command;
-
+    grocommand->tab_command[grocommand->nb_command].nb_command = -1;
     if (temp != NULL)
         free(temp);
     return SUCCESS;

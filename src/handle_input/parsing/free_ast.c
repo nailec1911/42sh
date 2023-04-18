@@ -13,7 +13,8 @@ static void free_command(command_t command)
     for (int i = 0; i < command.nb_command; i += 1) {
         free(command.command[i]);
     }
-    free(command.command);
+    if (command.command != NULL)
+        free(command.command);
     if (command.redirect_in.name != NULL)
         free(command.redirect_in.name);
     if (command.redirect_out.name != NULL)
@@ -22,8 +23,9 @@ static void free_command(command_t command)
 
 static void free_or_command(or_command_t or_command)
 {
-    for (int i = 0; i < or_command.nb_command; i += 1) {
-        for (int j = 0; j < or_command.tab_command[i].nb_command; j += 1)
+    for (int i = 0; or_command.tab_command[i].nb_command != -1; i += 1) {
+        for (int j = 0;
+        or_command.tab_command[i].tab_command[j].nb_command != -1; j += 1)
             free_command(or_command.tab_command[i].tab_command[j]);
         free(or_command.tab_command[i].tab_command);
     }
@@ -32,7 +34,7 @@ static void free_or_command(or_command_t or_command)
 
 static void free_grocommand(grocommand_t grocommand)
 {
-    for (int i = 0; i < grocommand.nb_command; i += 1) {
+    for (int i = 0; grocommand.tab_command[i].nb_command != -1 ; i += 1) {
         free_or_command(grocommand.tab_command[i]);
     }
     free(grocommand.tab_command);
@@ -40,7 +42,7 @@ static void free_grocommand(grocommand_t grocommand)
 
 void free_ast(ast_t ast)
 {
-    for (int i = 0; i < ast.nb_grocommand; i += 1) {
+    for (int i = 0; ast.tab_grocommands[i].nb_command != -1; i += 1) {
         free_grocommand(ast.tab_grocommands[i]);
     }
     free(ast.tab_grocommands);

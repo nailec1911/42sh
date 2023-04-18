@@ -69,6 +69,7 @@ TO_TEST	=	tests/test_lexer.c	\
 			tests/test_handle_error.c	\
 			tests/test_input_to_array.c	\
 			tests/test_get_path.c	\
+			tests/test_globing.c	\
 			tests/test_full_sh.c	\
 			tests/test_full_sh_operators.c
 

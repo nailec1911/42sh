@@ -17,14 +17,14 @@ static int add_elt_in_tab(and_command_t *and_command, command_t new_command)
     command_t * temp = and_command->tab_command;
 
     if ((and_command->tab_command =
-    malloc(sizeof(command_t) * and_command->nb_command)) == NULL)
+    malloc(sizeof(command_t) * (and_command->nb_command + 1))) == NULL)
         return ERROR;
 
     for (int i = 0; i < and_command->nb_command - 1; i += 1)
         and_command->tab_command[i] = temp[i];
 
     and_command->tab_command[and_command->nb_command - 1] = new_command;
-
+    and_command->tab_command[and_command->nb_command].nb_command = -1;
     if (temp != NULL)
         free(temp);
     return SUCCESS;

@@ -182,7 +182,6 @@ Test(parser7, missing_redirect_name){
     cr_assert_eq(mysh.last_status, 1);
 
     cr_assert_stderr_eq_str("missing name\n");
-    free_ast(mysh.ast);
 }
 
 Test(parser8, null_command){
@@ -194,7 +193,6 @@ Test(parser8, null_command){
     cr_assert_eq(mysh.last_status, 1);
 
     cr_assert_stderr_eq_str("Invalid null command.\n");
-    free_ast(mysh.ast);
 }
 
 void assert_command_ok(and_command_t to_test)
@@ -269,26 +267,26 @@ Test(parser12, all_operators){
 
     // ------------------ first grocommand ----------------------
     cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 2);
-    //            ------- first or_command ----------------------
+            //    ------- first or_command ----------------------
     cr_assert_eq(mysh.ast.tab_grocommands[0].tab_command[0].nb_command, 2);
     assert_command_ok(mysh.ast.tab_grocommands[0].tab_command[0].tab_command[0]);
     assert_command_ok(mysh.ast.tab_grocommands[0].tab_command[0].tab_command[1]);
-    //            ------- second or_command ----------------------
+            //    ------- second or_command ----------------------
     cr_assert_eq(mysh.ast.tab_grocommands[0].tab_command[1].nb_command, 1);
     assert_command_ok(mysh.ast.tab_grocommands[0].tab_command[1].tab_command[0]);
 
 
     // ------------------ second grocommand ----------------------
     cr_assert_eq(mysh.ast.tab_grocommands[1].nb_command, 3);
-    //            ------- first or_command ----------------------
+            //    ------- first or_command ----------------------
     cr_assert_eq(mysh.ast.tab_grocommands[1].tab_command[0].nb_command, 1);
     assert_command_ok(mysh.ast.tab_grocommands[1].tab_command[0].tab_command[0]);
-    //            ------- second or_command ----------------------
+            //    ------- second or_command ----------------------
     cr_assert_eq(mysh.ast.tab_grocommands[1].tab_command[1].nb_command, 3);
     assert_command_ok(mysh.ast.tab_grocommands[1].tab_command[1].tab_command[0]);
     assert_command_ok(mysh.ast.tab_grocommands[1].tab_command[1].tab_command[1]);
     assert_command_ok(mysh.ast.tab_grocommands[1].tab_command[1].tab_command[2]);
-    //            ------- third or_command ----------------------
+            //    ------- third or_command ----------------------
     cr_assert_eq(mysh.ast.tab_grocommands[1].tab_command[2].nb_command, 1);
     assert_command_ok(mysh.ast.tab_grocommands[1].tab_command[2].tab_command[0]);
     free_ast(mysh.ast);
