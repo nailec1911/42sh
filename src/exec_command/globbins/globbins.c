@@ -57,7 +57,8 @@ static int get_new_argv_size(command_t cmd)
 static char **get_glob_argv(command_t *cmd, int *size)
 {
     glob_t results = {0};
-    char **new_argv = malloc(8 * (get_new_argv_size(*cmd) + 1));
+    int new_argv_sz = get_new_argv_size(*cmd);
+    char **new_argv = malloc(8 * (new_argv_sz + 1));
     if (!new_argv)
         return 0;
 
@@ -72,7 +73,7 @@ static char **get_glob_argv(command_t *cmd, int *size)
             new_argv[(*size)++] = strdup(results.gl_pathv[y]);
         globfree(&results);
     }
-    new_argv[*size] = 0;
+    new_argv[new_argv_sz] = 0;
     return new_argv;
 }
 
@@ -90,6 +91,7 @@ int update_glob_argv(and_command_t *cmd)
         free_array(cur_cmd->command);
         cur_cmd->command = new_argv;
         cur_cmd->nb_command = size;
+        size = 0;
     }
     return SUCCESS;
 }
