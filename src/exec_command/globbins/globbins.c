@@ -40,20 +40,18 @@ static int get_glob_data(char *buf, glob_t *out)
 static int get_new_argv_size(command_t cmd)
 {
     int sz = 0;
+    glob_t glob_data = {0};
+
     for (int i = 0; cmd.command[i]; i++) {
         if (!is_globbing(cmd.command[i])) {
             sz++;
             continue;
         }
-
-        glob_t glob_data = {0};
         if (get_glob_data(cmd.command[i], &glob_data) == ERROR)
             continue;
-
         sz += glob_data.gl_pathc;
         globfree(&glob_data);
     }
-
     return sz;
 }
 
@@ -81,17 +79,18 @@ static char **get_glob_argv(command_t *cmd, int *size)
 
 int update_glob_argv(and_command_t *cmd)
 {
+    int size = 0;
+    command_t *cur_cmd = 0;
+    char **new_argv = 0;
+
     for (int i = 0; i < cmd->nb_command; i += 1) {
-        int size = 0;
-        command_t *cur_cmd = &(cmd->tab_command[i]);
-        char **new_argv = get_glob_argv(cur_cmd, &size);
+        cur_cmd = &(cmd->tab_command[i]);
+        new_argv = get_glob_argv(cur_cmd, &size);
         if (!new_argv)
             continue;
-
         free_array(cur_cmd->command);
         cur_cmd->command = new_argv;
         cur_cmd->nb_command = size;
     }
-
     return SUCCESS;
 }
