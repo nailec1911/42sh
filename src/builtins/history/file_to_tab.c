@@ -21,6 +21,7 @@ int count_line(char *str)
         if (str[i] == '\n')
             line += 1;
     }
+    free(str);
     return line;
 }
 
@@ -50,10 +51,10 @@ char **file_to_tab(char *filepath)
     ssize_t nread;
     int i = 0;
     int nb_line = get_nb_line(filepath);
+    char **tab = NULL;
     if (nb_line == -1)
         return NULL;
     stream = fopen(filepath, "r");
-    char **tab = NULL;
     if ((tab = malloc(sizeof(char *) * (nb_line + 1))) == NULL)
         return NULL;
     tab[nb_line] = NULL;
@@ -63,5 +64,7 @@ char **file_to_tab(char *filepath)
             return NULL;
         i += 1;
     }
+    fclose(stream);
+    free(line);
     return tab;
 }

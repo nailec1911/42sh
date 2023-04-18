@@ -18,8 +18,8 @@
         int last_status;
         int to_return;
         ast_t ast;
-        history_t *history;
-        alias_t *alias;
+        history_t history;
+        alias_t alias;
     } mysh_t;
 
 char *create_line_history(mysh_t *mysh, char *input);

@@ -6,6 +6,8 @@
 */
 
 #include <stdlib.h>
+#include <unistd.h>
+#include "str_func.h"
 #include "mysh.h"
 
 void free_env(mysh_t *mysh)
@@ -15,4 +17,13 @@ void free_env(mysh_t *mysh)
 
     for (int i = 0; mysh->env[i]; ++i)
         free(mysh->env[i]);
+
+    free(mysh->env);
+    fclose(mysh->history.fd_file);
+    close(mysh->history.fd_history_file);
+    fclose(mysh->alias.fd_file);
+    close(mysh->alias.fd_alias_file);
+    free(mysh->history.command);
+    free_array(mysh->alias.tab_file);
+    free_array(mysh->history.tab_file);
 }

@@ -6,20 +6,42 @@
 */
 #include "mysh.h"
 #include "history.h"
+#include "macro_errors.h"
+#include "alias.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 
-char **add_elem_tab(char **tab, char *to_add)
+int add_elem_tab(history_t *history, char *to_add)
 {
-    int len_tab = length_tab(tab);
-    char **new_tab = NULL;
-    if ((new_tab = malloc(sizeof(char *) * (len_tab + 2))) == NULL)
-        return NULL;
-    new_tab[len_tab + 1] = NULL;
-    for (int i = 0; tab[i] != NULL; i += 1) {
-        new_tab[i] = strdup(tab[i]);
+    int len_tab = length_tab(history->tab_file);
+    char **temp = history->tab_file;
+
+    if ((history->tab_file = malloc(sizeof(char *) * (len_tab + 2))) == NULL)
+        return ERROR;
+    history->tab_file[len_tab + 1] = NULL;
+    for (int i = 0; i < len_tab; i += 1) {
+        history->tab_file[i] = temp[i];
     }
-    new_tab[len_tab] = strdup(to_add);
-    return new_tab;
+    history->tab_file[len_tab] = to_add;
+    if (temp != NULL)
+        free(temp);
+    return SUCCESS;
+}
+
+int add_elem_tab_alias(alias_t *alias, char *to_add)
+{
+    int len_tab = length_tab(alias->tab_file);
+    char **temp = alias->tab_file;
+
+    if ((alias->tab_file = malloc(sizeof(char *) * (len_tab + 2))) == NULL)
+        return ERROR;
+    alias->tab_file[len_tab + 1] = NULL;
+    for (int i = 0; i < len_tab; i += 1) {
+        alias->tab_file[i] = temp[i];
+    }
+    alias->tab_file[len_tab] = to_add;
+    if (temp != NULL)
+        free(temp);
+    return SUCCESS;
 }

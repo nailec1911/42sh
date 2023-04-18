@@ -7,21 +7,24 @@
 
 #include <stdlib.h>
 #include "mysh.h"
+#include "str_func.h"
 #include <unistd.h>
 
 void free_env(mysh_t *mysh)
 {
-    env_var_t *to_free;
-    env_var_t *temp = mysh->list_env;
-
+    printf("kkkkkkkkkkk\n");
     while (temp != NULL) {
         to_free = temp;
         temp = temp->next;
         free(to_free->var);
         free(to_free);
     }
-    fclose(mysh->history->fd_file);
-    close(mysh->history->fd_history_file);
-    fclose(mysh->alias->fd_file);
-    close(mysh->alias->fd_alias_file);
+    free(mysh->env);
+    fclose(mysh->history.fd_file);
+    close(mysh->history.fd_history_file);
+    fclose(mysh->alias.fd_file);
+    close(mysh->alias.fd_alias_file);
+    free(mysh->history.command);
+    free_array(mysh->alias.tab_file);
+    free_array(mysh->history.tab_file);
 }

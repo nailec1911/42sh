@@ -14,10 +14,10 @@
 
 static void write_in_file(mysh_t *mysh)
 {
-    for (int i = 0; mysh->alias->tab_file[i] != NULL; i += 1) {
-        fprintf(mysh->alias->fd_file, "%s", mysh->alias->tab_file[i]);
+    for (int i = 0; mysh->alias.tab_file[i] != NULL; i += 1) {
+        fprintf(mysh->alias.fd_file, "%s", mysh->alias.tab_file[i]);
     }
-    fflush(mysh->alias->fd_file);
+    fflush(mysh->alias.fd_file);
 }
 
 static int nb_elem_to_remove(char **tab, char *to_find)
@@ -34,19 +34,20 @@ static int nb_elem_to_remove(char **tab, char *to_find)
 }
 
 static char **fill_tab_without_alias(mysh_t *mysh, char **new_tab,
-char *to_compare)
+char *to_compare, char **old)
 {
     int index = 0;
     char **tab_alias = NULL;
 
-    for (int i = 0; mysh->alias->tab_file[i + 1] != NULL; i += 1) {
+    for (int i = 0; mysh->alias.tab_file[i + 1] != NULL; i += 1) {
         tab_alias = my_str_to_word_array_separator
-        (mysh->alias->tab_file[i], " \n");
+        (mysh->alias.tab_file[i], " \n");
         if (strcmp(tab_alias[1], to_compare) != 0) {
-            new_tab[index] = strdup(mysh->alias->tab_file[i]);
+            new_tab[index] = strdup(mysh->alias.tab_file[i]);
             index += 1;
         }
     }
+    free(old);
     return new_tab;
 }
 
@@ -56,18 +57,18 @@ int do_unalias(mysh_t *mysh, command_t to_exec)
     int nb_elem = 0;
     int l_tab = 0;
 
-    if (mysh->alias->tab_file == NULL || mysh->alias->tab_file[0] == NULL)
+    if (mysh->alias.tab_file == NULL || mysh->alias.tab_file[0] == NULL)
         return SUCCESS;
     for (int i = 1; to_exec.command[i] != NULL; i += 1) {
-        l_tab = length_tab(mysh->alias->tab_file);
-        nb_elem = nb_elem_to_remove(mysh->alias->tab_file, to_exec.command[i]);
+        l_tab = length_tab(mysh->alias.tab_file);
+        nb_elem = nb_elem_to_remove(mysh->alias.tab_file, to_exec.command[i]);
         if ((new_tab = malloc(sizeof(char *) * (l_tab - nb_elem + 1))) == NULL)
             return ERROR;
         new_tab[l_tab - nb_elem] = NULL;
-        mysh->alias->tab_file = fill_tab_without_alias
-        (mysh, new_tab, to_exec.command[i]);
+        mysh->alias.tab_file = fill_tab_without_alias
+        (mysh, new_tab, to_exec.command[i], mysh->alias.tab_file);
     }
-    if (ftruncate(mysh->alias->fd_alias_file, 0) == -1) {
+    if (ftruncate(mysh->alias.fd_alias_file, 0) == -1) {
         return ERROR;
     }
     write_in_file(mysh);
