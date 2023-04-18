@@ -80,22 +80,12 @@ int do_alias(mysh_t *mysh, command_t to_exec)
     return SUCCESS;
 }
 
-char *clean_last_input(char *last_input, char **tab_alias)
-{
-    char *to_free = last_input;
-
-    last_input = remake_command(tab_alias);
-    last_input = my_strcat_dup(last_input, "\n");
-    free(to_free);
-    return last_input;
-}
 int is_alias(mysh_t *mysh, char **input)
 {
     char **tab_alias = NULL;
     char *last_input = NULL;
     char *to_compare = NULL;
     char *tmp = (*input);
-
     if (mysh->alias.tab_file == NULL)
         return SUCCESS;
     for (int i = 0; mysh->alias.tab_file[i] != NULL; i += 1) {

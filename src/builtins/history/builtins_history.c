@@ -14,7 +14,7 @@ int opt_clear(mysh_t *mysh)
 {
     char **tab = malloc(sizeof(char *) * 2);
     int l_tab = length_tab(mysh->history.tab_file);
-    char **to_free =  mysh->history.tab_file;
+    char **to_free = mysh->history.tab_file;
     if (tab == NULL)
         return ERROR;
     tab[0] = strdup(mysh->history.tab_file[l_tab - 1]);

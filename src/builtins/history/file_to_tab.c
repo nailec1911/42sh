@@ -43,28 +43,36 @@ int get_nb_line(char *filepath)
     return count_line(str_file);
 }
 
-char **file_to_tab(char *filepath)
+static char **fill_tab_from_file(FILE *stream, int nb_line)
 {
-    FILE *stream;
+    int i = 0;
+    char **tab = NULL;
     char *line = NULL;
     size_t len = 0;
-    ssize_t nread;
-    int i = 0;
-    int nb_line = get_nb_line(filepath);
-    char **tab = NULL;
-    if (nb_line == -1)
-        return NULL;
-    stream = fopen(filepath, "r");
+
     if ((tab = malloc(sizeof(char *) * (nb_line + 1))) == NULL)
         return NULL;
     tab[nb_line] = NULL;
-    while ((nread = getline(&line, &len, stream)) != -1) {
+    while (getline(&line, &len, stream) != -1) {
         tab[i] = strdup(line);
         if (tab[i] == NULL)
             return NULL;
         i += 1;
     }
-    fclose(stream);
     free(line);
+    return tab;
+}
+
+char **file_to_tab(char *filepath)
+{
+    FILE *stream;
+    int nb_line = get_nb_line(filepath);
+    char **tab = NULL;
+
+    if (nb_line == -1)
+        return NULL;
+    stream = fopen(filepath, "r");
+    tab = fill_tab_from_file(stream, nb_line);
+    fclose(stream);
     return tab;
 }

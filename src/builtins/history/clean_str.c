@@ -64,3 +64,13 @@ char *create_line_history(mysh_t *mysh, char *input)
     free(command);
     return final_line;
 }
+
+char *clean_last_input(char *last_input, char **tab_alias)
+{
+    char *to_free = last_input;
+
+    last_input = remake_command(tab_alias);
+    last_input = my_strcat_dup(last_input, "\n");
+    free(to_free);
+    return last_input;
+}
