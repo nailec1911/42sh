@@ -11,7 +11,7 @@
     #include <stdio.h>
     #include "mysh.h"
 
-    #define HISTORY_FILE "assets/42shhistory"
+    #define HISTORY_FILE "./42shhistory"
 
     typedef struct histroy_s {
         int num_command;

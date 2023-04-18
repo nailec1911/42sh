@@ -58,7 +58,7 @@ int init_history(mysh_t *mysh)
         return ERROR;
     mysh->history->num_command = 0;
     mysh->history->fd_history_file = open(HISTORY_FILE, O_CREAT |
-    O_APPEND | O_RDWR);
+    O_APPEND | O_RDWR, S_IRWXU);
     if (stat(HISTORY_FILE, &file) == -1)
         return ERROR;
     if (file.st_size == 0) {

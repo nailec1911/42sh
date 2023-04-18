@@ -10,7 +10,7 @@
 
     #include <stdio.h>
 
-    #define ALIASRC_FILE "assets/42shrc"
+    #define ALIASRC_FILE "42shrc"
 
     typedef struct alias_s {
         int fd_alias_file;

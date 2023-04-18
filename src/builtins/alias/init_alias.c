@@ -21,7 +21,7 @@ int init_alias(mysh_t *mysh)
     if (mysh->alias == NULL)
         return ERROR;
     mysh->alias->fd_alias_file = open(ALIASRC_FILE, O_CREAT |
-    O_APPEND | O_RDWR);
+    O_APPEND | O_RDWR, S_IRWXU);
     mysh->alias->fd_file = fopen(ALIASRC_FILE, "a+");
     if (mysh->alias->fd_file == NULL)
         return ERROR;
