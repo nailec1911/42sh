@@ -12,7 +12,6 @@
 #include "str_func.h"
 #include "macro_errors.h"
 
-/*moove somewhere else?*/
 static int is_globbing(char *arg)
 {
     int has_bracket = 0;
