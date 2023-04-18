@@ -38,7 +38,7 @@ static int set_magic_command(mysh_t *mysh, command_t *command)
 
 int set_magic_quote(mysh_t *mysh, and_command_t *actual)
 {
-    for (int i = 0; i < actual->nb_command; i += 1) {
+    for (int i = actual->nb_command - 1; i >= 0; i -= 1) {
         if (set_magic_command(mysh, &(actual->tab_command[i])) == ERROR)
             return ERROR;
     }
