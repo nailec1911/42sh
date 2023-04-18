@@ -18,18 +18,15 @@
 static void display_error_exec(int error_code, char *path)
 {
     if (error_code == 8) {
-        my_putstr(path, 2);
-        my_putstr(": Exec format error. Wrong Architecture.\n", 2);
+        fprintf(stderr, "%s: Exec format error. Wrong Architecture.\n", path);
         return;
     }
     if (error_code == 20) {
-        my_putstr(path, 2);
-        my_putstr(": Not a directory.\n", 2);
+        fprintf(stderr, "%s: Not a directory.\n", path);
         return;
     }
     if (error_code == 13) {
-        my_putstr(path, 2);
-        my_putstr(": Permission denied.\n", 2);
+        fprintf(stderr, "%s: Permission denied.\n", path);
         return;
     }
     perror(path);
@@ -50,8 +47,7 @@ static void parent_fork(mysh_t *mysh, int cpid, command_t command)
         mysh->last_status = status;
 }
 
-static int get_res_command(mysh_t *mysh,
-char * const env[], char *to_exec, command_t command)
+static int exec_binary(mysh_t *mysh, command_t command)
 {
     pid_t  cpid;
 
@@ -60,47 +56,31 @@ char * const env[], char *to_exec, command_t command)
     if (cpid == 0) {
         dup2(command.fd_out, STDOUT_FILENO);
         dup2(command.fd_in, STDIN_FILENO);
-        execve(to_exec, mysh->command, env);
-        display_error_exec(errno, mysh->command[0]);
+        execve(command.to_exec, command.command, mysh->env);
+        display_error_exec(errno, command.command[0]);
         exit(errno);
     }
     parent_fork(mysh, cpid, command);
     return SUCCESS;
 }
 
-int exec_binary(mysh_t *mysh, char *path_to_exec, command_t to_exec)
-{
-    char **env = set_new_env(mysh->list_env);
-
-    if (env == NULL)
-        return ERROR;
-
-    if ((get_res_command(mysh, env, path_to_exec, to_exec)) == ERROR)
-        return ERROR;
-
-    free(env);
-    return SUCCESS;
-}
-
 int exec_command(mysh_t *mysh, command_t to_exec)
 {
     int res = 0;
-    char *path_to_exec = NULL;
 
+    to_exec.to_exec = NULL;
     mysh->command = to_exec.command;
     if ((res = exec_builtins(mysh, to_exec)) != FAILURE)
         return res;
-
-    if ((res = get_path(mysh, &path_to_exec)) == ERROR)
+    if ((res = get_path(mysh, &(to_exec.to_exec))) == ERROR)
         return ERROR;
     if (res != SUCCESS){
-        my_putstr(mysh->command[0], 2);
-        write(2, ": Command not found.\n", 21);
+        fprintf(stderr, "%s: Command not found.\n", mysh->command[0]);
         mysh->last_status = 1;
         return SUCCESS;
     }
-    if (exec_binary(mysh, path_to_exec, to_exec) == ERROR)
+    if (exec_binary(mysh, to_exec) == ERROR)
         return ERROR;
-    free(path_to_exec);
+    free(to_exec.to_exec);
     return SUCCESS;
 }

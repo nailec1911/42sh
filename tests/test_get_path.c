@@ -8,16 +8,18 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include <unistd.h>
+#include <string.h>
 #include "macro_errors.h"
 #include "mysh.h"
 #include "builtins/env.h"
 #include "str_func.h"
 int get_path(mysh_t *mysh, char **path);
+char **init_mysh_env(char * const env[]);
 
 Test(get_path1, existing_absolute){
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[2]){"./Makefile"};
     args.last_status = 0;
 
@@ -31,7 +33,7 @@ Test(get_path1, existing_absolute){
 Test(get_path2, not_existing_absolute){
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[2]){"./tests/yhaaa"};
     args.last_status = 0;
 
@@ -45,7 +47,7 @@ Test(get_path2, not_existing_absolute){
 Test(get_path3, doesnt_exist){
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[2]){"yhaaa"};
     args.last_status = 0;
 
@@ -63,14 +65,14 @@ Test(get_path4, is_in_PATH){
 
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
-    args.list_env = create_list_env(env);
+    args.env = init_mysh_env(env);
     args.command = (char *[2]){"hello_world"};
     args.last_status = 0;
 
     modify_env_var("PATH", &args, path_var);
     char *path = NULL;
-    char *result = my_str_dup(get_env_var(args.list_env, "PATH="));
-    result[my_strlen(result) - 1] = '\0';
+    char *result = strdup(get_env_var(&args, "PATH="));
+    result[strlen(result) - 1] = '\0';
     result = my_strcat_with_char(result, "hello_world", '/');
     cr_assert_eq(get_path(&args, &path), SUCCESS);
     cr_assert_str_eq(path, result);

@@ -31,8 +31,8 @@ Test(handle_error4, exit_status){
     cr_assert_eq(handle_errors(2048), 126);
 }
 
-// Test(handle_error4, fpe_core_dump){
-    // cr_redirect_stderr();
-    // cr_assert_eq(handle_errors(136), 136);
-    // cr_assert_stderr_eq_str("Floating exception (core dumped)\n");
-// }
+Test(handle_error4, fpe_core_dump){
+    cr_redirect_stderr();
+    cr_assert_eq(handle_errors(136), 136);
+    cr_assert_stderr_eq_str("Floating exception (core dumped)\n");
+}

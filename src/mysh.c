@@ -16,7 +16,7 @@
 #include "mysh.h"
 #include "init.h"
 
-static int loop_sh(mysh_t *mysh, char *input)
+int loop_sh(mysh_t *mysh, char *input)
 {
     int res = 0;
 
@@ -30,8 +30,7 @@ static int loop_sh(mysh_t *mysh, char *input)
         return ERROR;
     if (res != SUCCESS)
         return SUCCESS;
-
-    if ((res = go_throught_grocommand(mysh)) == ERROR)
+    if ((res = loop_grocommand(mysh)) == ERROR)
         return ERROR;
 
     free_ast(mysh->ast);
@@ -40,7 +39,7 @@ static int loop_sh(mysh_t *mysh, char *input)
 
 int init_all(mysh_t *mysh, char * const env[])
 {
-    if ((mysh->list_env = create_list_env(env)) == NULL && env[0] != NULL)
+    if ((mysh->env = init_mysh_env(env)) == NULL)
         return ERROR;
     if (init_history(mysh) == ERROR)
         return ERROR;
@@ -58,7 +57,7 @@ int mysh(char * const env[])
         return ERROR;
     while (res == 0) {
         if (isatty(0) == 1)
-            write(1, "$> ", 3);
+            fprintf(stdout, ":) ");
         if ((input = get_input()) == NULL) {
             res = EXIT;
             break;
@@ -66,7 +65,7 @@ int mysh(char * const env[])
         res = loop_sh(&mysh, input);
     }
     if (res == EXIT && isatty(0) == 1)
-        write(1, "exit\n", 5);
+        fprintf(stdout, "exit\n");
     if (res == ERROR)
         return ERROR;
     free_env(&mysh);

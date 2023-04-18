@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include "mysh.h"
 #include "builtins/env.h"
 #include "str_func.h"
@@ -45,7 +46,7 @@ int get_path(mysh_t *mysh, char **path)
     char **all_prefix = NULL;
     int res_all_try = 0;
 
-    if ((*path = my_str_dup(mysh->command[0])) == NULL)
+    if ((*path = strdup(mysh->command[0])) == NULL)
         return ERROR;
     if (is_absolute_path(*path) == SUCCESS) {
         if (access(mysh->command[0], F_OK) == 0)
@@ -53,7 +54,7 @@ int get_path(mysh_t *mysh, char **path)
         return FAILURE;
     }
 
-    if ((env_path = get_env_var(mysh->list_env, "PATH=")) == NULL)
+    if ((env_path = get_env_var(mysh, "PATH=")) == NULL)
         return FAILURE;
     if ((all_prefix = input_to_array(env_path, ":")) == NULL)
         return ERROR;

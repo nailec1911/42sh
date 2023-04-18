@@ -32,7 +32,8 @@ static int add_elt_in_tab(ast_t *ast, grocommand_t new_command)
 
 static int fill_tab_grocommand(parser_t *parser, ast_t *ast)
 {
-    while (parser->list_tokens[parser->cursor].type != END_LINE) {
+    while (parser->list_tokens[parser->cursor].type != END_LINE
+    && parser->list_tokens[parser->cursor].type != UNMATCHED_QUOTE) {
         while (parser->list_tokens[parser->cursor].type == SEMICOLON)
             parser->cursor += 1;
         if (parser->list_tokens[parser->cursor].type == END_LINE)
@@ -42,7 +43,8 @@ static int fill_tab_grocommand(parser_t *parser, ast_t *ast)
             parser->error = ERROR;
         if (parser->error != 0)
             return parser->error;
-        if (is_end_command(parser->list_tokens[parser->cursor]) == false) {
+        if (parser->list_tokens[parser->cursor].type != END_LINE
+        && parser->list_tokens[parser->cursor].type != SEMICOLON) {
             parser->error = FAILURE;
             return parser->error;
         }

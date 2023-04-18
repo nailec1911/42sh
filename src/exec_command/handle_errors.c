@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <unistd.h>
+#include <stdio.h>
 #include <sys/wait.h>
 #include "macro_errors.h"
 #include "str_func.h"
@@ -15,12 +16,12 @@ int handle_errors(int status)
 {
     if (WIFSIGNALED(status)){
         if (WTERMSIG(status) == SIGFPE)
-            my_putstr("Floating exception", 2);
+            fprintf(stderr, "Floating exception");
         else
-            my_putstr(strsignal(WTERMSIG(status)), 2);
+            fprintf(stderr, strsignal(WTERMSIG(status)));
         if (WCOREDUMP(status))
-            my_putstr(" (core dumped)", 2);
-        write(2, "\n", 1);
+            fprintf(stderr, " (core dumped)");
+        fprintf(stderr, "\n");
         return status;
     }
     if (WIFEXITED(status)) {

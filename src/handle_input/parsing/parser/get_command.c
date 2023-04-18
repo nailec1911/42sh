@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 #include "str_func.h"
 #include "parser/token.h"
 #include "parser/ast.h"
@@ -15,9 +16,9 @@
 static void error_redirect(int type)
 {
     if (type == IN_1 || type == IN_2)
-        my_putstr("Ambiguous input redirect.\n", 2);
+        fprintf(stderr, "Ambiguous input redirect.\n");
     if (type == OUT_1 || type == OUT_2)
-        my_putstr("Ambiguous output redirect.\n", 2);
+        fprintf(stderr, "Ambiguous output redirect.\n");
 }
 
 static void set_redirect(parser_t *parser,
@@ -40,7 +41,7 @@ static void handle_redirect(parser_t *parser, command_t *command)
     if (parser->list_tokens[parser->cursor].type != IDENTIFIER){
         command->nb_command = -1;
         parser->error = 1;
-        my_putstr("missing name\n", 2);
+        fprintf(stderr, "missing name\n");
         return;
     }
     if (redirect.size_val == IN_1 || redirect.size_val == IN_2) {
@@ -84,19 +85,19 @@ command_t get_command(parser_t *parser)
 
     while (parser->list_tokens[parser->cursor].type == REDIRECT
     || parser->list_tokens[parser->cursor].type == IDENTIFIER) {
-
         if (parser->list_tokens[parser->cursor].type == IDENTIFIER
         && add_elt_in_tab(parser, &new) == ERROR) {
             parser->error = ERROR;
             return new;
         }
-
         if (parser->list_tokens[parser->cursor].type == REDIRECT)
             handle_redirect(parser, &new);
     }
-    if (new.command == NULL) {
+    if (parser->list_tokens[parser->cursor].type == UNMATCHED_QUOTE) {
         parser->error = 1;
-        my_putstr("Invalid null command.\n", 2);
+    } else if (new.command == NULL) {
+        parser->error = 1;
+        fprintf(stderr, "Invalid null command.\n");
     }
     return new;
 }

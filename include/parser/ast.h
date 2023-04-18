@@ -36,10 +36,19 @@
         redirect_t redirect_out;
     } command_t;
 
+    typedef struct and_command_s {
+        int nb_command;
+        command_t *tab_command;
+    } and_command_t;
+
+    typedef struct or_command_s {
+        int nb_command;
+        and_command_t *tab_command;
+    } or_command_t;
+
     typedef struct grocommand_s {
         int nb_command;
-        tokentype_t type;
-        command_t *tab_command;
+        or_command_t *tab_command;
     } grocommand_t;
 
     typedef struct ast_s {

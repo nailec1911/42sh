@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <unistd.h>
+#include <stdio.h>
 #include "builtins/env.h"
 #include "mysh.h"
 #include "str_func.h"
@@ -35,18 +36,15 @@ static int update_env_var(char *old_pwd, mysh_t *mysh)
 static void display_error_chdir(int error_code, char *path)
 {
     if (error_code == 2) {
-        my_putstr(path, 2);
-        my_putstr(": No such file or directory.\n", 2);
+        fprintf(stderr, "%s: No such file or directory.\n", path);
         return;
     }
     if (error_code == 20) {
-        my_putstr(path, 2);
-        my_putstr(": Not a directory.\n", 2);
+        fprintf(stderr, "%s: Not a directory.\n", path);
         return;
     }
     if (error_code == 13) {
-        my_putstr(path, 2);
-        my_putstr(": Permission denied.\n", 2);
+        fprintf(stderr, "%s: Permission denied.\n", path);
         return;
     }
     perror(path);
@@ -59,7 +57,7 @@ int do_cd(mysh_t *mysh, command_t to_exec)
     char *old_pwd = NULL;
     (void)to_exec;
     if (mysh->command[1] != NULL && mysh->command[2] != NULL) {
-        my_putstr("cd: Too many arguments.\n", 2);
+        fprintf(stderr, "cd: Too many arguments.\n");
         mysh->last_status = 1;
         return SUCCESS;
     }

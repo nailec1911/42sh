@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2023
 ** B-PSU-200-BDX-2-1-minishell2-celian.lombardot
 ** File description:
-** exec_grocommand
+** exec_pipes
 */
 
 #include <stdlib.h>
@@ -12,8 +12,9 @@
 #include <fcntl.h>
 #include "exec_command.h"
 #include "macro_errors.h"
+#include "globbins.h"
 
-static void close_all_fd_except(grocommand_t to_exec, int except)
+static void close_all_fd_except(and_command_t to_exec, int except)
 {
     for (int i = 0; i < to_exec.nb_command; i += 1) {
         if (i == except)
@@ -25,7 +26,7 @@ static void close_all_fd_except(grocommand_t to_exec, int except)
     }
 }
 
-static int fork_before_exec(mysh_t *mysh, grocommand_t to_exec, int i)
+static int fork_before_exec(mysh_t *mysh, and_command_t to_exec, int i)
 {
     int cpid = 0;
 
@@ -41,7 +42,7 @@ static int fork_before_exec(mysh_t *mysh, grocommand_t to_exec, int i)
     return SUCCESS;
 }
 
-static int exec_all_function(mysh_t *mysh, grocommand_t to_exec)
+static int exec_all_function(mysh_t *mysh, and_command_t to_exec)
 {
     int res = 0;
 
@@ -56,17 +57,22 @@ static int exec_all_function(mysh_t *mysh, grocommand_t to_exec)
     return SUCCESS;
 }
 
-int exec_grocommand(mysh_t *mysh, grocommand_t to_exec)
+int exec_and_command(mysh_t *mysh, and_command_t *to_exec)
 {
     int res = 0;
 
-    if ((res = set_fd_input(&(to_exec.tab_command[0]))) == EXIT)
+    update_glob_argv(to_exec);
+    if (set_magic_quote(mysh, to_exec) == ERROR)
+        return ERROR;
+
+    if ((res = set_fd_input(&(to_exec->tab_command[0]))) == EXIT)
         return SUCCESS;
     if (res == ERROR)
         return ERROR;
-    if (set_fd_output(&(to_exec.tab_command[to_exec.nb_command - 1])) == ERROR)
+    if (set_fd_output(&(to_exec->tab_command[to_exec->nb_command - 1]))
+            == ERROR)
         return ERROR;
-    if ((res = exec_all_function(mysh, to_exec)) != SUCCESS)
+    if ((res = exec_all_function(mysh, *to_exec)) != SUCCESS)
         return res;
 
     return SUCCESS;

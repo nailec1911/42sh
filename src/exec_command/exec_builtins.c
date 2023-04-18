@@ -9,7 +9,6 @@
 #include "mysh.h"
 #include "builtins/builtins_func.h"
 #include "str_func.h"
-#include "handle_input.h"
 #include "macro_errors.h"
 
 int exec_builtins(mysh_t *mysh, command_t to_exec)
