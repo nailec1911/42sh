@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #include "exec_command.h"
 #include "macro_errors.h"
+#include "globbins.h"
 
 static void close_all_fd_except(and_command_t to_exec, int except)
 {
@@ -60,6 +61,7 @@ int exec_and_command(mysh_t *mysh, and_command_t *to_exec)
 {
     int res = 0;
 
+    update_glob_argv(to_exec);
     if (set_magic_quote(mysh, to_exec) == ERROR)
         return ERROR;
 

@@ -26,6 +26,7 @@ SRC	=	mysh.c		\
 		handle_input/parsing/parser/get_command.c			\
 		handle_input/get_path.c					\
 		handle_input/set_fd_for_exec.c				\
+		exec_command/globbins/globbins.c 			\
 		exec_command/loop_command.c		\
 		exec_command/magic_quote/set_magic_quote.c		\
 		exec_command/magic_quote/get_res_command.c		\
