@@ -15,6 +15,7 @@
 #include "mysh.h"
 #include "macro_errors.h"
 int parse_input(char *input, mysh_t *mysh);
+void free_ast(ast_t ast);
 
 Test(parser1, only_ls){
     mysh_t mysh = {0};
@@ -38,6 +39,7 @@ Test(parser1, only_ls){
     cr_assert_str_eq(tree_leef.tab_command[0].command[0], "ls");
     cr_assert_str_eq(tree_leef.tab_command[0].command[1], "-l");
     cr_assert_str_eq(tree_leef.tab_command[0].command[2], "-a");
+    free_ast(mysh.ast);
 }
 
 Test(parser2, piped_command){
@@ -75,6 +77,7 @@ Test(parser2, piped_command){
     cr_assert_eq(tree_leef.tab_command[2].nb_command, 2);
     cr_assert_str_eq(tree_leef.tab_command[2].command[0], "cat");
     cr_assert_str_eq(tree_leef.tab_command[2].command[1], "-e");
+    free_ast(mysh.ast);
 }
 
 Test(parser3, redirection_simple){
@@ -99,6 +102,7 @@ Test(parser3, redirection_simple){
     cr_assert_str_eq(tree_leef.tab_command[0].redirect_out.name, "out");
     cr_assert_eq(tree_leef.tab_command[0].nb_command, 1);
     cr_assert_str_eq(tree_leef.tab_command[0].command[0], "cat");
+    free_ast(mysh.ast);
 }
 
 Test(parser4, redirection_double){
@@ -123,6 +127,7 @@ Test(parser4, redirection_double){
     cr_assert_str_eq(tree_leef.tab_command[0].redirect_out.name, "out");
     cr_assert_eq(tree_leef.tab_command[0].nb_command, 1);
     cr_assert_str_eq(tree_leef.tab_command[0].command[0], "cat");
+    free_ast(mysh.ast);
 }
 
 Test(parser5, ambiguous_redirection_in){
@@ -143,6 +148,7 @@ Test(parser5, ambiguous_redirection_in){
     cr_assert_eq(parse_input(input3, &mysh), FAILURE);
     cr_assert_eq(mysh.last_status, 1);
     cr_assert_stderr_eq_str("Ambiguous input redirect.\nAmbiguous input redirect.\nAmbiguous input redirect.\n");
+    free_ast(mysh.ast);
 }
 
 Test(parser6, ambiguous_redirection_out){
@@ -164,6 +170,7 @@ Test(parser6, ambiguous_redirection_out){
     cr_assert_eq(mysh.last_status, 1);
 
     cr_assert_stderr_eq_str("Ambiguous output redirect.\nAmbiguous output redirect.\nAmbiguous output redirect.\n");
+    free_ast(mysh.ast);
 }
 
 Test(parser7, missing_redirect_name){
@@ -175,6 +182,7 @@ Test(parser7, missing_redirect_name){
     cr_assert_eq(mysh.last_status, 1);
 
     cr_assert_stderr_eq_str("missing name\n");
+    free_ast(mysh.ast);
 }
 
 Test(parser8, null_command){
@@ -186,6 +194,7 @@ Test(parser8, null_command){
     cr_assert_eq(mysh.last_status, 1);
 
     cr_assert_stderr_eq_str("Invalid null command.\n");
+    free_ast(mysh.ast);
 }
 
 void assert_command_ok(and_command_t to_test)
@@ -214,6 +223,7 @@ Test(parser9, grocommand){
     for (int i = 0; i < 2; i += 1) {
         assert_command_ok(ast.tab_grocommands[i].tab_command[0].tab_command[0]);
     }
+    free_ast(mysh.ast);
 }
 
 Test(parser10, or_command){
@@ -229,6 +239,7 @@ Test(parser10, or_command){
     for (int i = 0; i < 3; i += 1) {
         assert_command_ok(to_test.tab_command[i].tab_command[0]);
     }
+    free_ast(mysh.ast);
 }
 
 Test(parser11, and_command){
@@ -245,6 +256,7 @@ Test(parser11, and_command){
     for (int i = 0; i < 3; i += 1) {
         assert_command_ok(to_test.tab_command[i]);
     }
+    free_ast(mysh.ast);
 }
 
 Test(parser12, all_operators){
@@ -279,6 +291,7 @@ Test(parser12, all_operators){
     //            ------- third or_command ----------------------
     cr_assert_eq(mysh.ast.tab_grocommands[1].tab_command[2].nb_command, 1);
     assert_command_ok(mysh.ast.tab_grocommands[1].tab_command[2].tab_command[0]);
+    free_ast(mysh.ast);
 }
 
 Test(parser13, quotes){
@@ -304,4 +317,5 @@ Test(parser13, quotes){
     cr_assert_str_eq(tree_leef.tab_command[0].command[1], "-l");
     cr_assert_str_eq(tree_leef.tab_command[0].command[2], "ds ds");
     cr_assert_str_eq(tree_leef.tab_command[0].command[3], "ddd`");
+    free_ast(mysh.ast);
 }

@@ -17,6 +17,7 @@ Test(mysh1, simple_command_with_path){
     char *const env[4] = {"PATH=tests/", "hello", "third"};
 
     fwrite("hello_world\n", 1, 12, inputs);
+    fwrite("exit\n", 1, 5, inputs);
 
     fclose(inputs);
     cr_assert_eq(mysh(env), SUCCESS);
@@ -29,6 +30,7 @@ Test(mysh2, simple_command_full_path){
     char *const env[4] = {"PATH=tests/", "hello", "third"};
 
     fwrite("./tests/hello_world\n", 1, 20, inputs);
+    fwrite("exit\n", 1, 5, inputs);
 
     fclose(inputs);
     cr_assert_eq(mysh(env), SUCCESS);
@@ -154,7 +156,7 @@ Test(mysh11, cd){
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"hi", "hello", "third"};
 
-    fwrite("cd src; ./hello_world; cd -; ./tests/hello_world\n", 1, 50, inputs);
+    fwrite("cd tests; ./hello_world; cd -; ./tests/hello_world\n", 1, 50, inputs);
     fwrite("exit\n", 1, 5, inputs);
 
     fclose(inputs);
@@ -210,7 +212,7 @@ Test(mysh15, backticks){
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"PATH=tests/", "hello", "third"};
 
-    fwrite("./tests/disp_args `env`\n", 1, 35, inputs);
+    fwrite("./tests/disp_args `env`\n", 1, 24, inputs);
     fwrite("exit\n", 1, 5, inputs);
 
     fclose(inputs);
