@@ -9,9 +9,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <glob.h>
 #include <sys/wait.h>
-#include <string.h>
 #include "builtins/env.h"
 #include "str_func.h"
 #include "macro_errors.h"

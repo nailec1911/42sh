@@ -6,6 +6,7 @@
 */
 
 #include <glob.h>
+#include <stdlib.h>
 #include <string.h>
 #include "globbins.h"
 #include "str_func.h"
@@ -70,7 +71,7 @@ static char **get_glob_argv(command_t *cmd, int *size)
         }
         if (get_glob_data(cmd->command[i], &results) == ERROR)
             continue;
-        for (int y = 0; y < results.gl_pathc; y++)
+        for (size_t y = 0; y < results.gl_pathc; y++)
             new_argv[(*size)++] = strdup(results.gl_pathv[y]);
         globfree(&results);
     }
