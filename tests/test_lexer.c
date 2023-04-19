@@ -153,3 +153,33 @@ Test(lexer11, missing_quote){
     cr_assert_eq(tokens[0].type, UNMATCHED_QUOTE);
     cr_assert_stderr_eq_str("Unmatched '\"'.\n");
 }
+
+Test(lexer12, inhibitors){
+    token_t *tokens = lexer("ls \\| \\  src \\\"ls\\s \n");
+
+    cr_assert_eq(tokens[0].type, IDENTIFIER);
+    cr_assert_str_eq(tokens[0].value, "ls");
+    cr_assert_eq(tokens[1].type, IDENTIFIER);
+    cr_assert_str_eq(tokens[1].value, "|");
+    cr_assert_eq(tokens[2].type, IDENTIFIER);
+    cr_assert_str_eq(tokens[2].value, " ");
+    cr_assert_eq(tokens[3].type, IDENTIFIER);
+    cr_assert_str_eq(tokens[3].value, "src");
+    cr_assert_eq(tokens[4].type, IDENTIFIER);
+    cr_assert_str_eq(tokens[4].value, "\"lss");
+    cr_assert_eq(tokens[5].type, END_LINE);
+}
+
+Test(lexer13, inhibitors_get_input){
+    cr_redirect_stdout();
+    FILE *inputs = cr_get_redirected_stdin();
+    fwrite("test\n", 1, 5, inputs);
+    fclose(inputs);
+
+    token_t *tokens = lexer("echo \\\n");
+    cr_assert_eq(tokens[0].type, IDENTIFIER);
+    cr_assert_str_eq(tokens[0].value, "echo");
+    cr_assert_eq(tokens[1].type, IDENTIFIER);
+    cr_assert_str_eq(tokens[1].value, "test");
+    cr_assert_eq(tokens[2].type, END_LINE);
+}
