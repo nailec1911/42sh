@@ -17,7 +17,7 @@
     void free_array(char **array);
     int is_in(char c, char *str);
     int my_strstrlen(char *str[]);
-    char *clean_last_input(char *last_input, char **tab_alias);
+    char *clean_last_input(char **tab_alias);
 
 
 #endif /* !STR_FUNC_H_ */

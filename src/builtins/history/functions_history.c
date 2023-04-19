@@ -24,7 +24,7 @@ static int just_history(char *input)
         return ERROR;
     for (int i = 0; tab_history[i] != NULL; i += 1) {
         if (strcmp("history", tab_history[i]) == 0 &&
-         tab_history[i + 1] == NULL) {
+            tab_history[i + 1] == NULL) {
             free_array(tab_history);
             return EXIT;
         }

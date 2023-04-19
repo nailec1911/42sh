@@ -24,7 +24,7 @@ int loop_sh(mysh_t *mysh, char *input)
         return SUCCESS;
     if (add_in_history(mysh, input) == ERROR)
         return ERROR;
-    if (is_alias(mysh, &input) == ERROR)
+    if ((input = is_alias(mysh, input)) == NULL)
         return ERROR;
     if ((res = parse_input(input, mysh)) == ERROR)
         return ERROR;
