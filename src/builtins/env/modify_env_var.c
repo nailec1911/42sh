@@ -15,20 +15,12 @@
 
 static int edit_var(char *to_change, char *new_value, char **old)
 {
-    int i = 0;
-
     free(*old);
     if (new_value == NULL) {
         if ((*old = my_strcat_dup(to_change, "=")) == NULL)
             return ERROR;
         return SUCCESS;
     }
-    for (; to_change[i] != '\0' && to_change[i] != '='; ++i);
-    if ((*old = malloc(sizeof(char) * (i + 1))) == NULL)
-        return ERROR;
-    (*old)[i] = '\0';
-    for (int j = 0; j < i; ++j)
-        (*old)[i] = to_change[i];
     if ((*old = my_strcat_with_char(to_change, new_value, '=')) == NULL)
         return ERROR;
     return SUCCESS;
