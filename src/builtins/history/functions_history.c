@@ -17,8 +17,30 @@
 #include <sys/stat.h>
 #include <time.h>
 
+static int just_history(char *input)
+{
+    char **tab_history = my_str_to_word_array_separator(input, " \n");
+    if (tab_history == NULL)
+        return ERROR;
+    for (int i = 0; tab_history[i] != NULL; i += 1) {
+        if (strcmp("history", tab_history[i]) == 0 &&
+         tab_history[i + 1] == NULL) {
+            free_array(tab_history);
+            return EXIT;
+        }
+    }
+    free_array(tab_history);
+    return SUCCESS;
+}
+
 int add_in_history(mysh_t *mysh, char *input)
 {
+    int res = just_history(input);
+
+    if (res == EXIT)
+        return SUCCESS;
+    if (res == ERROR)
+        return ERROR;
     if (ftruncate(mysh->history.fd_history_file, 0) == -1) {
         return ERROR;
     }
