@@ -9,6 +9,8 @@
     #define MYSH_H_
 
     #include "parser/ast.h"
+    #include "alias.h"
+    #include "history.h"
 
     typedef struct mysh_s {
         char **env;
@@ -16,6 +18,12 @@
         int last_status;
         int to_return;
         ast_t ast;
+        history_t history;
+        alias_t alias;
     } mysh_t;
 
+char *create_line_history(mysh_t *mysh, char *input);
+int check_last_command(mysh_t *mysh, char *input);
+int init_alias(mysh_t *mysh);
+char *is_alias(mysh_t *mysh, char *input);
 #endif /* !MYSH_H_ */

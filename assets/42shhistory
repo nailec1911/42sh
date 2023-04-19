@@ -1,0 +1,10 @@
+     1  12:20   ;;env;;;;./tests/hello_world;;;;
+     2  12:20   exit
+     3  12:21   ls > te| ls
+     4  12:21   ls | ls < l
+     5  12:21   history
+     6  12:21   exit
+     7  12:21   ls > te | ls
+     8  12:21   exit
+     9  12:22   ls | ls < l
+    10  12:22   exit

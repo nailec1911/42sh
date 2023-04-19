@@ -29,9 +29,9 @@ char **init_mysh_env(char * const env[])
     int sub_len = 0;
     char **result = malloc(sizeof(char*) * (len + 1));
 
-    result[len] = NULL;
-    if (env == NULL)
+    if (env == NULL || result == NULL)
         return result;
+    result[len] = NULL;
     for (int i = 0; i < len; i += 1) {
         sub_len = strlen(env[i]);
         result[i] = malloc(sizeof(char) * (sub_len + 1));
