@@ -19,6 +19,7 @@
         int len_input;
         int cursor;
         int nb_token;
+        int context;
     } lexer_t;
 
     char lexer_peek(lexer_t *lex);
