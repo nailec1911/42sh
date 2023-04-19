@@ -109,7 +109,7 @@ NAME_TESTS	=	unit_tests
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -o $(NAME) $(OBJ) $(CPPFLAGS) $(LFLAGS)
+	gcc -o $(NAME) $(OBJ)
 
 tests_run: CPPFLAGS += --coverage
 tests_run: fclean $(OBJ_TEST)
@@ -121,8 +121,8 @@ debug: CFLAGS += -ggdb3
 debug: $(NAME)
 
 clean:
-	rm -f $(OBJ)
 	rm -f $(OBJ_TEST)
+	find . -name "*.o" -delete
 	find . -name "*~" -delete
 	find . -name '#'*'#' -delete
 	find . -name "*.gc*" -delete
