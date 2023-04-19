@@ -143,3 +143,18 @@ Test(mysh_globings4, no_globs){
     cr_assert_eq(mysh(env), SUCCESS);
     cr_assert_stdout_eq_str("./disp_args\nt1\n");
 }
+
+Test(mysh_globings5, no_match){
+    cr_redirect_stdout();
+    cr_redirect_stderr();
+    chdir("tests/");
+    FILE *inputs = cr_get_redirected_stdin();
+    char *const env[4] = {"PATH=tests/", "hello", "third"};
+
+    fwrite("./disp_args *.d\n", 1, 16, inputs);
+    fwrite("exit\n", 1, 5, inputs);
+
+    fclose(inputs);
+    cr_assert_eq(mysh(env), SUCCESS);
+    cr_assert_stdout_eq_str("./disp_args: No match.\n");
+}
