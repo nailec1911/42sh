@@ -1,14 +1,14 @@
 /*
 ** EPITECH PROJECT, 2023
-** B-PSU-100-BDX-1-1-navy-adam.de-lacheisserie-levy
+** 42sh
 ** File description:
-** input
+** get_input_line
 */
 
-#include <stdio.h>
 #include <unistd.h>
+#include <stdio.h>
 
-char *get_input(void)
+char *get_input_line(void)
 {
     char *line = NULL;
     size_t len = 0;

@@ -8,11 +8,23 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <termios.h>
 #include <stdlib.h>
 #include "launch_command.h"
 #include "builtins/env.h"
 #include "str_func.h"
 #include "macro_errors.h"
+
+static char *choose_get_line(void)
+{
+    char *input = '\0';
+
+    if (isatty(0) == 1)
+        input = get_input();
+    else
+        input = get_input_line();
+    return input;
+}
 
 static int loop_sh(all_args_t *all_args, char *input)
 {
@@ -42,7 +54,7 @@ int mysh(char * const env[])
     while (res == 0) {
         if (isatty(0) == 1)
             write(1, "$> ", 3);
-        if ((input = get_input()) == NULL) {
+        if ((input = choose_get_line()) == NULL) {
             res = EXIT;
             break;
         }
