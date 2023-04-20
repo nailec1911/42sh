@@ -22,11 +22,7 @@ int loop_sh(mysh_t *mysh, char *input)
 
     if (input[0] == '\n')
         return SUCCESS;
-    if (add_in_history(mysh, input) == ERROR)
-        return ERROR;
-    if ((input = is_alias(mysh, input)) == NULL)
-        return ERROR;
-    if ((res = parse_input(input, mysh)) == ERROR)
+    if ((res = handle_input(mysh, input)) == ERROR)
         return ERROR;
     if (res != SUCCESS)
         return SUCCESS;
