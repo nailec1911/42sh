@@ -11,42 +11,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include "str_func.h"
-void arrow_function(int *index, int length);
+void arrow_function(int *index, int *length, char **line);
 void right_arrow_function(int *index, int length);
 void left_arrow_function(int *index);
 void set_terminal(struct termios *old_term, struct termios *term);
-
-static char *remove_char(char *line, int index, int length)
-{
-    int i = index;
-
-    line[index - 1] = '\0';
-    if (line[index] == '\0')
-        return line;
-    for (; i < length; i += 1)
-        line[i - 1] = line[i];
-    line[i - 1] = '\0';
-    return line;
-}
-
-static void backward_function(int *length, int *index, char **line)
-{
-    int res = *index;
-    int temp = res;
-
-    if (*index != 0) {
-        *line = remove_char(*line, *index, *length);
-        *length -= 1;
-        *index -= 1;
-        for (int i = res; i <= *length; i += 1)
-            printf("\033[C");
-        for (int k = 0; k <= *length; k += 1)
-            printf("\b \b");
-        printf("%s", *line);
-        for (int z = temp; z <= *length; z += 1)
-            printf("\033[D");
-    }
-}
+void backward_function(int *length, int *index, char **line);
+char *remove_char(char *line, int index, int length);
 
 static char *fill_string(char *line, int ch, int *index, int *length)
 {
@@ -71,7 +41,7 @@ static char *ch_functions(int ch, int *index, int *length, char *line)
 {
     switch (ch) {
         case 27:
-            arrow_function(index, *length);
+            arrow_function(index, length, &line);
             break;
         case 4:
             return NULL;
@@ -98,9 +68,10 @@ char *get_input(void)
     for (int i = 0; i < 1024; i += 1)
         line[i] = '\0';
     set_terminal(&old_term, &term);
-    while (read(STDIN_FILENO, &ch, 1) > 0 && ch != 10)
+    while (read(STDIN_FILENO, &ch, 1) > 0 && ch != 10) {
         if ((line = ch_functions(ch, &index, &length, line)) == NULL)
             return NULL;
+    }
     printf("\n");
     new = my_strcat_dup(line, "\n");
     tcsetattr(STDIN_FILENO, TCSANOW, &old_term);
