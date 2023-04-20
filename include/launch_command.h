@@ -12,7 +12,7 @@
 
     char *get_input(void);
     int loop_grocommand(mysh_t *mysh);
-    int parse_input(char *input, mysh_t *mysh);
+    int handle_input(mysh_t *mysh, char *input);
     void free_ast(ast_t ast);
 
 #endif /* !LAUNCH_COMMAND_H_ */

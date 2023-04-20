@@ -43,13 +43,13 @@ int set_fd_input(command_t *command)
     command->fd_in = STDIN_FILENO;
     if (command->redirect_in.type == NO_REDIRECT)
         return SUCCESS;
-    if (redirect.type == IN_1) {
+    if (redirect.type == REDIRECT_IN_1) {
         if ((command->fd_in = open(redirect.name, O_RDONLY)) < 0) {
             perror(redirect.name);
             return EXIT;
         }
     }
-    if (redirect.type == IN_2) {
+    if (redirect.type == REDIRECT_IN_2) {
         if ((command->fd_in = fill_file_from_input(redirect)) < 0)
             return ERROR;
     }
@@ -58,10 +58,10 @@ int set_fd_input(command_t *command)
 
 int set_fd_output(command_t *command)
 {
-    if (command->redirect_out.type == OUT_1)
+    if (command->redirect_out.type == REDIRECT_OUT_1)
         command->fd_out = open(command->redirect_out.name,
         O_CREAT | O_WRONLY | O_TRUNC, 00644);
-    if (command->redirect_out.type == OUT_2)
+    if (command->redirect_out.type == REDIRECT_OUT_2)
         command->fd_out = open(command->redirect_out.name,
         O_CREAT | O_WRONLY | O_APPEND, 00644);
     if (command->fd_out < 0) {

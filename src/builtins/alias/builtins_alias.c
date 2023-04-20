@@ -80,7 +80,7 @@ static char *check_is_alias(char **tab_alias, char **input, char *to_search)
 char *is_alias(mysh_t *mysh, char *input)
 {
     char **tab_alias = NULL;
-    char *to_search = strdup(input);
+    char *to_search = my_strcat_dup(input, "\n");
 
     if (to_search == NULL)
         return NULL;

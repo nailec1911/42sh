@@ -9,7 +9,9 @@ SOURCE_DIR	=	src/
 
 SRC	=	mysh.c		\
 		get_input.c	\
-		handle_input/parsing/parse_input.c			\
+		handle_input/handle_input.c			\
+		handle_input/tokens_to_history.c			\
+		handle_input/loop_for_aliases.c				\
 		handle_input/parsing/set_all_ast.c			\
 		handle_input/parsing/free_ast.c				\
 		handle_input/parsing/lexer/lexer.c					\
@@ -81,7 +83,8 @@ SRC_MAIN	=	src/main.c
 
 OBJ	=	$(addprefix $(SOURCE_DIR), $(SRC:.c=.o)) $(SRC_MAIN:.c=.o)
 
-TO_TEST	=	tests/test_lexer.c	\
+TO_TEST	=	tests/test_function.c	\
+			tests/test_lexer.c	\
 			tests/test_parser.c	\
 			tests/test_builtin_cd.c		\
 			tests/test_env_handling.c		\

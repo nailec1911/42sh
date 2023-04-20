@@ -15,9 +15,9 @@
 
 static void error_redirect(int type)
 {
-    if (type == IN_1 || type == IN_2)
+    if (type == REDIRECT_IN_1 || type == REDIRECT_IN_2)
         fprintf(stderr, "Ambiguous input redirect.\n");
-    if (type == OUT_1 || type == OUT_2)
+    if (type == REDIRECT_OUT_1 || type == REDIRECT_OUT_2)
         fprintf(stderr, "Ambiguous output redirect.\n");
 }
 
@@ -44,13 +44,13 @@ static void handle_redirect(parser_t *parser, command_t *command)
         fprintf(stderr, "missing name\n");
         return;
     }
-    if (redirect.size_val == IN_1 || redirect.size_val == IN_2) {
+    if (redirect.type == REDIRECT_IN_1 || redirect.type == REDIRECT_IN_2) {
         set_redirect(parser, &command->redirect_in,
-        redirect.size_val, parser->list_tokens[parser->cursor].value);
+        redirect.type, parser->list_tokens[parser->cursor].value);
     }
-    if (redirect.size_val == OUT_1 || redirect.size_val == OUT_2) {
+    if (redirect.type == REDIRECT_OUT_1 || redirect.type == REDIRECT_OUT_2) {
         set_redirect(parser, &command->redirect_out,
-        redirect.size_val, parser->list_tokens[parser->cursor].value);
+        redirect.type, parser->list_tokens[parser->cursor].value);
     }
     parser->cursor += 1;
 }
@@ -83,14 +83,14 @@ command_t get_command(parser_t *parser)
     command_t new = {0, NULL, NULL, false, STDIN_FILENO, STDOUT_FILENO,
     false, {NO_REDIRECT, NULL}, {NO_REDIRECT, NULL}};
 
-    while (parser->list_tokens[parser->cursor].type == REDIRECT
+    while (IS_REDIRECT(parser->list_tokens[parser->cursor].type)
     || parser->list_tokens[parser->cursor].type == IDENTIFIER) {
         if (parser->list_tokens[parser->cursor].type == IDENTIFIER
         && add_elt_in_tab(parser, &new) == ERROR) {
             parser->error = ERROR;
             return new;
         }
-        if (parser->list_tokens[parser->cursor].type == REDIRECT)
+        if (IS_REDIRECT(parser->list_tokens[parser->cursor].type))
             handle_redirect(parser, &new);
     }
     if (parser->list_tokens[parser->cursor].type == UNMATCHED_QUOTE) {

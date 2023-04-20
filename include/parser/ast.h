@@ -11,16 +11,10 @@
     #include <stdbool.h>
     #include "parser/token.h"
 
-    typedef enum {
-        NO_REDIRECT,
-        IN_1,
-        IN_2,
-        OUT_1,
-        OUT_2
-    } type_redirect_t;
+    #define NO_REDIRECT 0
 
     typedef struct redirect_s {
-        type_redirect_t type;
+        int type;
         char *name;
     } redirect_t;
 
