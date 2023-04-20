@@ -8,7 +8,6 @@
 SOURCE_DIR	=	src/
 
 SRC	=	mysh.c		\
-		get_input.c	\
 		handle_input/parsing/parse_input.c			\
 		handle_input/parsing/set_all_ast.c			\
 		handle_input/parsing/free_ast.c				\
@@ -39,6 +38,10 @@ SRC	=	mysh.c		\
 		str_func/free_array.c		\
 		str_func/str_is_alphanum.c	\
 		str_func/input_to_array.c	\
+		user_input/arrows_func.c	\
+		user_input/get_input.c	\
+		user_input/get_input_line.c	\
+		user_input/set_terminal.c	\
 		builtins/cd/cd.c				\
 		builtins/cd/get_path_to_go.c 	\
 		builtins/setenv/setenv.c			\
