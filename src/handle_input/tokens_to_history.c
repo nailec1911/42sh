@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include "macro_errors.h"
 #include "mysh.h"
-int add_in_history(mysh_t *mysh, char *input);
+#include "handle_input.h"
 
 static int get_size_malloc(token_t *list)
 {

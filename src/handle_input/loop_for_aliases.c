@@ -7,7 +7,8 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <parser/parse.h>
+#include "parser/parse.h"
+#include "handle_input.h"
 #include "mysh.h"
 
 static token_t *get_new_tab(token_t *old, token_t *to_add, int ind)
