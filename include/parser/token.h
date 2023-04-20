@@ -25,8 +25,9 @@
         T_ERROR
     } tokentype_t;
 
-    #define IS_REDIRECT(value) value == REDIRECT_IN_1 || value == REDIRECT_IN_2\
-                        || value == REDIRECT_OUT_1 || value == REDIRECT_OUT_2
+    #define IS_REDIRECT_IN(val) val == REDIRECT_IN_1 || val == REDIRECT_IN_2
+    #define IS_REDIRECT_OUT(val) val == REDIRECT_OUT_1 || val == REDIRECT_OUT_2
+    #define IS_REDIRECT(val) IS_REDIRECT_IN(val) || IS_REDIRECT_OUT(val)
 
     typedef struct token_s {
         tokentype_t type;

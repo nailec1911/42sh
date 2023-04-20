@@ -24,14 +24,10 @@ static token_t *get_new_tab(token_t *old, token_t *to_add, int ind)
         return NULL;
     for (; i < ind; i += 1)
         new[i] = old[i];
-    for (int j = 0; j < len_new - 1; j += 1) {
-        new[i] = to_add[j];
-        i += 1;
-    }
-    for (int j = ind + 1; j < len_old; j += 1) {
-        new[i] = old[j];
-        i += 1;
-    }
+    for (int j = 0; j < len_new - 1; j += 1)
+        new[i ++] = to_add[j];
+    for (int j = ind + 1; j < len_old; j += 1)
+        new[i ++] = old[j];
     free(old);
     return new;
 }
@@ -41,7 +37,8 @@ static token_t *replace_if_alias(mysh_t *mysh, token_t *list, int *i)
     char *alias = NULL;
     token_t *list_alias;
 
-    if (list[*i].type != IDENTIFIER || (*i > 0 && list[*i - 1].type == IDENTIFIER))
+    if (list[*i].type != IDENTIFIER ||
+    (*i > 0 && list[*i - 1].type == IDENTIFIER))
         return list;
     if ((alias = is_alias(mysh, list[*i].value)) == NULL)
         return NULL;
