@@ -9,6 +9,8 @@ SOURCE_DIR	=	src/
 
 SRC	=	mysh.c		\
 		get_input.c	\
+		handle_input/handle_input.c			\
+		handle_input/tokens_to_history.c			\
 		handle_input/parsing/parse_input.c			\
 		handle_input/parsing/set_all_ast.c			\
 		handle_input/parsing/free_ast.c				\

@@ -27,7 +27,7 @@ token_t token_redirect_in(lexer_t *lex)
 
 token_t token_redirect_out(lexer_t *lex)
 {
-    token_t new = {0, 0, 0};
+    token_t new = {0, ">", 0};
 
     lexer_get(lex);
 
@@ -36,6 +36,7 @@ token_t token_redirect_out(lexer_t *lex)
     if (lexer_peek(lex) == '>') {
         lexer_get(lex);
         new.size_val = 2;
+        new.value = ">>";
         new.type = REDIRECT_OUT_2;
     }
     return new;
@@ -43,7 +44,7 @@ token_t token_redirect_out(lexer_t *lex)
 
 token_t token_pipe(lexer_t *lex)
 {
-    token_t new = {0, 0, 0};
+    token_t new = {0, "|", 0};
 
     lexer_get(lex);
     new.type = PIPE;
@@ -52,13 +53,14 @@ token_t token_pipe(lexer_t *lex)
         lexer_get(lex);
         new.type = OPERATOR_OR;
         new.size_val = 2;
+        new.value = "||";
     }
     return new;
 }
 
 token_t token_and(lexer_t *lex)
 {
-    token_t new = {0, 0, 0};
+    token_t new = {0, "&", 0};
 
     lexer_get(lex);
     new.type = AND;
@@ -67,6 +69,7 @@ token_t token_and(lexer_t *lex)
         lexer_get(lex);
         new.type = OPERATOR_AND;
         new.size_val = 2;
+        new.value = "&&";
     }
     return new;
 }
