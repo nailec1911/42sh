@@ -8,6 +8,19 @@
 #include <stdio.h>
 #include <string.h>
 
+char *remove_line(int res, int *length, int *index, char *line)
+{
+    for (int i = res; i <= *length; i += 1)
+        printf("\033[C");
+    for (int k = 0; k <= *length; k += 1)
+        printf("\b \b");
+    *length = 0;
+    *index = 0;
+    for (int j = 0; line[j] != '\0'; j += 1)
+        line[j] = '\0';
+    return line;
+}
+
 char *remove_char(char *line, int index, int length)
 {
     int i = index;

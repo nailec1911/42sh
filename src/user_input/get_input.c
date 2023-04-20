@@ -10,8 +10,9 @@
 #include <termio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <mysh.h>
 #include "str_func.h"
-void arrow_function(int *index, int *length, char **line);
+void arrow_function(int *index, int *length, char **line, mysh_t *mysh);
 void right_arrow_function(int *index, int length);
 void left_arrow_function(int *index);
 void set_terminal(struct termios *old_term, struct termios *term);
@@ -23,7 +24,7 @@ static char *fill_string(char *line, int ch, int *index, int *length)
     int res = *index;
     int temp = res;
 
-    memmove(&line[*index + 1], &line[*index], *length - *index + 1);
+    memmove(&line[*index + 1], &line[*index], *length - *index);
     line[*index] = ch;
     *index += 1;
     *length += 1;
@@ -37,11 +38,11 @@ static char *fill_string(char *line, int ch, int *index, int *length)
     return line;
 }
 
-static char *ch_functions(int ch, int *index, int *length, char *line)
+static char *ch_functions(mysh_t *mysh, int *index, int *length, char *line)
 {
-    switch (ch) {
+    switch (mysh->ch) {
         case 27:
-            arrow_function(index, length, &line);
+            arrow_function(index, length, &line, mysh);
             break;
         case 4:
             return NULL;
@@ -49,17 +50,16 @@ static char *ch_functions(int ch, int *index, int *length, char *line)
             backward_function(length, index, &line);
             break;
         default:
-            line = fill_string(line, ch, index, length);
+            line = fill_string(line, mysh->ch, index, length);
     }
     fflush(stdout);
     return line;
 }
 
-char *get_input(void)
+char *get_input(mysh_t mysh)
 {
     struct termios term;
     struct termios old_term;
-    int ch = 0;
     int index = 0;
     int length = 0;
     char *line = malloc(sizeof(char) * 1024);
@@ -68,10 +68,9 @@ char *get_input(void)
     for (int i = 0; i < 1024; i += 1)
         line[i] = '\0';
     set_terminal(&old_term, &term);
-    while (read(STDIN_FILENO, &ch, 1) > 0 && ch != 10) {
-        if ((line = ch_functions(ch, &index, &length, line)) == NULL)
+    while (read(STDIN_FILENO, &mysh.ch, 1) > 0 && mysh.ch != 10)
+        if ((line = ch_functions(&mysh, &index, &length, line)) == NULL)
             return NULL;
-    }
     printf("\n");
     new = my_strcat_dup(line, "\n");
     tcsetattr(STDIN_FILENO, TCSANOW, &old_term);

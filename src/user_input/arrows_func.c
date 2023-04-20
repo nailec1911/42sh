@@ -7,45 +7,21 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include "mysh.h"
+#include "str_func.h"
 char *suppr_function(int *index, int *length, char *line);
-void ctrl_functions(int *index, int *length, int ch);
+void choose_arrow(mysh_t *mysh, int *index, int *length, char **line);
 
-static void left_arrow_function(int *index)
+void arrow_function(int *index, int *length, char **line, mysh_t *mysh)
 {
-    if (*index > 0) {
-        *index -= 1;
-        printf("\033[D");
+    read(STDIN_FILENO, &mysh->ch, 1);
+    if (mysh->ch == 91) {
+        read(STDIN_FILENO, &mysh->ch, 1);
+        choose_arrow(mysh, index, length, line);
     }
-}
-
-static void right_arrow_function(int *index, int length)
-{
-    if (*index != length) {
-        *index += 1;
-        printf("\033[C");
-    }
-}
-
-void arrow_function(int *index, int *length, char **line)
-{
-    int ch = 0;
-
-    read(STDIN_FILENO, &ch, 1);
-    if (ch == 91) {
-        read(STDIN_FILENO, &ch, 1);
-        switch (ch) {
-            case 68:
-                left_arrow_function(index);
-                break;
-            case 67:
-                right_arrow_function(index, *length);
-                break;
-            case 49:
-                ctrl_functions(index, length, ch);
-        }
-    }
-    if (ch == 51) {
-        read(STDIN_FILENO, &ch, 1);
+    if (mysh->ch == 51) {
+        read(STDIN_FILENO, &mysh->ch, 1);
         *line = suppr_function(index, length, *line);
     }
 }

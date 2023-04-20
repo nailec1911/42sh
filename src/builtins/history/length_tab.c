@@ -8,6 +8,8 @@
 
 int length_tab(char **tab)
 {
+    if (tab == NULL || tab[0] == NULL)
+        return 0;
     int len = 0;
     for (int i = 0; tab[i] != NULL; i += 1) {
         len += 1;

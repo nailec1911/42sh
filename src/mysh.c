@@ -19,9 +19,11 @@
 static char *choose_get_line(mysh_t mysh)
 {
     char *input = '\0';
+    mysh.ind_history = length_tab(mysh.history.tab_file);
+    mysh.ind_init = mysh.ind_history;
 
     if (mysh.tty)
-        input = get_input();
+        input = get_input(mysh);
     else
         input = get_input_line();
     return input;
