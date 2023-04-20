@@ -40,12 +40,13 @@ int do_alias(mysh_t *mysh, command_t to_exec)
     if (to_exec.command[1] == NULL) {
         if (mysh->alias.tab_file == NULL)
             return SUCCESS;
-        return display_alias(mysh);
+        return display_alias(mysh->alias, to_exec.fd_out);
     }
     if (to_exec.command[2] == NULL) {
         if (mysh->alias.tab_file == NULL)
             return SUCCESS;
-        return display_specific_alias(mysh, to_exec.command[1]);
+        return display_specific_alias
+        (mysh->alias, to_exec.command[1], to_exec.fd_out);
     } else {
         command = remake_input(to_exec.command);
         if (add_alias_rc(mysh, command) == ERROR) {

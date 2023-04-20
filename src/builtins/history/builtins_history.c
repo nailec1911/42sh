@@ -26,16 +26,16 @@ int opt_clear(mysh_t *mysh)
     return SUCCESS;
 }
 
-int opt_sort(mysh_t *mysh)
+int opt_sort(mysh_t *mysh, int fd)
 {
     int l_tab = length_tab(mysh->history.tab_file) - 1;
     for (; l_tab >= 0; l_tab -= 1) {
-        printf("%s", mysh->history.tab_file[l_tab]);
+        dprintf(fd, "%s", mysh->history.tab_file[l_tab]);
     }
     return SUCCESS;
 }
 
-int opt_without_info(mysh_t *mysh)
+int opt_without_info(mysh_t *mysh, int fd)
 {
     char *to_display = NULL;
     char **tab_cmd = NULL;
@@ -43,15 +43,15 @@ int opt_without_info(mysh_t *mysh)
         tab_cmd = my_str_to_word_array_separator
         (mysh->history.tab_file[i], " \n");
         to_display = remake_command(tab_cmd);
-        printf("%s\n", to_display);
+        dprintf(fd, "%s\n", to_display);
     }
     return SUCCESS;
 }
 
-int display_history(mysh_t *mysh)
+int display_history(mysh_t *mysh, int fd)
 {
     for (int i = 0; mysh->history.tab_file[i] != NULL; i += 1) {
-        printf("%s", mysh->history.tab_file[i]);
+        dprintf(fd, "%s", mysh->history.tab_file[i]);
     }
     return SUCCESS;
 }
@@ -59,16 +59,16 @@ int display_history(mysh_t *mysh)
 int do_history(mysh_t *mysh, command_t to_exec)
 {
     if (to_exec.command[1] == NULL) {
-        return display_history(mysh);
+        return display_history(mysh, to_exec.fd_out);
     }
     if (strcmp(to_exec.command[1], "-c") == 0)
         return opt_clear(mysh);
     if (strcmp(to_exec.command[1], "-r") == 0)
-        return opt_sort(mysh);
+        return opt_sort(mysh, to_exec.fd_out);
     if (strcmp(to_exec.command[1], "-h") == 0)
-        return opt_without_info(mysh);
+        return opt_without_info(mysh, to_exec.fd_out);
     if (strcmp(to_exec.command[1], "-T") == 0)
-        return display_history(mysh);
+        return display_history(mysh, to_exec.fd_out);
     else {
         printf("Usage: history [-chrSLMT] [# number of events].\n");
         mysh->last_status = 1;

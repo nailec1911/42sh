@@ -20,5 +20,7 @@
 
 char *remake_input(char **tab);
 int add_elem_tab_alias(alias_t *alias, char *to_add);
+int display_alias(alias_t alias, int fd);
+int display_specific_alias(alias_t alias, char *to_find, int fd);
 
 #endif /* !ALIAS_H_ */
