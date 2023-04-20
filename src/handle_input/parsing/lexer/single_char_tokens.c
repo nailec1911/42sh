@@ -9,22 +9,22 @@
 
 token_t token_semicolon(lexer_t *lex)
 {
-    token_t new = {0, 0, 0};
+    token_t new = {0, ";", 0};
 
     lexer_get(lex);
 
     new.type = SEMICOLON;
-
+    new.size_val = 1;
     return new;
 }
 
 token_t token_end_line(lexer_t *lex)
 {
-    token_t new = {0, 0, 0};
+    token_t new = {0, "\n", 0};
 
     lexer_get(lex);
 
     new.type = END_LINE;
-
+    new.size_val = 1;
     return new;
 }

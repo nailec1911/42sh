@@ -98,10 +98,10 @@ Test(lexer6, pipe){
 Test(lexer7, redirect){
     token_t *tokens = lexer(">><< < > temp\n");
 
-    cr_assert_eq(tokens[0].type, REDIRECT);
-    cr_assert_eq(tokens[1].type, REDIRECT);
-    cr_assert_eq(tokens[2].type, REDIRECT);
-    cr_assert_eq(tokens[3].type, REDIRECT);
+    cr_assert_eq(tokens[0].type, REDIRECT_OUT_2);
+    cr_assert_eq(tokens[1].type, REDIRECT_IN_1);
+    cr_assert_eq(tokens[2].type, REDIRECT_IN_2);
+    cr_assert_eq(tokens[3].type, REDIRECT_OUT_1);
     cr_assert_eq(tokens[4].type, IDENTIFIER);
     cr_assert_str_eq(tokens[4].value, "temp");
     cr_assert_eq(tokens[5].type, END_LINE);

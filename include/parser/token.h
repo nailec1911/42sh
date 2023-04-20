@@ -16,12 +16,17 @@
         OPERATOR_AND,
         OPERATOR_OR,
         PIPE,
-        REDIRECT,
+        REDIRECT_IN_1,
+        REDIRECT_IN_2,
+        REDIRECT_OUT_1,
+        REDIRECT_OUT_2,
         IDENTIFIER,
-        S_QUOTE,
         UNMATCHED_QUOTE,
         T_ERROR
     } tokentype_t;
+
+    #define IS_REDIRECT(value) value == REDIRECT_IN_1 || value == REDIRECT_IN_2\
+                        || value == REDIRECT_OUT_1 || value == REDIRECT_OUT_2
 
     typedef struct token_s {
         tokentype_t type;

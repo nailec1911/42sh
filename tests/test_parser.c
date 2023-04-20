@@ -96,9 +96,9 @@ Test(parser3, redirection_simple){
     cr_assert_eq(tree_leef.tab_command[0].fd_in, STDIN_FILENO);
     cr_assert_eq(tree_leef.tab_command[0].fd_out, STDOUT_FILENO);
 
-    cr_assert_eq(tree_leef.tab_command[0].redirect_in.type, IN_1);
+    cr_assert_eq(tree_leef.tab_command[0].redirect_in.type, REDIRECT_IN_1);
     cr_assert_str_eq(tree_leef.tab_command[0].redirect_in.name, "in");
-    cr_assert_eq(tree_leef.tab_command[0].redirect_out.type, OUT_1);
+    cr_assert_eq(tree_leef.tab_command[0].redirect_out.type, REDIRECT_OUT_1);
     cr_assert_str_eq(tree_leef.tab_command[0].redirect_out.name, "out");
     cr_assert_eq(tree_leef.tab_command[0].nb_command, 1);
     cr_assert_str_eq(tree_leef.tab_command[0].command[0], "cat");
@@ -121,9 +121,9 @@ Test(parser4, redirection_double){
     cr_assert_eq(tree_leef.tab_command[0].fd_in, STDIN_FILENO);
     cr_assert_eq(tree_leef.tab_command[0].fd_out, STDOUT_FILENO);
 
-    cr_assert_eq(tree_leef.tab_command[0].redirect_in.type, IN_2);
+    cr_assert_eq(tree_leef.tab_command[0].redirect_in.type, REDIRECT_IN_2);
     cr_assert_str_eq(tree_leef.tab_command[0].redirect_in.name, "in");
-    cr_assert_eq(tree_leef.tab_command[0].redirect_out.type, OUT_2);
+    cr_assert_eq(tree_leef.tab_command[0].redirect_out.type, REDIRECT_OUT_2);
     cr_assert_str_eq(tree_leef.tab_command[0].redirect_out.name, "out");
     cr_assert_eq(tree_leef.tab_command[0].nb_command, 1);
     cr_assert_str_eq(tree_leef.tab_command[0].command[0], "cat");
