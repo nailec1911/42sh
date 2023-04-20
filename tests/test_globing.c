@@ -11,18 +11,18 @@
 #include <unistd.h>
 #include "macro_errors.h"
 #include "mysh.h"
-int parse_input(char *input, mysh_t *mysh);
+#include "parser/parse.h"
 int mysh(char * const env[]);
 int update_glob_argv(and_command_t *cmd);
+int get_ast(mysh_t *mysh, char *input);
 
 Test(unit_globings1, star_in_arg){
     cr_redirect_stderr();
     mysh_t mysh = {0};
-
     chdir("tests/");
+    char *input = "./disp_args test_full*.c\n";
 
-    char *input = strdup("./disp_args test_full*.c\n");
-    cr_assert_eq(parse_input(input, &mysh), SUCCESS);
+    cr_assert_eq(get_ast(&(mysh), input), SUCCESS);
     cr_assert_eq(mysh.last_status, 0);
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
     cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
@@ -45,8 +45,8 @@ Test(unit_globings2, question_mark){
 
     chdir("tests/");
 
-    char *input = strdup("./disp_args hello?world\n");
-    cr_assert_eq(parse_input(input, &mysh), SUCCESS);
+    char *input = "./disp_args hello?world\n";
+    cr_assert_eq(get_ast(&mysh, input), SUCCESS);
     cr_assert_eq(mysh.last_status, 0);
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
     cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
@@ -70,7 +70,7 @@ Test(unit_globings3, brackets){
     chdir("tests/");
 
     char *input = strdup("./disp_args t[1-3]\n");
-    cr_assert_eq(parse_input(input, &mysh), SUCCESS);
+    cr_assert_eq(get_ast(&mysh, input), SUCCESS);
     cr_assert_eq(mysh.last_status, 0);
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
     cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);

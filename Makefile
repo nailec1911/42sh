@@ -82,7 +82,8 @@ SRC_MAIN	=	src/main.c
 
 OBJ	=	$(addprefix $(SOURCE_DIR), $(SRC:.c=.o)) $(SRC_MAIN:.c=.o)
 
-TO_TEST	=	tests/test_lexer.c	\
+TO_TEST	=	tests/test_function.c	\
+			tests/test_lexer.c	\
 			tests/test_parser.c	\
 			tests/test_builtin_cd.c		\
 			tests/test_env_handling.c		\
