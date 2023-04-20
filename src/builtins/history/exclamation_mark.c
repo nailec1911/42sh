@@ -4,6 +4,8 @@
 ** File description:
 ** main
 */
+#include <stdlib.h>
+#include <string.h>
 #include "mysh.h"
 #include "macro_errors.h"
 #include "str_func.h"
@@ -29,18 +31,19 @@ int search_command(mysh_t *mysh, char *input, char **final_input)
     return ERROR;
 }
 
-int do_exclamation_mark(mysh_t *mysh, command_t *to_exec)
+int do_exclamation_mark(mysh_t *mysh, char *input)
 {
     char *last_input = NULL;
 
-    if (to_exec->command[1][0] == '!' && to_exec->command[1][1] == NULL) {
+    if (input[0] == '!' && input[1] == '\n') {
         mysh->last_status = 1;
         fprintf(stderr, "!: Command not found.\n");
         return SUCCESS;
     }
-    if (search_command(mysh, to_exec->command[1], &last_input) == ERROR) {
+    if (search_command(mysh, input, &last_input) == ERROR) {
         mysh->last_status = 1;
-        printf("%s: Event not found.\n", to_exec->command[1]);
+        printf("%s: Event not found.\n", input);
         return SUCCESS;
     }
+    return SUCCESS;
 }

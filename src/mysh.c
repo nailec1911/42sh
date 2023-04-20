@@ -26,6 +26,10 @@ int loop_sh(mysh_t *mysh, char *input)
         return ERROR;
     if ((input = is_alias(mysh, input)) == NULL)
         return ERROR;
+    if (input[0] == '!') {
+        if (do_exclamation_mark(mysh, &input) == ERROR)
+            return ERROR;
+    }
     if ((res = parse_input(input, mysh)) == ERROR)
         return ERROR;
     if (res != SUCCESS)

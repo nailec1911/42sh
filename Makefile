@@ -49,6 +49,7 @@ SRC	=	mysh.c		\
 		builtins/alias/display_alias.c\
 		builtins/unalias/remove_alias.c\
 		builtins/history/functions_history.c\
+		builtins/history/exclamation_mark.c\
 		builtins/history/builtins_history.c\
 		builtins/history/clean_str.c\
 		builtins/history/add_elem_tab.c\
