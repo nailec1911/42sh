@@ -8,10 +8,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include "parser/parse.h"
-#include "mysh.h"
+#include "handle_input.h"
 #include "macro_errors.h"
-int tokens_to_history(mysh_t *mysh, token_t *list);
-token_t *loop_for_aliases(mysh_t *mysh, token_t *list);
+#include "mysh.h"
 
 static token_t *get_list_tokens(mysh_t *mysh, char *input)
 {
