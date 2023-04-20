@@ -16,6 +16,17 @@
 #include "mysh.h"
 #include "init.h"
 
+static char *choose_get_line(void)
+{
+    char *input = '\0';
+
+    if (isatty(0) == 1)
+        input = get_input();
+    else
+        input = get_input_line();
+    return input;
+}
+
 int loop_sh(mysh_t *mysh, char *input)
 {
     int res = 0;
@@ -33,7 +44,7 @@ int loop_sh(mysh_t *mysh, char *input)
     return res;
 }
 
-int init_all(mysh_t *mysh, char * const env[])
+static int init_all(mysh_t *mysh, char * const env[])
 {
     if ((mysh->env = init_mysh_env(env)) == NULL)
         return ERROR;
@@ -53,8 +64,8 @@ int mysh(char * const env[])
         return ERROR;
     while (res == 0) {
         if (isatty(0) == 1)
-            fprintf(stdout, ":) ");
-        if ((input = get_input()) == NULL) {
+            write(1, "xD ", 3);
+        if ((input = choose_get_line()) == NULL) {
             res = EXIT;
             break;
         }
