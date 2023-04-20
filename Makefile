@@ -48,6 +48,7 @@ SRC	=	mysh.c		\
 		user_input/get_input_line.c	\
 		user_input/get_input.c	\
 		user_input/set_terminal.c	\
+		user_input/remove_functions.c	\
 		builtins/alias/init_alias.c\
 		builtins/alias/builtins_alias.c\
 		builtins/alias/remake_input.c\
