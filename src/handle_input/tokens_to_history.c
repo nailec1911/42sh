@@ -53,5 +53,6 @@ int tokens_to_history(mysh_t *mysh, token_t *list)
         return ERROR;
     if (add_in_history(mysh, to_hitory) == ERROR)
         return ERROR;
+    free(to_hitory);
     return SUCCESS;
 }
