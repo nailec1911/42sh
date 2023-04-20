@@ -50,6 +50,8 @@ SRC	=	mysh.c		\
 		user_input/set_terminal.c	\
 		user_input/remove_functions.c	\
 		user_input/ctrl_functions.c	\
+		user_input/parsing_history_spe.c	\
+		user_input/choose_arrow.c	\
 		builtins/alias/init_alias.c\
 		builtins/alias/builtins_alias.c\
 		builtins/alias/remake_input.c\
