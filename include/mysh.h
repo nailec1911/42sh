@@ -8,6 +8,7 @@
 #ifndef MYSH_H_
     #define MYSH_H_
 
+    #include <stdbool.h>
     #include "parser/ast.h"
     #include "alias.h"
     #include "history.h"
@@ -17,6 +18,7 @@
         char **command;
         int last_status;
         int to_return;
+        bool tty;
         ast_t ast;
         history_t history;
         alias_t alias;
