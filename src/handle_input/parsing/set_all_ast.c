@@ -16,7 +16,7 @@ static int error_redirect(int type)
     if (type == REDIRECT_IN_1 || type == REDIRECT_IN_2)
         fprintf(stderr, "Ambiguous input redirect.\n");
     if (type == REDIRECT_OUT_1 || type == REDIRECT_OUT_2)
-        fprintf(stderr, "Ambiguous output reirect.\n");
+        fprintf(stderr, "Ambiguous output redirect.\n");
     return FAILURE;
 }
 
