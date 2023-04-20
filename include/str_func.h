@@ -14,6 +14,7 @@
     int my_strcmp(char const *s1, char const *s2);
     int my_strncmp(char const *s1, char const *s2, int n);
     int str_is_alphanum(char *str);
+    int char_isnum(char c);
     void free_array(char **array);
     int is_in(char c, char *str);
     int my_strstrlen(char *str[]);

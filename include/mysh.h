@@ -19,6 +19,9 @@
         int last_status;
         int to_return;
         bool tty;
+        int ch;
+        int ind_history;
+        int ind_init;
         ast_t ast;
         history_t history;
         alias_t alias;
