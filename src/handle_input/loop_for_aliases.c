@@ -40,14 +40,15 @@ static token_t *replace_if_alias(mysh_t *mysh, token_t *list, int *i)
     if (list[*i].type != IDENTIFIER ||
     (*i > 0 && list[*i - 1].type == IDENTIFIER))
         return list;
-    if ((alias = is_alias(mysh, list[*i].value)) == NULL)
-        return NULL;
-    if (strcmp(alias, list[*i].value) == 0)
+    alias = is_alias(mysh, list[*i].value);
+    if (alias == NULL || strcmp(alias, list[*i].value) == 0)
         return list;
     if ((list_alias = lexer(alias)) == NULL)
         return NULL;
+    free(list[*i].value);
     list = get_new_tab(list, list_alias, *i);
     free(list_alias);
+    free(alias);
     *i -= 1;
     return list;
 }

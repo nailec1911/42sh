@@ -56,46 +56,34 @@ int do_alias(mysh_t *mysh, command_t to_exec)
     return SUCCESS;
 }
 
-static char *check_is_alias(char **tab_alias, char **input, char *to_search)
+static char *check_is_alias(char **tab_alias, char *input, char *to_search)
 {
-    char *last_input = NULL;
-    char *to_compare = my_strcat_dup(tab_alias[1], "\n");
-    char *to_free = *input;
+    char *res = input;
 
     if (tab_alias[2] == NULL)
-        return *input;
-    if (to_compare == NULL)
-        return NULL;
-    if (strcmp(to_search, to_compare) == 0) {
-        if ((last_input = clean_last_input(tab_alias)) == NULL)
+        return input;
+    if (strcmp(to_search, tab_alias[1]) == 0) {
+        if ((res = clean_last_input(tab_alias)) == NULL)
             return NULL;
-        *input = last_input;
-        free(to_free);
+        free(input);
     }
     free_array(tab_alias);
-    free(to_compare);
-    return *input;
+    return res;
 }
 
 char *is_alias(mysh_t *mysh, char *input)
 {
     char **tab_alias = NULL;
-    char *to_search = my_strcat_dup(input, "\n");
+    char *res = NULL;
 
-    if (to_search == NULL)
+    if (mysh->alias.tab_file == NULL)
         return NULL;
-    if (mysh->alias.tab_file == NULL) {
-        free(to_search);
-        return input;
-    }
     for (int i = 0; mysh->alias.tab_file[i] != NULL; i += 1) {
         tab_alias = my_str_to_word_array_separator
         (mysh->alias.tab_file[i], " \n");
         if (tab_alias == NULL)
             return NULL;
-        if ((input = check_is_alias(tab_alias, &input, to_search)) == NULL)
-            return NULL;
+        res = check_is_alias(tab_alias, res, input);
     }
-    free(to_search);
-    return input;
+    return res;
 }
