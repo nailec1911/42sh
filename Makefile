@@ -8,7 +8,6 @@
 SOURCE_DIR	=	src/
 
 SRC	=	mysh.c		\
-		get_input.c	\
 		handle_input/handle_input.c			\
 		handle_input/tokens_to_history.c			\
 		handle_input/loop_for_aliases.c				\
@@ -45,6 +44,10 @@ SRC	=	mysh.c		\
 		str_func/free_array.c		\
 		str_func/str_is_alphanum.c	\
 		str_func/input_to_array.c	\
+		user_input/arrows_func.c	\
+		user_input/get_input_line.c	\
+		user_input/get_input.c	\
+		user_input/set_terminal.c	\
 		builtins/alias/init_alias.c\
 		builtins/alias/builtins_alias.c\
 		builtins/alias/remake_input.c\
