@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <stdio.h>
 char *suppr_function(int *index, int *length, char *line);
+void ctrl_functions(int *index, int *length, int ch);
 
 static void left_arrow_function(int *index)
 {
@@ -38,6 +39,9 @@ void arrow_function(int *index, int *length, char **line)
                 break;
             case 67:
                 right_arrow_function(index, *length);
+                break;
+            case 49:
+                ctrl_functions(index, length, ch);
         }
     }
     if (ch == 51) {
