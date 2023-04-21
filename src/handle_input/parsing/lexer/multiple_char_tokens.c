@@ -16,16 +16,15 @@ static int get_size_value(lexer_t *lex)
     int temp_cursor = lex->cursor;
     int size_val = 0;
 
-    if (lex->context == 1){
+    while (lex->context == 1 || (lex->cursor < lex->len_input &&
+    is_in(lexer_peek(lex), SEPARATORS) != 0)) {
         size_val += 1;
         lex->cursor += 1;
-    }
-    while (lex->cursor < lex->len_input &&
-    is_in(lexer_peek(lex), SEPARATORS) != 0) {
-        size_val += 1;
-        lex->cursor += 1;
-        if (lexer_peek(lex) == '\\')
+        lex->context = 0;
+        if (lexer_peek(lex) == '\\') {
             lex->cursor += 1;
+            lex->context = 1;
+        }
     }
     lex->cursor = temp_cursor;
     return size_val;
