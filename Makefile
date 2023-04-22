@@ -38,6 +38,7 @@ SRC	=	mysh.c		\
 		exec_command/exec_builtins.c	\
 		exec_command/handle_errors.c	\
 		str_func/is_in.c			\
+		str_func/is_num.c			\
 		str_func/my_strcat_dup.c	\
 		str_func/my_strcat_with_char.c	\
 		str_func/my_strcmp.c		\

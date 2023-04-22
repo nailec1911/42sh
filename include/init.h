@@ -17,5 +17,6 @@
     int get_num_command(mysh_t *mysh);
     int display_alias(mysh_t *mysh);
     int display_specific_alias(mysh_t *mysh, char *to_find);
+    char *do_exclamation_mark(mysh_t *mysh, char *input);
 
 #endif /* !INIT_H_ */

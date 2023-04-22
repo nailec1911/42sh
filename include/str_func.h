@@ -18,6 +18,6 @@
     int is_in(char c, char *str);
     int my_strstrlen(char *str[]);
     char *clean_last_input(char **tab_alias);
-
+    int is_num(char *str);
 
 #endif /* !STR_FUNC_H_ */

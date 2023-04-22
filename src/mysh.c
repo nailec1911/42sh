@@ -22,6 +22,7 @@ int loop_sh(mysh_t *mysh, char *input)
 
     if (input[0] == '\n')
         return SUCCESS;
+    input = do_exclamation_mark(mysh, input);
     if ((res = handle_input(mysh, input)) == ERROR)
         return ERROR;
     if (res != SUCCESS)
