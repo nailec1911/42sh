@@ -62,17 +62,14 @@ SRC	=	mysh.c		\
 		builtins/history/clean_str.c\
 		builtins/history/add_elem_tab.c\
 		builtins/history/check_last_command.c\
+		builtins/history/usefull_function_history.c\
 		builtins/history/word_array/find_index_separator.c\
 		builtins/history/word_array/loop_separator.c\
 		builtins/history/word_array/my_word_array_separator.c\
 		builtins/history/word_array/strlen_index_separator.c\
 		builtins/history/word_array/nbr_word_separator.c\
-		builtins/history/biggest_line.c\
 		builtins/history/num_to_str.c\
-		builtins/history/info_tab.c\
-		builtins/history/length_tab.c\
 		builtins/history/file_to_tab.c\
-		builtins/history/print_tab.c\
 		str_func/my_strstrlen.c	\
 		builtins/cd/cd.c				\
 		builtins/cd/get_path_to_go.c 	\

@@ -12,6 +12,11 @@
     #include "mysh.h"
 
     #define HISTORY_FILE ".42shhistory"
+    typedef struct tab_hist_s {
+        char *num;
+        char *time;
+        char *command;
+    } tab_hist_t;
 
     typedef struct histroy_s {
         int num_command;
@@ -19,7 +24,9 @@
         int fd_history_file;
         FILE *fd_file;
         char **tab_file;
+        tab_hist_t **tab_hist;
     }history_t;
+
 
 void print_tab(char **tab);
 int length_tab(char **tab);
@@ -27,16 +34,17 @@ int biggest_line(char const *str);
 int next_index(char const *str, int i);
 int nb_char(char const *str, int index);
 int do_width(char *map, int width);
-char *clean_str(char *input);
-int get_line(char const *file);
 int get_col(char const *file);
 char **compare_char(char **map, int i, int j, int *count);
 char **single_line(char **map);
 char **my_str_to_word_array_separator(char *str, char *separator);
 int get_nb_line(char *filepath);
-int add_elem_tab(history_t *history, char *to_add);
+int add_elem_tab(history_t *history, char *to_add, int num);
 char *num_to_str(int num);
 char **file_to_tab(char *filepath);
 char *remake_command(char **tab);
-char **file_to_tab_bis(char *filepath);
+char *create_time_line(void);
+int length_tab_hist(tab_hist_t **tab);
+void write_in_file(tab_hist_t **tab, FILE *fd);
+void free_tab_hist(tab_hist_t **tab);
 #endif /* !HISTORY_H_ */

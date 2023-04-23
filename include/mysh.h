@@ -27,7 +27,6 @@
         alias_t alias;
     } mysh_t;
 
-char *create_line_history(mysh_t *mysh, char *input);
 int check_last_command(mysh_t *mysh, char *input);
 int init_alias(mysh_t *mysh);
 #endif /* !MYSH_H_ */

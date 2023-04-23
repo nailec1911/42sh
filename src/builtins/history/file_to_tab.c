@@ -12,7 +12,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "history.h"
+#include "str_func.h"
 #include <string.h>
+#include "init.h"
 
 int count_line(char *str)
 {

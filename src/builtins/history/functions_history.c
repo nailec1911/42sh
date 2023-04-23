@@ -15,32 +15,11 @@
 #include <stdlib.h>
 #include "str_func.h"
 #include <sys/stat.h>
+#include "init.h"
 #include <time.h>
-
-static int just_history(char *input)
-{
-    char **tab_history = my_str_to_word_array_separator(input, " \n");
-    if (tab_history == NULL)
-        return ERROR;
-    for (int i = 0; tab_history[i] != NULL; i += 1) {
-        if (strcmp("history", tab_history[i]) == 0 &&
-            tab_history[i + 1] == NULL) {
-            free_array(tab_history);
-            return EXIT;
-        }
-    }
-    free_array(tab_history);
-    return SUCCESS;
-}
 
 int add_in_history(mysh_t *mysh, char *input)
 {
-    int res = just_history(input);
-
-    if (res == EXIT)
-        return SUCCESS;
-    if (res == ERROR)
-        return ERROR;
     if (ftruncate(mysh->history.fd_history_file, 0) == -1) {
         return ERROR;
     }
@@ -51,26 +30,11 @@ int add_in_history(mysh_t *mysh, char *input)
     return SUCCESS;
 }
 
-static char *get_last_line(mysh_t *mysh)
-{
-    int len_tab = 0;
-
-    mysh->history.tab_file = file_to_tab(HISTORY_FILE);
-    if (mysh->history.tab_file == NULL)
-        return NULL;
-    len_tab = length_tab(mysh->history.tab_file);
-    return mysh->history.tab_file[len_tab - 1];
-}
-
 static int get_num_command(mysh_t *mysh)
 {
-    char *line = get_last_line(mysh);
-    if (line == NULL)
+    if (file_to_tab_hist(HISTORY_FILE, mysh) == ERROR)
         return ERROR;
-    char **tab_last = my_str_to_word_array_separator(line, " \n");
-    mysh->history.num_command = atoi(tab_last[0]);
     mysh->history.num_command += 1;
-    free_array(tab_last);
     return SUCCESS;
 }
 
@@ -86,9 +50,52 @@ int init_history(mysh_t *mysh)
     if (file.st_size == 0) {
         mysh->history.num_command = 1;
         mysh->history.tab_file = NULL;
+        mysh->history.tab_hist = NULL;
     } else {
         if (get_num_command(mysh) == ERROR)
             return ERROR;
     }
+    return SUCCESS;
+}
+
+static int fill_tab_hist_from_file(FILE *stream, mysh_t *mysh, int *i)
+{
+    char *line = NULL;
+    char **tab = NULL;
+    char *command = NULL;
+    size_t len = 0;
+
+    while (getline(&line, &len, stream) != -1) {
+        if ((tab = my_str_to_word_array_separator(line, " \n")) == NULL)
+            return ERROR;
+        mysh->history.tab_hist[*i] = malloc(sizeof(tab_hist_t));
+        mysh->history.tab_hist[*i]->num = num_to_str(atoi(tab[0]));
+        mysh->history.tab_hist[*i]->time = strdup(tab[1]);
+        command = remake_command(tab);
+        mysh->history.tab_hist[*i]->command = my_strcat_dup(command, "\n");
+        mysh->history.num_command = atoi(tab[0]);
+        free_array(tab);
+        free(command);
+        *i += 1;
+    }
+    free(line);
+    return SUCCESS;
+}
+
+int file_to_tab_hist(char *filepath, mysh_t *mysh)
+{
+    FILE *stream;
+    int i = 0;
+    int nb_line = get_nb_line(filepath);
+
+    if (nb_line == -1)
+        return ERROR;
+    if ((mysh->history.tab_hist =
+    malloc(sizeof(tab_hist_t *) * (nb_line + 1))) == NULL)
+        return ERROR;
+    mysh->history.tab_hist[nb_line] = NULL;
+    stream = fopen(filepath, "r");
+    fill_tab_hist_from_file(stream, mysh, &i);
+    fclose(stream);
     return SUCCESS;
 }

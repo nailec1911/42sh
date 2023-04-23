@@ -47,12 +47,12 @@ static char *get_str_for_history(token_t *list)
 
 int tokens_to_history(mysh_t *mysh, token_t *list)
 {
-    char *to_hitory = get_str_for_history(list);
+    char *to_history = get_str_for_history(list);
 
-    if (to_hitory == NULL)
+    if (to_history == NULL)
         return ERROR;
-    if (add_in_history(mysh, to_hitory) == ERROR)
+    if (add_in_history(mysh, to_history) == ERROR)
         return ERROR;
-    free(to_hitory);
+    free(to_history);
     return SUCCESS;
 }

@@ -12,20 +12,26 @@
 #include <stdlib.h>
 #include <string.h>
 
-int add_elem_tab(history_t *history, char *to_add)
+int add_elem_tab(history_t *history, char *to_add, int num)
 {
-    int len_tab = length_tab(history->tab_file);
-    char **temp = history->tab_file;
-
-    if ((history->tab_file = malloc(sizeof(char *) * (len_tab + 2))) == NULL)
+    int len_tab = length_tab_hist(history->tab_hist);
+    tab_hist_t **temp = history->tab_hist;
+    if ((history->tab_hist = malloc(sizeof(tab_hist_t *) *
+    (len_tab + 2))) == NULL)
         return ERROR;
-    history->tab_file[len_tab + 1] = NULL;
+    history->tab_hist[len_tab + 1] = NULL;
     for (int i = 0; i < len_tab; i += 1) {
-        history->tab_file[i] = temp[i];
+        history->tab_hist[i] = malloc(sizeof(tab_hist_t));
+        history->tab_hist[i]->command = strdup(temp[i]->command);
+        history->tab_hist[i]->num = strdup(temp[i]->num);
+        history->tab_hist[i]->time = strdup(temp[i]->time);
     }
-    history->tab_file[len_tab] = to_add;
+    history->tab_hist[len_tab] = malloc(sizeof(tab_hist_t));
+    history->tab_hist[len_tab]->num = num_to_str(num);
+    history->tab_hist[len_tab]->time = create_time_line();
+    history->tab_hist[len_tab]->command = strdup(to_add);
     if (temp != NULL)
-        free(temp);
+        free_tab_hist(temp);
     return SUCCESS;
 }
 

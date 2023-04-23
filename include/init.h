@@ -14,6 +14,7 @@
 
     int add_in_history(mysh_t *mysh, char *input);
     int init_history(mysh_t *mysh);
-    int get_num_command(mysh_t *mysh);
+    int file_to_tab_hist(char *filepath, mysh_t *mysh);
+
 
 #endif /* !INIT_H_ */

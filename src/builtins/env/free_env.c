@@ -17,7 +17,6 @@ void free_env(mysh_t *mysh)
 
     for (int i = 0; mysh->env[i]; ++i)
         free(mysh->env[i]);
-
     free(mysh->env);
     fclose(mysh->history.fd_file);
     close(mysh->history.fd_history_file);
@@ -29,5 +28,8 @@ void free_env(mysh_t *mysh)
     }
     if (mysh->history.tab_file != NULL) {
         free_array(mysh->history.tab_file);
+    }
+    if (mysh->history.tab_hist != NULL) {
+        free_tab_hist(mysh->history.tab_hist);
     }
 }

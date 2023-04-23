@@ -13,7 +13,7 @@
 #include "macro_errors.h"
 #include <unistd.h>
 
-static void write_in_file(mysh_t *mysh)
+static void write_in_file_alias(mysh_t *mysh)
 {
     for (int i = 0; mysh->alias.tab_file[i] != NULL; i += 1) {
         fprintf(mysh->alias.fd_file, "%s", mysh->alias.tab_file[i]);
@@ -91,6 +91,6 @@ int do_unalias(mysh_t *mysh, command_t to_exec)
     if (ftruncate(mysh->alias.fd_alias_file, 0) == -1) {
         return ERROR;
     }
-    write_in_file(mysh);
+    write_in_file_alias(mysh);
     return SUCCESS;
 }

@@ -13,68 +13,56 @@
 #include <time.h>
 #include "str_func.h"
 
-static void write_in_file(char **tab, FILE *fd)
+void write_in_file(tab_hist_t **tab, FILE *fd)
 {
     for (int i = 0; tab[i] != NULL; i += 1) {
-        fprintf(fd, "%s", tab[i]);
+        fprintf(fd, "%s  %s   %s", tab[i]->num, tab[i]->time, tab[i]->command);
     }
 }
 
 int replace_last_line(mysh_t *mysh, char *input)
 {
-    int l_tab = length_tab(mysh->history.tab_file);
-    char *command = create_line_history(mysh, input);
-    free(mysh->history.tab_file[l_tab - 1]);
-    mysh->history.tab_file[l_tab - 1] = my_strcat_dup(command, "\n");
-    write_in_file(mysh->history.tab_file, mysh->history.fd_file);
-    free(command);
-    free(input);
+    int l_tab = length_tab_hist(mysh->history.tab_hist);
+    free(mysh->history.tab_hist[l_tab - 1]->num);
+    free(mysh->history.tab_hist[l_tab - 1]->time);
+    free(mysh->history.tab_hist[l_tab - 1]->command);
+    mysh->history.tab_hist[l_tab - 1]->num =
+    num_to_str(mysh->history.num_command);
+    mysh->history.tab_hist[l_tab - 1]->time = create_time_line();
+    mysh->history.tab_hist[l_tab - 1]->command = strdup(input);
+    write_in_file(mysh->history.tab_hist, mysh->history.fd_file);
     return SUCCESS;
 }
 
 int add_line(mysh_t *mysh, char *input)
 {
-    char *command = create_line_history(mysh, input);
-    char *new_command = my_strcat_dup(command, "\n");
-    if (add_elem_tab(&(mysh->history), new_command) == ERROR)
+    if (add_elem_tab(&(mysh->history), input,
+    mysh->history.num_command) == ERROR)
         return ERROR;
-    write_in_file(mysh->history.tab_file, mysh->history.fd_file);
-    free(command);
-    free(input);
+    write_in_file(mysh->history.tab_hist, mysh->history.fd_file);
     return SUCCESS;
 }
 
 int add_line_history(mysh_t *mysh, char *input)
 {
-    int l_tab = length_tab(mysh->history.tab_file);
-    char **tab_cmd = my_str_to_word_array_separator
-    (mysh->history.tab_file[l_tab - 1], " \n");
-    char *to_compare = remake_command(tab_cmd);
-    input = clean_str(input);
-    if (strcmp(input, to_compare) == 0) {
-        free(to_compare);
-        free_array(tab_cmd);
+    int l_tab = length_tab_hist(mysh->history.tab_hist);
+    if (strcmp(input,mysh->history.tab_hist[l_tab - 1]->command) == 0) {
         return replace_last_line(mysh, input);
     } else {
-        free(to_compare);
-        free_array(tab_cmd);
         return add_line(mysh, input);
     }
 }
 
 int check_last_command(mysh_t *mysh, char *input)
 {
-    char *command = NULL;
-
-    if (mysh->history.tab_file == NULL) {
-        input = clean_str(input);
-        command = create_line_history(mysh, input);
-        mysh->history.tab_file = malloc(sizeof(char *) * 2);
-        mysh->history.tab_file[0] = my_strcat_dup(command, "\n");
-        mysh->history.tab_file[1] = NULL;
-        fprintf(mysh->history.fd_file, "%s", mysh->history.tab_file[0]);
-        free(command);
-        free(input);
+    if (mysh->history.tab_hist == NULL) {
+        mysh->history.tab_hist = malloc(sizeof(tab_hist_t *) * 2);
+        mysh->history.tab_hist[0] = malloc(sizeof(tab_hist_t));
+        mysh->history.tab_hist[0]->num = num_to_str(mysh->history.num_command);
+        mysh->history.tab_hist[0]->time = create_time_line();
+        mysh->history.tab_hist[0]->command = strdup(input);
+        mysh->history.tab_hist[1] = NULL;
+        write_in_file(mysh->history.tab_hist, mysh->history.fd_file);
     } else {
         return add_line_history(mysh, input);
     }
