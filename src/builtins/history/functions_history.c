@@ -20,6 +20,8 @@
 
 int add_in_history(mysh_t *mysh, char *input)
 {
+    if (strcmp("history\n", input) == 0)
+        return SUCCESS;
     if (ftruncate(mysh->history.fd_history_file, 0) == -1) {
         return ERROR;
     }
