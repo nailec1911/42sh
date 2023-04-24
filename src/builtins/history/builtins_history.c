@@ -47,18 +47,24 @@ int opt_without_info(tab_hist_t **tab, int fd)
     return SUCCESS;
 }
 
-int display_history(tab_hist_t **tab, int fd)
+int display_history(tab_hist_t **tab, int fd, mysh_t *mysh)
 {
+    char *time = create_time_line();
+    char *num = num_to_str(mysh->history.num_command);
+
     for (int i = 0; tab[i] != NULL; i += 1) {
         dprintf(fd, "%s  %s   %s", tab[i]->num, tab[i]->time, tab[i]->command);
     }
+    dprintf(fd, "%s  %s   %s\n", num, time, "history");
+    free(num);
+    free(time);
     return SUCCESS;
 }
 
 int do_history(mysh_t *mysh, command_t to_exec)
 {
     if (to_exec.command[1] == NULL) {
-        return display_history(mysh->history.tab_hist, to_exec.fd_out);
+        return display_history(mysh->history.tab_hist, to_exec.fd_out, mysh);
     }
     if (strcmp(to_exec.command[1], "-c") == 0)
         return opt_clear(mysh);
@@ -67,7 +73,7 @@ int do_history(mysh_t *mysh, command_t to_exec)
     if (strcmp(to_exec.command[1], "-h") == 0)
         return opt_without_info(mysh->history.tab_hist, to_exec.fd_out);
     if (strcmp(to_exec.command[1], "-T") == 0)
-        return display_history(mysh->history.tab_hist, to_exec.fd_out);
+        return display_history(mysh->history.tab_hist, to_exec.fd_out, mysh);
     else {
         printf("Usage: history [-chrSLMT] [# number of events].\n");
         mysh->last_status = 1;
