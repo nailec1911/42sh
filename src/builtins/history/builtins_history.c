@@ -51,12 +51,13 @@ int display_history(tab_hist_t **tab, int fd, mysh_t *mysh)
 {
     char *time = create_time_line();
     char *num = num_to_str(mysh->history.num_command);
+
     for (int i = 0; tab[i] != NULL; i += 1) {
         dprintf(fd, "%s  %s   %s", tab[i]->num, tab[i]->time, tab[i]->command);
     }
-    dprintf(fd, "%s  %s   %s", num, time, "history\n");
-    free(time);
+    dprintf(fd, "%s  %s   %s\n", num, time, "history");
     free(num);
+    free(time);
     return SUCCESS;
 }
 
