@@ -38,6 +38,26 @@ static char *fill_string(char *line, int ch, int *index, int *length)
     return line;
 }
 
+static char *is_inib(char *line)
+{
+    char *get = NULL;
+    size_t len = 0;
+    int length = strlen(line) - 2;
+
+    if (line[length] != '\\')
+        return line;
+    write(STDOUT_FILENO, "? ", 2);
+    getline(&get, &len, stdin);
+    line[length] = ' ';
+    length += 1;
+    for (int i = 0; get[i] != '\n' && get[i] != '\0'; i += 1) {
+        line[length] = get[i];
+        length += 1;
+    }
+    line[length] = '\n';
+    return line;
+}
+
 static char *ch_functions(mysh_t *mysh, int *index, int *length, char *line)
 {
     switch (mysh->ch) {
@@ -75,5 +95,6 @@ char *get_input(mysh_t mysh)
     new = my_strcat_dup(line, "\n");
     tcsetattr(STDIN_FILENO, TCSANOW, &old_term);
     free(line);
+    new = is_inib(new);
     return new;
 }
