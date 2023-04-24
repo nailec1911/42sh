@@ -8,7 +8,6 @@
 #include <string.h>
 #include "mysh.h"
 char *remove_line(int res, int *length, int *index, char *line);
-char *parsing_history_spe(char *line, char *str, int *length);
 void ctrl_functions(int *index, int *length, int ch);
 
 static void left_arrow_function(int *index)
@@ -31,12 +30,14 @@ char *up_arrow_function(mysh_t *mysh, int *index, int *length, char *line)
 {
     int res = *index;
 
-    if (mysh->history.tab_file == NULL)
+    if (mysh->history.tab_hist == NULL)
         return line;
     if (mysh->ind_history > 0)
         mysh->ind_history -= 1;
-    line = parsing_history_spe
-    (line, mysh->history.tab_file[mysh->ind_history], length);
+    for (int k = 0; k < *length; k += 1)
+        line[k] = '\0';
+    line = strcpy(line, mysh->history.tab_hist[mysh->ind_history]->command);
+    line[strlen(line) - 1] = '\0';
     for (int i = res; i <= *length; i += 1)
         printf("\033[C");
     for (int k = 0; k <= *length; k += 1)
@@ -50,16 +51,17 @@ char *up_arrow_function(mysh_t *mysh, int *index, int *length, char *line)
 char *down_arrow_function(mysh_t *mysh, int *index, int *length, char *line)
 {
     int res = *index;
-
     mysh->ind_history += 1;
     if (mysh->ind_history == mysh->ind_init)
         return remove_line(res, length, index, line);
-    if (mysh->ind_history > length_tab(mysh->history.tab_file) - 1) {
+    if (mysh->ind_history > length_tab_hist(mysh->history.tab_hist) - 1) {
         mysh->ind_history -= 1;
         return line;
     }
-    line = parsing_history_spe
-    (line, mysh->history.tab_file[mysh->ind_history], length);
+    for (int k = 0; k < *length; k += 1)
+        line[k] = '\0';
+    line = strcpy(line, mysh->history.tab_hist[mysh->ind_history]->command);
+    line[strlen(line) - 1] = '\0';
     for (int i = res; i <= *length; i += 1)
         printf("\033[C");
     for (int k = 0; k <= *length; k += 1)
