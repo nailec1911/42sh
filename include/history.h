@@ -30,13 +30,6 @@
 
 void print_tab(char **tab);
 int length_tab(char **tab);
-int biggest_line(char const *str);
-int next_index(char const *str, int i);
-int nb_char(char const *str, int index);
-int do_width(char *map, int width);
-int get_col(char const *file);
-char **compare_char(char **map, int i, int j, int *count);
-char **single_line(char **map);
 char **my_str_to_word_array_separator(char *str, char *separator);
 int get_nb_line(char *filepath);
 int add_elem_tab(history_t *history, char *to_add, int num);
@@ -47,4 +40,5 @@ char *create_time_line(void);
 int length_tab_hist(tab_hist_t **tab);
 void write_in_file(tab_hist_t **tab, FILE *fd);
 void free_tab_hist(tab_hist_t **tab);
+
 #endif /* !HISTORY_H_ */

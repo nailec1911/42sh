@@ -33,12 +33,10 @@ int loop_sh(mysh_t *mysh, char *input)
 {
     int res = 0;
 
+    mysh->to_return = mysh->last_status;
+    mysh->last_status = 0;
     if (input[0] == '\n')
         return SUCCESS;
-    if (input[0] == '!' && input[1] != '!') {
-        if ((input = do_exclamation_mark(mysh, input)) == NULL)
-            return ERROR;
-    }
     if ((res = handle_input(mysh, input)) == ERROR)
         return ERROR;
     if (res != SUCCESS)

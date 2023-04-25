@@ -18,20 +18,21 @@ char *search_command(mysh_t *mysh, char *last_input)
     if (is_num(last_input)) {
         if ((replace = search_by_num(mysh, last_input)) == NULL) {
             free(last_input);
+            mysh->last_status = 1;
+            mysh->display_line = false;
             return NULL;
         }
         free(last_input);
-        printf("%s", replace);
-        return replace;
-    } else {
-        if ((replace = search_by_name(mysh, last_input)) == NULL) {
-            free(last_input);
-            return NULL;
-        }
-        free(last_input);
-        printf("%s", replace);
         return replace;
     }
+    if ((replace = search_by_name(mysh, last_input)) == NULL) {
+        free(last_input);
+        mysh->last_status = 1;
+        mysh->display_line = false;
+        return NULL;
+    }
+    free(last_input);
+    return replace;
 }
 
 char *do_exclamation_mark(mysh_t *mysh, char *input)

@@ -52,7 +52,6 @@ int loop_grocommand(mysh_t *mysh)
     int res = 0;
     int exit = 0;
 
-    mysh->to_return = mysh->last_status;
     for (int i = 0; i < mysh->ast.nb_grocommand; i += 1) {
         mysh->last_status = 0;
         res = loop_or_command(mysh, &(mysh->ast.tab_grocommands[i]));
