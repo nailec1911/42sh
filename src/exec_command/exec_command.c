@@ -56,7 +56,7 @@ static int exec_binary(mysh_t *mysh, command_t command)
     if (cpid == 0) {
         dup2(command.fd_out, STDOUT_FILENO);
         dup2(command.fd_in, STDIN_FILENO);
-        execve(command.to_exec, command.command, mysh->env);
+        execvp(command.to_exec, command.command);
         display_error_exec(errno, command.command[0]);
         exit(errno);
     }
