@@ -55,6 +55,8 @@ static int get_ast(mysh_t *mysh, token_t *list_token)
     if (res == FAILURE) {
         free_ast(mysh->ast);
         mysh->last_status = 1;
+        free(list_token);
+        return FAILURE;
     }
     if (res == ERROR)
         mysh->last_status = ERROR;
