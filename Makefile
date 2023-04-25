@@ -11,6 +11,7 @@ SRC	=	mysh.c		\
 		handle_input/handle_input.c			\
 		handle_input/tokens_to_history.c			\
 		handle_input/loop_for_aliases.c				\
+		handle_input/loop_exclamation_mark.c		\
 		handle_input/parsing/set_all_ast.c			\
 		handle_input/parsing/free_ast.c				\
 		handle_input/parsing/lexer/lexer.c					\
@@ -37,6 +38,8 @@ SRC	=	mysh.c		\
 		exec_command/exec_builtins.c	\
 		exec_command/handle_errors.c	\
 		str_func/is_in.c			\
+		str_func/is_num.c			\
+		str_func/my_strlen.c			\
 		str_func/my_strcat_dup.c	\
 		str_func/my_strcat_with_char.c	\
 		str_func/my_strcmp.c		\
@@ -57,6 +60,9 @@ SRC	=	mysh.c		\
 		builtins/alias/display_alias.c\
 		builtins/unalias/remove_alias.c\
 		builtins/history/functions_history.c\
+		builtins/history/exclamation_mark.c\
+		builtins/history/remove_first_char.c\
+		builtins/history/search_command.c\
 		builtins/history/builtins_history.c\
 		builtins/history/clean_str.c\
 		builtins/history/add_elem_tab.c\

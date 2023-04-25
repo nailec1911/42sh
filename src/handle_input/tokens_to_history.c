@@ -51,6 +51,10 @@ int tokens_to_history(mysh_t *mysh, token_t *list)
 
     if (to_history == NULL)
         return ERROR;
+    if (mysh->display_line) {
+        printf("%s", to_history);
+        fflush(stdout);
+    }
     if (add_in_history(mysh, to_history) == ERROR)
         return ERROR;
     free(to_history);

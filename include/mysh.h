@@ -23,6 +23,7 @@
         int ind_history;
         int ind_init;
         ast_t ast;
+        bool display_line;
         history_t history;
         alias_t alias;
     } mysh_t;
