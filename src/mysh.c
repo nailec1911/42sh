@@ -35,6 +35,10 @@ int loop_sh(mysh_t *mysh, char *input)
 
     if (input[0] == '\n')
         return SUCCESS;
+    if (input[0] == '!' && input[1] != '!') {
+        if ((input = do_exclamation_mark(mysh, input)) == NULL)
+            return ERROR;
+    }
     if ((res = handle_input(mysh, input)) == ERROR)
         return ERROR;
     if (res != SUCCESS)

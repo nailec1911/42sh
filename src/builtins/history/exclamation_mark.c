@@ -4,43 +4,39 @@
 ** File description:
 ** main
 */
+#include <string.h>
+#include <stdlib.h>
 #include "mysh.h"
 #include "macro_errors.h"
 #include "str_func.h"
+#include "init.h"
 
-int search_command(mysh_t *mysh, char *input, char **final_input)
+char *search_command(mysh_t *mysh, char *last_input)
 {
-    char **tab_hist = NULL;
-    char *temp = NULL;
-
-    for (int i = 0; mysh->history.tab_file[i] != NULL; i += 1) {
-        tab_hist = my_str_to_word_array_separator
-        (mysh->history.tab_file[i], " \n");
-        *final_input = remake_command(tab_hist);
-        temp = my_strcat_dup("!", *final_input);
-        if (strcmp(temp, input) == 0) {
-            free(temp);
-            free_array(tab_hist);
-            return SUCCESS;
-        }
-        free(temp);
-        free_array(tab_hist);
+    if (is_num(last_input)) {
+        if ((last_input = search_by_num(mysh, last_input)) == NULL)
+            return NULL;
+        printf("%s", last_input);
+        return last_input;
+    } else {
+        if ((last_input = search_by_name(mysh, last_input)) == NULL)
+            return NULL;
+        printf("%s", last_input);
+        return last_input;
     }
-    return ERROR;
 }
 
-int do_exclamation_mark(mysh_t *mysh, command_t *to_exec)
+char *do_exclamation_mark(mysh_t *mysh, char *input)
 {
-    char *last_input = NULL;
+    char *last_input = remove_first_char(input);
 
-    if (to_exec->command[1][0] == '!' && to_exec->command[1][1] == NULL) {
+    if (last_input == NULL)
+        return NULL;
+    if (input[0] == '!' && input[1] == '\n') {
         mysh->last_status = 1;
         fprintf(stderr, "!: Command not found.\n");
-        return SUCCESS;
+        free(input);
+        return NULL;
     }
-    if (search_command(mysh, to_exec->command[1], &last_input) == ERROR) {
-        mysh->last_status = 1;
-        printf("%s: Event not found.\n", to_exec->command[1]);
-        return SUCCESS;
-    }
+    return search_command(mysh, last_input);
 }
