@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <signal.h>
+
 #include "launch_command.h"
 #include "builtins/env.h"
 #include "str_func.h"
@@ -18,7 +20,7 @@
 
 static char *choose_get_line(mysh_t mysh)
 {
-    char *input = '\0';
+    char *input = "\0";
     mysh.ind_history = length_tab_hist(mysh.history.tab_hist);
     mysh.ind_init = mysh.ind_history;
 
@@ -33,6 +35,8 @@ int loop_sh(mysh_t *mysh, char *input)
 {
     int res = 0;
 
+    mysh->to_return = mysh->last_status;
+    mysh->last_status = 0;
     if (input[0] == '\n')
         return SUCCESS;
     if ((res = handle_input(mysh, input)) == ERROR)

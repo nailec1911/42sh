@@ -8,6 +8,8 @@
 #ifndef STR_FUNC_H_
     #define STR_FUNC_H_
 
+    #include <stdbool.h>
+
     char **input_to_array(char const *str, char *separator);
     char *my_strcat_dup(char *dest, char *src);
     char *my_strcat_with_char(char *dest, char const *src, char c);
@@ -19,6 +21,8 @@
     int is_in(char c, char *str);
     int my_strstrlen(char *str[]);
     char *clean_last_input(char **tab_alias);
-
+    bool is_num(char *str);
+    int my_strlen(char *str);
+    char *remove_first_char(char *input);
 
 #endif /* !STR_FUNC_H_ */

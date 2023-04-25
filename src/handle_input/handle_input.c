@@ -16,7 +16,10 @@ static token_t *get_list_tokens(mysh_t *mysh, char *input)
 {
     token_t *list_token = lexer(input);
 
+    mysh->display_line = false;
     if (list_token == NULL)
+        return NULL;
+    if ((list_token = loop_for_exclamation_mark(mysh, list_token)) == NULL)
         return NULL;
     if (tokens_to_history(mysh, list_token) == ERROR)
         return NULL;
@@ -52,6 +55,8 @@ static int get_ast(mysh_t *mysh, token_t *list_token)
     if (res == FAILURE) {
         free_ast(mysh->ast);
         mysh->last_status = 1;
+        free(list_token);
+        return FAILURE;
     }
     if (res == ERROR)
         mysh->last_status = ERROR;
@@ -64,6 +69,10 @@ int handle_input(mysh_t *mysh, char *input)
     token_t *list_token = get_list_tokens(mysh, input);
     int res = 0;
 
+    if (mysh->last_status == 1) {
+        free(list_token);
+        return FAILURE;
+    }
     if ((res = error_in_tokens(mysh, list_token)) != SUCCESS)
         return res;
     if ((res = get_ast(mysh, list_token)) != SUCCESS)
