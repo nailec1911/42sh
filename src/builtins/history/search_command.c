@@ -51,42 +51,34 @@ char *search_by_name_command(mysh_t *mysh, char *last_input)
 
 char *search_by_name(mysh_t *mysh, char *last_input)
 {
-    char *to_free = last_input;
     char *to_compare = strdup(last_input);
 
     if ((last_input = search_by_name_command(mysh, last_input)) == NULL) {
         free(to_compare);
-        free(to_free);
         return last_input;
     }
     if (strcmp(last_input, to_compare) != 0) {
-        free(to_free);
         free(to_compare);
         return last_input;
     }
     fprintf(stderr, "%s: Event not found.\n", last_input);
-    free(to_free);
     free(to_compare);
     return NULL;
 }
 
 char *search_by_num(mysh_t *mysh, char *last_input)
 {
-    char *to_free = last_input;
     char *to_compare = strdup(last_input);
 
     if ((last_input = search_by_num_command(mysh, last_input)) == NULL) {
-        free(to_free);
         free(to_compare);
         return last_input;
     }
     if (strcmp(last_input, to_compare) != 0) {
-        free(to_free);
         free(to_compare);
         return last_input;
     }
     fprintf(stderr, "%s: Event not found.\n", last_input);
     free(to_compare);
-    free(to_free);
     return NULL;
 }

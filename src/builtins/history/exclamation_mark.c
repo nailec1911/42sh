@@ -13,16 +13,24 @@
 
 char *search_command(mysh_t *mysh, char *last_input)
 {
+    char *replace = NULL;
+
     if (is_num(last_input)) {
-        if ((last_input = search_by_num(mysh, last_input)) == NULL)
+        if ((replace = search_by_num(mysh, last_input)) == NULL) {
+            free(last_input);
             return NULL;
-        printf("%s", last_input);
-        return last_input;
+        }
+        free(last_input);
+        printf("%s", replace);
+        return replace;
     } else {
-        if ((last_input = search_by_name(mysh, last_input)) == NULL)
+        if ((replace = search_by_name(mysh, last_input)) == NULL) {
+            free(last_input);
             return NULL;
-        printf("%s", last_input);
-        return last_input;
+        }
+        free(last_input);
+        printf("%s", replace);
+        return replace;
     }
 }
 
