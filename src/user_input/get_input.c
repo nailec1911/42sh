@@ -38,6 +38,43 @@ static char *fill_string(char *line, int ch, int *index, int *length)
     return line;
 }
 
+static bool is_inib_odd(int length, char *line)
+{
+    int count = 0;
+
+    if (line[length] != '\\')
+        return false;
+    while (line[length] == '\\' && length >= 0) {
+        count += 1;
+        length -= 1;
+    }
+    if (count % 2 == 1)
+        return true;
+    return false;
+}
+
+static char *is_inib(char *line)
+{
+    char *get = NULL;
+    size_t len = 0;
+    int length = strlen(line) - 2;
+
+    if (strlen(line) == 1 || !is_inib_odd(length, line))
+        return line;
+    write(STDOUT_FILENO, "? ", 2);
+    getline(&get, &len, stdin);
+    line[length] = ' ';
+    length += 1;
+    for (int i = 0; get[i] != '\n' && get[i] != '\0'; i += 1) {
+        line[length] = get[i];
+        length += 1;
+    }
+    line[length] = '\n';
+    if (line[length - 1] == '\\')
+        is_inib(line);
+    return line;
+}
+
 static char *ch_functions(mysh_t *mysh, int *index, int *length, char *line)
 {
     switch (mysh->ch) {
@@ -63,7 +100,6 @@ char *get_input(mysh_t mysh)
     int index = 0;
     int length = 0;
     char *line = malloc(sizeof(char) * 1024);
-    char *new = NULL;
 
     for (int i = 0; i < 1024; i += 1)
         line[i] = '\0';
@@ -72,8 +108,8 @@ char *get_input(mysh_t mysh)
         if ((line = ch_functions(&mysh, &index, &length, line)) == NULL)
             return NULL;
     printf("\n");
-    new = my_strcat_dup(line, "\n");
+    line[strlen(line)] = '\n';
     tcsetattr(STDIN_FILENO, TCSANOW, &old_term);
-    free(line);
-    return new;
+    line = is_inib(line);
+    return line;
 }
