@@ -38,6 +38,7 @@ static int get_num_command(history_t *history)
     if (file_to_tab_hist(HISTORY_FILE, history) == ERROR)
         return ERROR;
     history->num_command += 1;
+    history->len_tab_hist = length_tab_hist(history->tab_hist);
     return SUCCESS;
 }
 

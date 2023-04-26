@@ -13,7 +13,7 @@
 int opt_clear(mysh_t *mysh)
 {
     tab_hist_t **tab = malloc(sizeof(tab_hist_t *) * 2);
-    int l_tab = length_tab_hist(mysh->history.tab_hist);
+    int l_tab = mysh->history.len_tab_hist;
     tab_hist_t **to_free = mysh->history.tab_hist;
     if (tab == NULL)
         return ERROR;
@@ -24,6 +24,7 @@ int opt_clear(mysh_t *mysh)
     tab[0]->time = strdup(mysh->history.tab_hist[l_tab - 1]->time);
     tab[0]->command = strdup(mysh->history.tab_hist[l_tab - 1]->command);
     tab[1] = NULL;
+    mysh->history.len_tab_hist = 1;
     mysh->history.tab_hist = tab;
     free_tab_hist(to_free);
     return SUCCESS;

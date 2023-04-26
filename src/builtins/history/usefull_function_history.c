@@ -18,6 +18,7 @@ char *create_time_line(void)
 {
     time_t timestamp = time(NULL);
     char **tab_time = NULL;
+    char *command = NULL;
     char *time_str = ctime(&timestamp);
     if (time_str == NULL)
         return NULL;
@@ -25,7 +26,10 @@ char *create_time_line(void)
     if (tab_time == NULL)
         return NULL;
     tab_time[3][5] = '\0';
-    return strdup(tab_time[3]);
+    if ((command = strdup(tab_time[3])) == NULL)
+        return NULL;
+    free_array(tab_time);
+    return command;
 }
 
 int length_tab_hist(tab_hist_t **tab)

@@ -22,7 +22,7 @@ void write_in_file(tab_hist_t **tab, FILE *fd)
 
 int replace_last_line(history_t *history, char *input)
 {
-    int l_tab = length_tab_hist(history->tab_hist);
+    int l_tab = history->len_tab_hist;
     free(history->tab_hist[l_tab - 1]->num);
     free(history->tab_hist[l_tab - 1]->time);
     free(history->tab_hist[l_tab - 1]->command);
@@ -45,7 +45,7 @@ int add_line(history_t *history, char *input)
 
 int add_line_history(history_t *history, char *input)
 {
-    int l_tab = length_tab_hist(history->tab_hist);
+    int l_tab = history->len_tab_hist;
     if (strcmp(input,history->tab_hist[l_tab - 1]->command) == 0) {
         return replace_last_line(history, input);
     } else {

@@ -27,7 +27,7 @@ static int count_line(char *str)
     return line;
 }
 
-static int get_nb_line(char *filepath)
+int get_nb_line(char *filepath)
 {
     struct stat file;
     char *str_file = NULL;

@@ -20,7 +20,7 @@
 static char *choose_get_line(mysh_t mysh)
 {
     char *input = "\0";
-    mysh.ind_history = length_tab_hist(mysh.history.tab_hist);
+    mysh.ind_history = mysh.history.len_tab_hist;
     mysh.ind_init = mysh.ind_history;
 
     if (mysh.tty)
