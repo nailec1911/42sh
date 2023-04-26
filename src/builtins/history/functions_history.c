@@ -19,17 +19,17 @@
 #include <time.h>
 int file_to_tab_hist(char *filepath, history_t *history);
 
-int add_in_history(mysh_t *mysh, char *input)
+int add_in_history(history_t *history, char *input)
 {
     if (strcmp("history\n", input) == 0)
         return SUCCESS;
-    if (ftruncate(mysh->history.fd_history_file, 0) == -1) {
+    if (ftruncate(history->fd_history_file, 0) == -1) {
         return ERROR;
     }
-    if (check_last_command(mysh, input) == ERROR)
+    if (check_last_command(history, input) == ERROR)
         return ERROR;
-    mysh->history.num_command += 1;
-    fflush(mysh->history.fd_file);
+    history->num_command += 1;
+    fflush(history->fd_file);
     return SUCCESS;
 }
 
@@ -41,21 +41,21 @@ static int get_num_command(history_t *history)
     return SUCCESS;
 }
 
-int init_history(mysh_t *mysh)
+int init_history(history_t *history)
 {
     struct stat file;
-    mysh->history.num_command = 0;
-    mysh->history.fd_history_file = open(HISTORY_FILE, O_CREAT |
+    history->num_command = 0;
+    history->fd_history_file = open(HISTORY_FILE, O_CREAT |
     O_APPEND | O_RDWR, S_IRWXU);
-    mysh->history.fd_file = fdopen(mysh->history.fd_history_file, "a+");
+    history->fd_file = fdopen(history->fd_history_file, "a+");
     if (stat(HISTORY_FILE, &file) == -1)
         return ERROR;
     if (file.st_size == 0) {
-        mysh->history.num_command = 1;
-        mysh->history.tab_file = NULL;
-        mysh->history.tab_hist = NULL;
+        history->num_command = 1;
+        history->tab_file = NULL;
+        history->tab_hist = NULL;
     } else {
-        if (get_num_command(&mysh->history) == ERROR)
+        if (get_num_command(history) == ERROR)
             return ERROR;
     }
     return SUCCESS;
