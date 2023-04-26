@@ -9,7 +9,7 @@
 #include "mysh.h"
 #include "str_func.h"
 #include "macro_errors.h"
-int dectect_flags(command_t *to_exec, history_t *history);
+int detect_flags(command_t *to_exec, history_t *history);
 
 int opt_clear(mysh_t *mysh)
 {
