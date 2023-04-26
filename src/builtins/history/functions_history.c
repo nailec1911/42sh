@@ -53,6 +53,7 @@ int init_history(history_t *history)
         return ERROR;
     if (file.st_size == 0) {
         history->num_command = 1;
+        history->tab_file = NULL;
         history->tab_hist = NULL;
     } else {
         if (get_num_command(history) == ERROR)
