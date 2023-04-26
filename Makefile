@@ -67,7 +67,6 @@ SRC	=	mysh.c		\
 		builtins/history/load_file_history.c\
 		builtins/history/clean_str.c\
 		builtins/history/add_elem_tab.c\
-		builtins/history/combine_flags.c\
 		builtins/history/check_last_command.c\
 		builtins/history/usefull_function_history.c\
 		builtins/history/word_array/find_index_separator.c\
