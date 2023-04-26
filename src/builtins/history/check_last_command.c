@@ -65,6 +65,7 @@ int check_last_command(history_t *history, char *input)
         if ((history->tab_hist[0]->command = strdup(input)) == NULL)
             return ERROR;
         history->tab_hist[1] = NULL;
+        history->len_tab_hist = 1;
         write_in_file(history->tab_hist, history->fd_file);
     } else {
         return add_line_history(history, input);
