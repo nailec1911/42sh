@@ -47,14 +47,14 @@ static int loop_or_command(mysh_t *mysh, grocommand_t *grocommand)
     return exit;
 }
 
-int loop_grocommand(mysh_t *mysh)
+int loop_grocommand(mysh_t *mysh, ast_t *ast)
 {
     int res = 0;
     int exit = 0;
 
-    for (int i = 0; i < mysh->ast.nb_grocommand; i += 1) {
+    for (int i = 0; i < ast->nb_grocommand; i += 1) {
         mysh->last_status = 0;
-        res = loop_or_command(mysh, &(mysh->ast.tab_grocommands[i]));
+        res = loop_or_command(mysh, &(ast->tab_grocommands[i]));
         if (res == ERROR)
             return ERROR;
         if (res == EXIT)

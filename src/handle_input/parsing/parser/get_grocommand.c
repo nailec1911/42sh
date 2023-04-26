@@ -14,6 +14,7 @@ or_command_t get_or_command(parser_t *parser);
 static bool is_end_grocommand(token_t token)
 {
     if (token.type == END_LINE
+    || token.type == R_PARENTHESIS
     || token.type == SEMICOLON
     || token.type == UNMATCHED_QUOTE)
         return true;
@@ -45,7 +46,8 @@ static int fill_tab_command(parser_t *parser, grocommand_t *grocommand)
         parser->error = ERROR;
         return ERROR;
     }
-    while (is_end_grocommand(parser->list_tokens[parser->cursor]) == false) {
+    while (is_end_grocommand(parser->list_tokens[parser->cursor]) == false
+    && parser->error == SUCCESS) {
         parser->cursor += 1;
         grocommand->nb_command += 1;
         if (add_elt_in_tab(grocommand, get_or_command(parser)) == ERROR)

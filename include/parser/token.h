@@ -21,6 +21,8 @@
         REDIRECT_OUT_1,
         REDIRECT_OUT_2,
         IDENTIFIER,
+        L_PARENTHESIS,
+        R_PARENTHESIS,
         UNMATCHED_QUOTE,
         T_ERROR
     } tokentype_t;

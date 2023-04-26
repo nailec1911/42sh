@@ -10,6 +10,7 @@
 bool is_end_command(token_t token)
 {
     if (token.type == END_LINE
+    || token.type == R_PARENTHESIS
     || token.type == SEMICOLON
     || token.type == OPERATOR_AND
     || token.type == OPERATOR_OR
