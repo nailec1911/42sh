@@ -9,6 +9,7 @@ SOURCE_DIR	=	src/
 
 SRC	=	mysh.c		\
 		handle_input/handle_input.c			\
+		handle_input/error_in_token_list.c			\
 		handle_input/tokens_to_history.c			\
 		handle_input/loop_for_aliases.c				\
 		handle_input/loop_exclamation_mark.c		\
@@ -26,6 +27,8 @@ SRC	=	mysh.c		\
 		handle_input/parsing/parser/get_or_command.c		\
 		handle_input/parsing/parser/get_and_command.c		\
 		handle_input/parsing/parser/get_command.c			\
+		handle_input/parsing/parser/get_ast_parenthesis.c	\
+		handle_input/parsing/parser/error_in_command.c	\
 		handle_input/get_path.c					\
 		handle_input/set_fd_for_exec.c				\
 		exec_command/globbins/globbins.c 			\
@@ -33,6 +36,7 @@ SRC	=	mysh.c		\
 		exec_command/magic_quote/set_magic_quote.c		\
 		exec_command/magic_quote/get_res_command.c		\
 		exec_command/magic_quote/set_new_tab.c		\
+		exec_command/exec_parenthesis/exec_parenthesis.c	\
 		exec_command/exec_pipes.c	\
 		exec_command/exec_command.c		\
 		exec_command/exec_builtins.c	\

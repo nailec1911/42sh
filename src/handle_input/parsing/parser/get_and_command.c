@@ -37,7 +37,8 @@ static int fill_tab_command(parser_t *parser, and_command_t *and_command)
         parser->error = ERROR;
         return ERROR;
     }
-    while (is_end_command(parser->list_tokens[parser->cursor]) == false) {
+    while (is_end_command(parser->list_tokens[parser->cursor]) == false
+    && parser->error == SUCCESS) {
         parser->cursor += 1;
         and_command->nb_command += 1;
         if (add_elt_in_tab(and_command, get_command(parser)) == ERROR)

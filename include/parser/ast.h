@@ -19,6 +19,8 @@
     } redirect_t;
 
     typedef struct command_s {
+        bool is_ast;
+        struct ast_s *parenthesis;
         int nb_command;
         char **command;
         char *to_exec;

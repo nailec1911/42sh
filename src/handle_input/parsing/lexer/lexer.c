@@ -24,6 +24,10 @@ static token_t single_char_token(lexer_t *lex)
         return token_pipe(lex);
     if (lexer_peek(lex) == '&')
         return token_and(lex);
+    if (lexer_peek(lex) == '(')
+        return token_l_parenthesis(lex);
+    if (lexer_peek(lex) == ')')
+        return token_r_parenthesis(lex);
     return token_semicolon(lex);
 }
 

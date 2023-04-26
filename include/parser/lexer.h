@@ -10,9 +10,9 @@
 
     #include "token.h"
 
-    #define SEPARATORS ";&><| \t\n\0"
-    #define SINGLE_CHAR ";&><|\n"
-    #define QUOTED "'\"(`"
+    #define SEPARATORS ";&><| ()\t\n\0"
+    #define SINGLE_CHAR ";&><|()\n"
+    #define QUOTED "'\"`"
 
     typedef struct lexer_s {
         char *input;
@@ -32,5 +32,7 @@
     token_t token_end_line(lexer_t *lex);
     token_t multiple_char_token(lexer_t *lex);
     token_t quoted_tokens(lexer_t *lex);
+    token_t token_r_parenthesis(lexer_t *lex);
+    token_t token_l_parenthesis(lexer_t *lex);
 
 #endif /* !LEXER_H_ */

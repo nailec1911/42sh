@@ -28,3 +28,25 @@ token_t token_end_line(lexer_t *lex)
     new.size_val = 1;
     return new;
 }
+
+token_t token_l_parenthesis(lexer_t *lex)
+{
+    token_t new = {0, "(", 0};
+
+    lexer_get(lex);
+
+    new.type = L_PARENTHESIS;
+    new.size_val = 1;
+    return new;
+}
+
+token_t token_r_parenthesis(lexer_t *lex)
+{
+    token_t new = {0, ")", 0};
+
+    lexer_get(lex);
+
+    new.type = R_PARENTHESIS;
+    new.size_val = 1;
+    return new;
+}
