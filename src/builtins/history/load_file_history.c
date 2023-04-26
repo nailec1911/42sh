@@ -30,12 +30,13 @@ static int fill_tab(tab_hist_t **tab_hist, int i, char **tab)
     return SUCCESS;
 }
 
-static int check_syntaxe(char ***tab_time, char **tab)
+static int check_syntaxe(char **tab)
 {
-    if ((*tab_time = my_str_to_word_array_separator(tab[1], ":")) == NULL)
+    char **tab_time = NULL;
+    if ((tab_time = my_str_to_word_array_separator(tab[1], ":")) == NULL)
         return ERROR;
-    if ((atoi(*tab_time[0]) < 0 || atoi(*tab_time[0]) > 23) ||
-    (atoi(*tab_time[1]) < 0 || atoi(*tab_time[1]) > 59))
+    if ((atoi(tab_time[0]) < 0 || atoi(tab_time[0]) > 23) ||
+    (atoi(tab_time[1]) < 0 || atoi(tab_time[1]) > 59))
         return ERROR;
     if (strlen(tab[1]) != 5)
         return ERROR;
@@ -43,24 +44,23 @@ static int check_syntaxe(char ***tab_time, char **tab)
         return ERROR;
     if (!is_num_colon(tab[1]))
         return ERROR;
+    free_array(tab_time);
     return SUCCESS;
 }
 
 static int check_and_fill_tab(char *line, int i, history_t *history)
 {
-    char **tab_time = NULL;
     char **tab = NULL;
+
     if ((tab = my_str_to_word_array_separator(line, " \n")) == NULL)
         return ERROR;
     if (length_tab(tab) < 3) {
         free_array(tab);
         return ERROR;
     }
-    if (check_syntaxe(&tab_time, tab) == ERROR) {
-        free_array(tab);
+    if (check_syntaxe(tab) == ERROR) {
         return ERROR;
     }
-    free_array(tab_time);
     if (fill_tab(history->tab_hist, i, tab) == ERROR) {
         free_array(tab);
         return ERROR;
