@@ -34,7 +34,8 @@ char **my_str_to_word_array_separator(char *str, char *separator)
     for (int i = 0; i < nb_word; i += 1) {
         len_word = my_strlen_index_separator(str, index, separator);
         index_str = index;
-        tab[i] = malloc(sizeof(char) * (len_word + 1));
+        if ((tab[i] = malloc(sizeof(char) * (len_word + 1))) == NULL)
+            return NULL;
         for (int j = 0; j < len_word; j += 1) {
             tab[i][j] = str[index_str];
             index_str += 1;

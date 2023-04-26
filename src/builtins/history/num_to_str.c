@@ -10,6 +10,8 @@
 char *num_to_str(int num)
 {
     char *str = malloc(sizeof(char) * 7);
+    if (str == NULL)
+        return NULL;
     str[6] = '\0';
     for (int i = 0; i < 5; i += 1) {
         str[i] = ' ';
