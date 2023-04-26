@@ -10,6 +10,7 @@
 #include <str_func.h>
 #include "mysh.h"
 #include "macro_errors.h"
+int set_all_ast(ast_t *ast);
 
 static int error_redirect(int type)
 {
@@ -22,10 +23,14 @@ static int error_redirect(int type)
 
 static int set_redirect_command(command_t *command, int red_in, int red_out)
 {
+    int res = 0;
+
+    if (command->is_ast &&
+    (res = set_all_ast(command->parenthesis)) != SUCCESS)
+        return res;
     if (red_in != STDIN_FILENO && command->redirect_in.type != NO_REDIRECT)
         return error_redirect(command->redirect_in.type);
     command->fd_in = red_in;
-
     if (red_out != STDOUT_FILENO && command->redirect_out.type != NO_REDIRECT)
         return error_redirect(command->redirect_out.type);
     command->fd_out = red_out;

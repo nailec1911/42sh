@@ -84,6 +84,8 @@ int update_glob_argv(and_command_t *cmd)
 
     for (int i = 0; i < cmd->nb_command; i += 1) {
         cur_cmd = &(cmd->tab_command[i]);
+        if (cur_cmd->is_ast)
+            continue;
         new_argv = get_glob_argv(cur_cmd, &size);
         if (!new_argv)
             continue;

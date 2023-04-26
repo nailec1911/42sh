@@ -36,6 +36,7 @@ SRC	=	mysh.c		\
 		exec_command/magic_quote/set_magic_quote.c		\
 		exec_command/magic_quote/get_res_command.c		\
 		exec_command/magic_quote/set_new_tab.c		\
+		exec_command/exec_parenthesis/exec_parenthesis.c	\
 		exec_command/exec_pipes.c	\
 		exec_command/exec_command.c		\
 		exec_command/exec_builtins.c	\
