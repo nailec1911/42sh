@@ -9,7 +9,13 @@
     #define HISTORY_H_
 
     #include <stdio.h>
-    #include "mysh.h"
+    #include <stdint.h>
+
+    #define FLAG_H 0b0000001
+    #define FLAG_R 0b0000010
+    #define FLAG_C 0b0000100
+    #define NO_FLAG 0
+    #define IS_FLAG(flag, to_search) (to_search & flag)
 
     #define HISTORY_FILE ".42shhistory"
     typedef struct tab_hist_s {
@@ -23,9 +29,9 @@
         char *command;
         int fd_history_file;
         FILE *fd_file;
-        char **tab_file;
         int len_tab_hist;
         tab_hist_t **tab_hist;
+        uint8_t flags;
     }history_t;
 
 

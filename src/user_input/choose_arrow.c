@@ -75,19 +75,19 @@ char *down_arrow_function(mysh_t *mysh, int *index, int *length, char *line)
 void choose_arrow(mysh_t *mysh, int *index, int *length, char **line)
 {
     switch (mysh->ch) {
-        case 68:
+        case 'D':
             left_arrow_function(index);
             break;
-        case 67:
+        case 'C':
             right_arrow_function(index, *length);
             break;
-        case 65:
+        case 'A':
             *line = up_arrow_function(mysh, index, length, *line);
             break;
-        case 66:
+        case 'B':
             *line = down_arrow_function(mysh, index, length, *line);
             break;
-        case 49:
+        case '1':
             ctrl_functions(index, length, mysh->ch);
     }
 }
