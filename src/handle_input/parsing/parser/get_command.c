@@ -12,14 +12,9 @@
 #include "parser/token.h"
 #include "parser/ast.h"
 #include "macro_errors.h"
-
-static void error_redirect(int type)
-{
-    if (type == REDIRECT_IN_1 || type == REDIRECT_IN_2)
-        fprintf(stderr, "Ambiguous input redirect.\n");
-    if (type == REDIRECT_OUT_1 || type == REDIRECT_OUT_2)
-        fprintf(stderr, "Ambiguous output redirect.\n");
-}
+int get_ast_parenthesis(parser_t *parser, command_t *new);
+void error_redirect(int type);
+void check_error(parser_t *parser, command_t new);
 
 static void set_redirect(parser_t *parser,
 redirect_t *redirect, int new_type, char *name)
@@ -80,11 +75,16 @@ static int add_elt_in_tab(parser_t *parser, command_t *command)
 
 command_t get_command(parser_t *parser)
 {
-    command_t new = {0, NULL, NULL, false, STDIN_FILENO, STDOUT_FILENO,
-    false, {NO_REDIRECT, NULL}, {NO_REDIRECT, NULL}};
+    command_t new = {false, NULL, 0, NULL, NULL, false, STDIN_FILENO,
+    STDOUT_FILENO, false, {NO_REDIRECT, NULL}, {NO_REDIRECT, NULL}};
 
-    while (IS_REDIRECT(parser->list_tokens[parser->cursor].type)
-    || parser->list_tokens[parser->cursor].type == IDENTIFIER) {
+    while ((IS_REDIRECT(parser->list_tokens[parser->cursor].type)
+    || parser->list_tokens[parser->cursor].type == IDENTIFIER
+    || parser->list_tokens[parser->cursor].type == L_PARENTHESIS)
+    && parser->error == SUCCESS) {
+        if (parser->list_tokens[parser->cursor].type == L_PARENTHESIS
+        && get_ast_parenthesis(parser, &new) != SUCCESS)
+            return new;
         if (parser->list_tokens[parser->cursor].type == IDENTIFIER
         && add_elt_in_tab(parser, &new) == ERROR) {
             parser->error = ERROR;
@@ -93,11 +93,6 @@ command_t get_command(parser_t *parser)
         if (IS_REDIRECT(parser->list_tokens[parser->cursor].type))
             handle_redirect(parser, &new);
     }
-    if (parser->list_tokens[parser->cursor].type == UNMATCHED_QUOTE) {
-        parser->error = 1;
-    } else if (new.command == NULL) {
-        parser->error = 1;
-        fprintf(stderr, "Invalid null command.\n");
-    }
+    check_error(parser, new);
     return new;
 }

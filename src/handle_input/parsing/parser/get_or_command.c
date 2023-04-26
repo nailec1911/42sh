@@ -15,6 +15,7 @@ bool is_end_command(token_t token);
 static bool is_end_and_command(token_t token)
 {
     if (token.type == END_LINE
+    || token.type == R_PARENTHESIS
     || token.type == SEMICOLON
     || token.type == OPERATOR_OR
     || token.type == UNMATCHED_QUOTE)
@@ -47,7 +48,8 @@ static int fill_tab_command(parser_t *parser, or_command_t *or_command)
         parser->error = ERROR;
         return ERROR;
     }
-    while (is_end_and_command(parser->list_tokens[parser->cursor]) == false) {
+    while (is_end_and_command(parser->list_tokens[parser->cursor]) == false
+    && parser->cursor == SUCCESS) {
         parser->cursor += 1;
         or_command->nb_command += 1;
         if (add_elt_in_tab(or_command, get_and_command(parser)) == ERROR)
