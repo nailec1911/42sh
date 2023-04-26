@@ -56,11 +56,14 @@ int add_line_history(mysh_t *mysh, char *input)
 int check_last_command(mysh_t *mysh, char *input)
 {
     if (mysh->history.tab_hist == NULL) {
-        mysh->history.tab_hist = malloc(sizeof(tab_hist_t *) * 2);
-        mysh->history.tab_hist[0] = malloc(sizeof(tab_hist_t));
+        if ((mysh->history.tab_hist = malloc(sizeof(tab_hist_t *) * 2)) == NULL)
+            return ERROR;
+        if ((mysh->history.tab_hist[0] = malloc(sizeof(tab_hist_t))) == NULL)
+            return ERROR;
         mysh->history.tab_hist[0]->num = num_to_str(mysh->history.num_command);
         mysh->history.tab_hist[0]->time = create_time_line();
-        mysh->history.tab_hist[0]->command = strdup(input);
+        if ((mysh->history.tab_hist[0]->command = strdup(input)) == NULL)
+            return ERROR;
         mysh->history.tab_hist[1] = NULL;
         write_in_file(mysh->history.tab_hist, mysh->history.fd_file);
     } else {
