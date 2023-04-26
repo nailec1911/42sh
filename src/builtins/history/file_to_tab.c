@@ -16,7 +16,7 @@
 #include <string.h>
 #include "init.h"
 
-int count_line(char *str)
+static int count_line(char *str)
 {
     int line = 0;
     for (int i = 0; str[i] != '\0'; i += 1) {
@@ -27,7 +27,7 @@ int count_line(char *str)
     return line;
 }
 
-int get_nb_line(char *filepath)
+static int get_nb_line(char *filepath)
 {
     struct stat file;
     char *str_file = NULL;

@@ -30,7 +30,7 @@ static int fill_tab(tab_hist_t **tab_hist, int i, char **tab)
     return SUCCESS;
 }
 
-int check_syntaxe(char ***tab_time, char **tab)
+static int check_syntaxe(char ***tab_time, char **tab)
 {
     if ((*tab_time = my_str_to_word_array_separator(tab[1], ":")) == NULL)
         return ERROR;
