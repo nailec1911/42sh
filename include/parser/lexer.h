@@ -10,7 +10,7 @@
 
     #include "token.h"
 
-    #define SEPARATORS ";&><| \t\n\0"
+    #define SEPARATORS ";&><| ()\t\n\0"
     #define SINGLE_CHAR ";&><|()\n"
     #define QUOTED "'\"`"
 
