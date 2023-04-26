@@ -17,11 +17,11 @@ int compare_char(char **command, int i, history_t *history)
         && command[i][j] != 'h')
             return ERROR;
         if (command[i][j] == 'c')
-            history->opt_c = true;
+            history->flags |= FLAG_C;
         if (command[i][j] == 'r')
-            history->opt_r = true;
+            history->flags |= FLAG_R;
         if (command[i][j] == 'h')
-            history->opt_h = true;
+            history->flags |= FLAG_H;
     }
     return SUCCESS;
 
