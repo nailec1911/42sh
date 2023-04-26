@@ -24,5 +24,8 @@
     bool is_num(char *str);
     int my_strlen(char *str);
     char *remove_first_char(char *input);
+    bool is_num_space(char *str);
+    bool is_num_colon(char *str);
+
 
 #endif /* !STR_FUNC_H_ */

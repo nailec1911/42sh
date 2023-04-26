@@ -14,7 +14,7 @@
 
     int add_in_history(mysh_t *mysh, char *input);
     int init_history(mysh_t *mysh);
-    int file_to_tab_hist(char *filepath, mysh_t *mysh);
+    char *do_exclamation_mark(mysh_t *mysh, char *input);
     char *search_by_num(mysh_t *mysh, char *last_input);
     char *search_by_name(mysh_t *mysh, char *last_input);
 
