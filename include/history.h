@@ -24,6 +24,7 @@
         int fd_history_file;
         FILE *fd_file;
         char **tab_file;
+        int len_tab_hist;
         tab_hist_t **tab_hist;
     }history_t;
 

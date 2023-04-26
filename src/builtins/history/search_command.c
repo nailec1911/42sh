@@ -32,7 +32,7 @@ char *search_by_name_command(mysh_t *mysh, char *last_input)
     char *command = NULL;
     char **tmp = NULL;
     int len = strlen(last_input);
-    int len_tab_hist = length_tab_hist(mysh->history.tab_hist);
+    int len_tab_hist = mysh->history.len_tab_hist;
 
     for (int i = len_tab_hist - 1; i >= 0; i -= 1) {
         tmp = my_str_to_word_array_separator

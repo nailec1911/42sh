@@ -14,7 +14,7 @@
 
 int add_elem_tab(history_t *history, char *to_add, int num)
 {
-    int len_tab = length_tab_hist(history->tab_hist);
+    int len_tab = history->len_tab_hist;
     tab_hist_t **temp = history->tab_hist;
     if ((history->tab_hist = malloc(sizeof(tab_hist_t *) *
     (len_tab + 2))) == NULL)
@@ -31,6 +31,7 @@ int add_elem_tab(history_t *history, char *to_add, int num)
         return ERROR;
     if (temp != NULL)
         free(temp);
+    history->len_tab_hist += 1;
     return SUCCESS;
 }
 

@@ -54,7 +54,7 @@ char *down_arrow_function(mysh_t *mysh, int *index, int *length, char *line)
     mysh->ind_history += 1;
     if (mysh->ind_history == mysh->ind_init)
         return remove_line(res, length, index, line);
-    if (mysh->ind_history > length_tab_hist(mysh->history.tab_hist) - 1) {
+    if (mysh->ind_history > mysh->history.len_tab_hist - 1) {
         mysh->ind_history -= 1;
         return line;
     }
