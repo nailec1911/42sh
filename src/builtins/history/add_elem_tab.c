@@ -14,24 +14,24 @@
 
 int add_elem_tab(history_t *history, char *to_add, int num)
 {
-    int len_tab = length_tab_hist(history->tab_hist);
+    int len_tab = history->len_tab_hist;
     tab_hist_t **temp = history->tab_hist;
     if ((history->tab_hist = malloc(sizeof(tab_hist_t *) *
     (len_tab + 2))) == NULL)
         return ERROR;
     history->tab_hist[len_tab + 1] = NULL;
     for (int i = 0; i < len_tab; i += 1) {
-        history->tab_hist[i] = malloc(sizeof(tab_hist_t));
-        history->tab_hist[i]->command = strdup(temp[i]->command);
-        history->tab_hist[i]->num = strdup(temp[i]->num);
-        history->tab_hist[i]->time = strdup(temp[i]->time);
+        history->tab_hist[i] = temp[i];
     }
     history->tab_hist[len_tab] = malloc(sizeof(tab_hist_t));
     history->tab_hist[len_tab]->num = num_to_str(num);
-    history->tab_hist[len_tab]->time = create_time_line();
-    history->tab_hist[len_tab]->command = strdup(to_add);
+    if ((history->tab_hist[len_tab]->time = create_time_line()) == NULL)
+        return ERROR;
+    if ((history->tab_hist[len_tab]->command = strdup(to_add)) == NULL)
+        return ERROR;
     if (temp != NULL)
-        free_tab_hist(temp);
+        free(temp);
+    history->len_tab_hist += 1;
     return SUCCESS;
 }
 

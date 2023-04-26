@@ -28,6 +28,6 @@
         alias_t alias;
     } mysh_t;
 
-int check_last_command(mysh_t *mysh, char *input);
-int init_alias(mysh_t *mysh);
+int check_last_command(history_t *history, char *input);
+int init_alias(alias_t *alias);
 #endif /* !MYSH_H_ */

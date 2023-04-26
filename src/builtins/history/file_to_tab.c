@@ -16,7 +16,7 @@
 #include <string.h>
 #include "init.h"
 
-int count_line(char *str)
+static int count_line(char *str)
 {
     int line = 0;
     for (int i = 0; str[i] != '\0'; i += 1) {
@@ -45,6 +45,23 @@ int get_nb_line(char *filepath)
     return count_line(str_file);
 }
 
+static int check_syntaxe(char *line)
+{
+    char **check = NULL;
+    if ((check = my_str_to_word_array_separator(line, " \n")) == NULL)
+        return ERROR;
+    if (length_tab(check) < 3) {
+        free_array(check);
+        return ERROR;
+    }
+    if (strcmp(check[0], "alias") != 0) {
+        free_array(check);
+        return ERROR;
+    }
+    free_array(check);
+    return SUCCESS;
+}
+
 static char **fill_tab_from_file(FILE *stream, int nb_line)
 {
     int i = 0;
@@ -56,6 +73,10 @@ static char **fill_tab_from_file(FILE *stream, int nb_line)
         return NULL;
     tab[nb_line] = NULL;
     while (getline(&line, &len, stream) != -1) {
+        if (check_syntaxe(line) == ERROR) {
+            free(line);
+            return NULL;
+        }
         tab[i] = strdup(line);
         if (tab[i] == NULL)
             return NULL;

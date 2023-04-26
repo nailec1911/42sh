@@ -17,22 +17,27 @@
 char *create_time_line(void)
 {
     time_t timestamp = time(NULL);
+    char **tab_time = NULL;
+    char *command = NULL;
     char *time_str = ctime(&timestamp);
-    char **tab_time = my_str_to_word_array_separator(time_str, " ");
-    char **hours_tab = my_str_to_word_array_separator(tab_time[3], ":");
-    char *time_line = my_strcat_dup(hours_tab[0], ":");
-    char *full_time = my_strcat_dup(time_line, hours_tab[1]);
+    if (time_str == NULL)
+        return NULL;
+    tab_time = my_str_to_word_array_separator(time_str, " ");
+    if (tab_time == NULL)
+        return NULL;
+    tab_time[3][5] = '\0';
+    if ((command = strdup(tab_time[3])) == NULL)
+        return NULL;
     free_array(tab_time);
-    free_array(hours_tab);
-    free(time_line);
-    return full_time;
+    return command;
 }
 
 int length_tab_hist(tab_hist_t **tab)
 {
+    int len = 0;
+
     if (tab == NULL || tab[0] == NULL)
         return 0;
-    int len = 0;
     for (int i = 0; tab[i] != NULL; i += 1) {
         len += 1;
     }

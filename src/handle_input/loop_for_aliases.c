@@ -40,7 +40,7 @@ static token_t *replace_if_alias(mysh_t *mysh, token_t *list, int *i)
     if (list[*i].type != IDENTIFIER ||
     (*i > 0 && list[*i - 1].type == IDENTIFIER))
         return list;
-    alias = is_alias(mysh, list[*i].value);
+    alias = is_alias(&mysh->alias, list[*i].value);
     if (alias == NULL || strcmp(alias, list[*i].value) == 0)
         return list;
     if ((list_alias = lexer(alias)) == NULL)

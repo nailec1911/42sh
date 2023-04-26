@@ -10,18 +10,17 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
-
+#include "mysh.h"
 #include "launch_command.h"
 #include "builtins/env.h"
 #include "str_func.h"
 #include "macro_errors.h"
-#include "mysh.h"
 #include "init.h"
 
 static char *choose_get_line(mysh_t mysh)
 {
     char *input = "\0";
-    mysh.ind_history = length_tab_hist(mysh.history.tab_hist);
+    mysh.ind_history = mysh.history.len_tab_hist;
     mysh.ind_init = mysh.ind_history;
 
     if (mysh.tty)
@@ -56,9 +55,9 @@ static int init_all(mysh_t *mysh, char * const env[])
         mysh->tty = true;
     if ((mysh->env = init_mysh_env(env)) == NULL)
         return ERROR;
-    if (init_history(mysh) == ERROR)
+    if (init_history(&mysh->history) == ERROR)
         return ERROR;
-    if (init_alias(mysh) == ERROR)
+    if (init_alias(&mysh->alias) == ERROR)
         return ERROR;
     return SUCCESS;
 }

@@ -13,24 +13,24 @@
 #include "macro_errors.h"
 #include "init.h"
 
-static int add_alias_rc(mysh_t *mysh, char *input)
+static int add_alias_rc(alias_t *alias, char *input)
 {
     int l_tab = 0;
 
-    if (mysh->alias.tab_file == NULL) {
-        mysh->alias.tab_file = malloc(sizeof(char *) * 2);
-        if (mysh->alias.tab_file == NULL)
+    if (alias->tab_file == NULL) {
+        alias->tab_file = malloc(sizeof(char *) * 2);
+        if (alias->tab_file == NULL)
             return ERROR;
-        mysh->alias.tab_file[0] = input;
-        mysh->alias.tab_file[1] = NULL;
-        fprintf(mysh->alias.fd_file, "%s", mysh->alias.tab_file[0]);
+        alias->tab_file[0] = input;
+        alias->tab_file[1] = NULL;
+        fprintf(alias->fd_file, "%s", alias->tab_file[0]);
     } else {
-        if (add_elem_tab_alias(&mysh->alias, input) == ERROR)
+        if (add_elem_tab_alias(alias, input) == ERROR)
             return ERROR;
-        l_tab = length_tab(mysh->alias.tab_file);
-        fprintf(mysh->alias.fd_file, "%s", mysh->alias.tab_file[l_tab - 1]);
+        l_tab = length_tab(alias->tab_file);
+        fprintf(alias->fd_file, "%s", alias->tab_file[l_tab - 1]);
     }
-    fflush(mysh->alias.fd_file);
+    fflush(alias->fd_file);
     return SUCCESS;
 }
 
@@ -49,7 +49,7 @@ int do_alias(mysh_t *mysh, command_t to_exec)
         (mysh->alias, to_exec.command[1], to_exec.fd_out);
     } else {
         command = remake_input(to_exec.command);
-        if (add_alias_rc(mysh, command) == ERROR) {
+        if (add_alias_rc(&mysh->alias, command) == ERROR) {
             mysh->last_status = 1;
             return ERROR;
         }
@@ -72,16 +72,16 @@ static char *check_is_alias(char **tab_alias, char *input, char *to_search)
     return res;
 }
 
-char *is_alias(mysh_t *mysh, char *input)
+char *is_alias(alias_t *alias, char *input)
 {
     char **tab_alias = NULL;
     char *res = NULL;
 
-    if (mysh->alias.tab_file == NULL)
+    if (alias->tab_file == NULL)
         return NULL;
-    for (int i = 0; mysh->alias.tab_file[i] != NULL; i += 1) {
+    for (int i = 0; alias->tab_file[i] != NULL; i += 1) {
         tab_alias = my_str_to_word_array_separator
-        (mysh->alias.tab_file[i], " \n");
+        (alias->tab_file[i], " \n");
         if (tab_alias == NULL)
             return NULL;
         res = check_is_alias(tab_alias, res, input);
