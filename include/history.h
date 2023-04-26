@@ -26,6 +26,10 @@
         char **tab_file;
         int len_tab_hist;
         tab_hist_t **tab_hist;
+        bool opt_h;
+        bool opt_r;
+        bool opt_c;
+        bool no_flags;
     }history_t;
 
 
