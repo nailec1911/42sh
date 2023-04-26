@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <mysh.h>
 #include "str_func.h"
+#include "macros_inputs.h"
 void arrow_function(int *index, int *length, char **line, mysh_t *mysh);
 void right_arrow_function(int *index, int length);
 void left_arrow_function(int *index);
@@ -78,12 +79,12 @@ static char *is_inib(char *line)
 static char *ch_functions(mysh_t *mysh, int *index, int *length, char *line)
 {
     switch (mysh->ch) {
-        case 27:
+        case ESC:
             arrow_function(index, length, &line, mysh);
             break;
-        case 4:
+        case CTRL_D:
             return NULL;
-        case 127:
+        case DELETE:
             backward_function(length, index, &line);
             break;
         default:
@@ -104,7 +105,7 @@ char *get_input(mysh_t mysh)
     for (int i = 0; i < 1024; i += 1)
         line[i] = '\0';
     set_terminal(&old_term, &term);
-    while (read(STDIN_FILENO, &mysh.ch, 1) > 0 && mysh.ch != 10)
+    while (read(STDIN_FILENO, &mysh.ch, 1) > 0 && mysh.ch != ENTER)
         if ((line = ch_functions(&mysh, &index, &length, line)) == NULL)
             return NULL;
     printf("\n");

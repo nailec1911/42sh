@@ -32,10 +32,10 @@ void ctrl_functions(int *index, int *length, int ch)
     read(STDIN_FILENO, &ch, 1);
     read(STDIN_FILENO, &ch, 1);
     switch (ch) {
-        case 68:
+        case 'D':
             left_ctrl(index);
             break;
-        case 67:
+        case 'C':
             right_ctrl(index, length);
     }
 }
