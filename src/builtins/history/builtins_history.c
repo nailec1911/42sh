@@ -71,7 +71,7 @@ int do_history(mysh_t *mysh, command_t to_exec)
         &mysh->history);
     }
     mysh->history.flags = NO_FLAG;
-    if (dectect_flags(&to_exec, &mysh->history) == ERROR) {
+    if (detect_flags(&to_exec, &mysh->history) == ERROR) {
         printf("Usage: history [-chrSLMT] [# number of events].\n");
         mysh->last_status = 1;
         return SUCCESS;
