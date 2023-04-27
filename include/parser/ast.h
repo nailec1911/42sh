@@ -19,6 +19,8 @@
     } redirect_t;
 
     typedef struct command_s {
+        bool is_ast;
+        struct ast_s *parenthesis;
         int nb_command;
         char **command;
         char *to_exec;
@@ -49,11 +51,5 @@
         int nb_grocommand;
         grocommand_t *tab_grocommands;
     } ast_t;
-
-    typedef struct parser_s {
-        token_t *list_tokens;
-        int cursor;
-        int error;
-    } parser_t;
 
 #endif /* !AST_H_ */

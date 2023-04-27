@@ -24,6 +24,10 @@ static token_t single_char_token(lexer_t *lex)
         return token_pipe(lex);
     if (lexer_peek(lex) == '&')
         return token_and(lex);
+    if (lexer_peek(lex) == '(')
+        return token_l_parenthesis(lex);
+    if (lexer_peek(lex) == ')')
+        return token_r_parenthesis(lex);
     return token_semicolon(lex);
 }
 
@@ -31,11 +35,8 @@ static token_t get_token(lexer_t *lex)
 {
     while (lexer_peek(lex) == '\t' || lexer_peek(lex) == ' ')
         lexer_get(lex);
-    if (lexer_peek(lex) == '\\'){
-        lexer_get(lex);
-        lex->context = 1;
+    if (lexer_peek(lex) == '\\')
         return multiple_char_token(lex);
-    }
     if (is_in(lexer_peek(lex), SINGLE_CHAR) == 0)
         return single_char_token(lex);
     if (is_in(lexer_peek(lex), QUOTED) == 0)
@@ -66,7 +67,8 @@ token_t *lexer(char *input)
     token_t *list_token = NULL;
 
     for (; lex.input[lex.len_input] != '\n'; lex.len_input += 1);
-    while (lex.nb_token < 1 || list_token[lex.nb_token - 1].type != END_LINE) {
+    while ((lex.nb_token < 1 || list_token[lex.nb_token - 1].type != END_LINE)
+    && lex.cursor <= lex.len_input) {
         if ((list_token =
         add_elt_in_tab(&lex, get_token(&lex), list_token)) == NULL)
             return NULL;

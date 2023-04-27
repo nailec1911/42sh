@@ -7,9 +7,15 @@
 
 #include "stdlib.h"
 #include "parser/ast.h"
+void free_ast(ast_t ast);
 
 static void free_command(command_t command)
 {
+    if (command.is_ast) {
+        free_ast(*command.parenthesis);
+        free(command.parenthesis);
+        return;
+    }
     for (int i = 0; i < command.nb_command; i += 1) {
         free(command.command[i]);
     }

@@ -7,24 +7,27 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "macro_errors.h"
 #include "mysh.h"
 #include "parser/parse.h"
 
 int get_ast(mysh_t *mysh, char *input)
 {
-    token_t *list_token = NULL;
+    parser_t parser;
     char *input_test = strdup(input);
     int res = 0;
 
-    list_token = lexer(input_test);
+    parser.list_tokens = lexer(input_test);
 
-    res = create_ast(list_token, &(mysh->ast));
+    mysh->ast.tab_grocommands = NULL;
+    mysh->ast.nb_grocommand = 0;
+    res = create_ast(&parser, &(mysh->ast));
     if (res != SUCCESS){
         mysh->last_status = res;
         return res;
     }
-
+    free(parser.list_tokens);
     res = set_all_ast(&(mysh->ast));
     if (res != SUCCESS){
         mysh->last_status = res;

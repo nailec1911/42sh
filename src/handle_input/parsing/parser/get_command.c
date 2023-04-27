@@ -9,17 +9,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "str_func.h"
-#include "parser/token.h"
-#include "parser/ast.h"
+#include "parser/create_ast.h"
 #include "macro_errors.h"
-
-static void error_redirect(int type)
-{
-    if (type == REDIRECT_IN_1 || type == REDIRECT_IN_2)
-        fprintf(stderr, "Ambiguous input redirect.\n");
-    if (type == REDIRECT_OUT_1 || type == REDIRECT_OUT_2)
-        fprintf(stderr, "Ambiguous output redirect.\n");
-}
 
 static void set_redirect(parser_t *parser,
 redirect_t *redirect, int new_type, char *name)
@@ -35,22 +26,22 @@ redirect_t *redirect, int new_type, char *name)
 
 static void handle_redirect(parser_t *parser, command_t *command)
 {
-    token_t redirect = parser->list_tokens[parser->cursor];
+    token_t redirect = parser_peek(parser);
     parser->cursor += 1;
 
-    if (parser->list_tokens[parser->cursor].type != IDENTIFIER){
+    if (parser_peek(parser).type != IDENTIFIER){
         command->nb_command = -1;
         parser->error = 1;
-        fprintf(stderr, "missing name\n");
+        fprintf(stderr, "Missing name for redirect.\n");
         return;
     }
     if (redirect.type == REDIRECT_IN_1 || redirect.type == REDIRECT_IN_2) {
         set_redirect(parser, &command->redirect_in,
-        redirect.type, parser->list_tokens[parser->cursor].value);
+        redirect.type, parser_peek(parser).value);
     }
     if (redirect.type == REDIRECT_OUT_1 || redirect.type == REDIRECT_OUT_2) {
         set_redirect(parser, &command->redirect_out,
-        redirect.type, parser->list_tokens[parser->cursor].value);
+        redirect.type, parser_peek(parser).value);
     }
     parser->cursor += 1;
 }
@@ -63,15 +54,10 @@ static int add_elt_in_tab(parser_t *parser, command_t *command)
     if ((command->command =
     malloc(sizeof(char *) * (command->nb_command + 1))) == NULL)
         return ERROR;
-
     for (int i = 0; i < command->nb_command - 1; i += 1)
         command->command[i] = temp[i];
-
-    command->command[command->nb_command - 1] =
-    parser->list_tokens[parser->cursor].value;
-
+    command->command[command->nb_command - 1] = parser_peek(parser).value;
     command->command[command->nb_command] = NULL;
-
     parser->cursor += 1;
     if (temp != NULL)
         free(temp);
@@ -80,24 +66,21 @@ static int add_elt_in_tab(parser_t *parser, command_t *command)
 
 command_t get_command(parser_t *parser)
 {
-    command_t new = {0, NULL, NULL, false, STDIN_FILENO, STDOUT_FILENO,
-    false, {NO_REDIRECT, NULL}, {NO_REDIRECT, NULL}};
+    command_t new = {false, NULL, 0, NULL, NULL, false, STDIN_FILENO,
+    STDOUT_FILENO, false, {NO_REDIRECT, NULL}, {NO_REDIRECT, NULL}};
 
-    while (IS_REDIRECT(parser->list_tokens[parser->cursor].type)
-    || parser->list_tokens[parser->cursor].type == IDENTIFIER) {
-        if (parser->list_tokens[parser->cursor].type == IDENTIFIER
+    while (!END_CMD(parser_peek(parser)) && parser->error == SUCCESS) {
+        if (parser_peek(parser).type == L_PARENTHESIS
+        && get_ast_parenthesis(parser, &new) != SUCCESS)
+            return new;
+        if (parser_peek(parser).type == IDENTIFIER
         && add_elt_in_tab(parser, &new) == ERROR) {
             parser->error = ERROR;
             return new;
         }
-        if (IS_REDIRECT(parser->list_tokens[parser->cursor].type))
+        if (IS_REDIRECT(parser_peek(parser).type))
             handle_redirect(parser, &new);
     }
-    if (parser->list_tokens[parser->cursor].type == UNMATCHED_QUOTE) {
-        parser->error = 1;
-    } else if (new.command == NULL) {
-        parser->error = 1;
-        fprintf(stderr, "Invalid null command.\n");
-    }
+    check_error(parser, new);
     return new;
 }

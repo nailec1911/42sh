@@ -14,6 +14,7 @@
 #include "str_func.h"
 #include "macro_errors.h"
 #include "exec_command.h"
+int exec_parenthesis(mysh_t *mysh, command_t *to_exec);
 
 static void display_error_exec(int error_code, char *path)
 {
@@ -70,6 +71,8 @@ int exec_command(mysh_t *mysh, command_t to_exec)
 
     to_exec.to_exec = NULL;
     mysh->command = to_exec.command;
+    if (to_exec.is_ast)
+        return exec_parenthesis(mysh, &to_exec);
     if ((res = exec_builtins(mysh, to_exec)) != FAILURE)
         return res;
     if ((res = get_path(mysh, &(to_exec.to_exec))) == ERROR)
