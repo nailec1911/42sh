@@ -96,6 +96,8 @@ char **file_to_tab(char *filepath)
         return NULL;
     stream = fopen(filepath, "r");
     tab = fill_tab_from_file(stream, nb_line);
+    if (tab == NULL)
+        return NULL;
     fclose(stream);
     return tab;
 }

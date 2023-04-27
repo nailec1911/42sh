@@ -28,8 +28,10 @@ int init_alias(alias_t *alias)
         alias->tab_file = NULL;
     } else {
         alias->tab_file = file_to_tab(ALIASRC_FILE);
-        if (alias->tab_file == NULL)
+        if (alias->tab_file == NULL) {
+            printf("Wrong syntaxe : %s\n", ALIASRC_FILE);
             return ERROR;
+        }
     }
     return SUCCESS;
 }
