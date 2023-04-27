@@ -9,7 +9,7 @@
     #define PARSE_H_
 
     #include "parser/lexer.h"
-    #include "parser/ast.h"
+    #include "parser/create_ast.h"
 
     token_t *lexer(char *input);
     int create_ast(parser_t *parser, ast_t *ast);

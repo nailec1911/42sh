@@ -21,8 +21,7 @@ void free_ast(ast_t ast);
 Test(parser1, only_ls){
     mysh_t mysh = {0};
 
-    char *input = strdup("ls -l -a\n");
-    cr_assert_eq(get_ast(&mysh, input), SUCCESS);
+    cr_assert_eq(get_ast(&mysh, "ls -l -a\n"), SUCCESS);
 
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
     cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
@@ -46,8 +45,7 @@ Test(parser1, only_ls){
 Test(parser2, piped_command){
     mysh_t mysh = {0};
 
-    char *input = strdup("ls -l -a | grep src|cat -e\n");
-    cr_assert_eq(get_ast(&mysh, input), SUCCESS);
+    cr_assert_eq(get_ast(&mysh, "ls -l -a | grep src|cat -e\n"), SUCCESS);
 
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
     cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
@@ -84,8 +82,7 @@ Test(parser2, piped_command){
 Test(parser3, redirection_simple){
     mysh_t mysh = {0};
 
-    char *input = strdup("< in cat > out\n");
-    cr_assert_eq(get_ast(&mysh, input), SUCCESS);
+    cr_assert_eq(get_ast(&mysh, "< in cat > out\n"), SUCCESS);
 
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
     cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
@@ -109,8 +106,7 @@ Test(parser3, redirection_simple){
 Test(parser4, redirection_double){
     mysh_t mysh = {0};
 
-    char *input = strdup("<< in cat >> out\n");
-    cr_assert_eq(get_ast(&mysh, input), SUCCESS);
+    cr_assert_eq(get_ast(&mysh, "<< in cat >> out\n"), SUCCESS);
 
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
     cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
@@ -135,20 +131,27 @@ Test(parser5, ambiguous_redirection_in){
     cr_redirect_stderr();
     mysh_t mysh = {0};
 
-    char *input = strdup("cat < in < in2\n");
-    cr_assert_eq(get_ast(&mysh, input), FAILURE);
+    cr_assert_eq(get_ast(&mysh, "cat < in < in2\n"), FAILURE);
     cr_assert_eq(mysh.last_status, 1);
+    free_ast(mysh.ast);
+    cr_assert_stderr_eq_str("Ambiguous input redirect.\n");
+}
 
-    mysh.last_status = 0;
-    char *input2 = strdup("cat << in << in2\n");
-    cr_assert_eq(get_ast(&mysh, input2), FAILURE);
+Test(parser5, ambiguous_redir_in_2){
+    cr_redirect_stderr();
+    mysh_t mysh = {0};
+    cr_assert_eq(get_ast(&mysh, "cat << in << in2\n"), FAILURE);
     cr_assert_eq(mysh.last_status, 1);
+    free_ast(mysh.ast);
+    cr_assert_stderr_eq_str("Ambiguous input redirect.\n");
+}
 
-    mysh.last_status = 0;
-    char *input3 = strdup("ls | cat < in\n");
-    cr_assert_eq(get_ast(&mysh, input3), FAILURE);
+Test(parser5, ambiguous_redir_in3){
+    cr_redirect_stderr();
+    mysh_t mysh = {0};
+    cr_assert_eq(get_ast(&mysh, "ls | cat < in\n"), FAILURE);
     cr_assert_eq(mysh.last_status, 1);
-    cr_assert_stderr_eq_str("Ambiguous input redirect.\nAmbiguous input redirect.\nAmbiguous input redirect.\n");
+    cr_assert_stderr_eq_str("Ambiguous input redirect.\n");
     free_ast(mysh.ast);
 }
 
@@ -156,41 +159,46 @@ Test(parser6, ambiguous_redirection_out){
     cr_redirect_stderr();
     mysh_t mysh = {0};
 
-    char *input = strdup("cat > in > in2\n");
-    cr_assert_eq(get_ast(&mysh, input), FAILURE);
+    cr_assert_eq(get_ast(&mysh, "cat > in > in2\n"), FAILURE);
     cr_assert_eq(mysh.last_status, 1);
+    cr_assert_stderr_eq_str("Ambiguous output redirect.\n");
+}
 
-    mysh.last_status = 0;
-    char *input2 = strdup("cat >> in >> in2\n");
-    cr_assert_eq(get_ast(&mysh, input2), FAILURE);
+Test(parser6, ambiguous_redirection_out_2){
+
+    cr_redirect_stderr();
+    mysh_t mysh = {0};
+
+    cr_assert_eq(get_ast(&mysh, "cat >> in >> in2\n"), FAILURE);
     cr_assert_eq(mysh.last_status, 1);
+    cr_assert_stderr_eq_str("Ambiguous output redirect.\n");
+}
 
-    mysh.last_status = 0;
-    char *input3 = strdup("cat > in | ls\n");
-    cr_assert_eq(get_ast(&mysh, input3), FAILURE);
+Test(parser6, ambiguous_redirection_out_3){
+    cr_redirect_stderr();
+    mysh_t mysh = {0};
+
+    cr_assert_eq(get_ast(&mysh, "cat > in | ls\n"), FAILURE);
     cr_assert_eq(mysh.last_status, 1);
-
-    cr_assert_stderr_eq_str("Ambiguous output redirect.\nAmbiguous output redirect.\nAmbiguous output redirect.\n");
     free_ast(mysh.ast);
+    cr_assert_stderr_eq_str("Ambiguous output redirect.\n");
 }
 
 Test(parser7, missing_redirect_name){
     cr_redirect_stderr();
     mysh_t mysh = {0};
 
-    char *input = strdup("cat < < in2\n");
-    cr_assert_eq(get_ast(&mysh, input), FAILURE);
+    cr_assert_eq(get_ast(&mysh, "cat < < in2\n"), FAILURE);
     cr_assert_eq(mysh.last_status, 1);
 
-    cr_assert_stderr_eq_str("missing name\n");
+    cr_assert_stderr_eq_str("Missing name for redirect.\n");
 }
 
 Test(parser8, null_command){
     cr_redirect_stderr();
     mysh_t mysh = {0};
 
-    char *input = strdup("ls|;\n");
-    cr_assert_eq(get_ast(&mysh, input), FAILURE);
+    cr_assert_eq(get_ast(&mysh, "ls|;\n"), FAILURE);
     cr_assert_eq(mysh.last_status, 1);
 
     cr_assert_stderr_eq_str("Invalid null command.\n");
@@ -213,8 +221,7 @@ void assert_command_ok(and_command_t to_test)
 Test(parser9, grocommand){
     mysh_t mysh = {0};
 
-    char *input = strdup(";;;;ls -l;;; ls -l\n");
-    cr_assert_eq(get_ast(&mysh, input), SUCCESS);
+    cr_assert_eq(get_ast(&mysh, ";;;;ls -l;;; ls -l\n"), SUCCESS);
 
     ast_t ast = mysh.ast;
     cr_assert_eq(ast.nb_grocommand, 2);
@@ -228,8 +235,7 @@ Test(parser9, grocommand){
 Test(parser10, or_command){
     mysh_t mysh = {0};
 
-    char *input = strdup("ls -l || ls -l || ls -l\n");
-    cr_assert_eq(get_ast(&mysh, input), SUCCESS);
+    cr_assert_eq(get_ast(&mysh,"ls -l || ls -l || ls -l\n"), SUCCESS);
 
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
     grocommand_t to_test = mysh.ast.tab_grocommands[0];
@@ -244,8 +250,7 @@ Test(parser10, or_command){
 Test(parser11, and_command){
     mysh_t mysh = {0};
 
-    char *input = strdup("ls -l && ls -l && ls -l\n");
-    cr_assert_eq(get_ast(&mysh, input), SUCCESS);
+    cr_assert_eq(get_ast(&mysh, "ls -l && ls -l && ls -l\n"), SUCCESS);
 
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
     cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
@@ -261,8 +266,8 @@ Test(parser11, and_command){
 Test(parser12, all_operators){
     mysh_t mysh = {0};
 
-    char *input = strdup("ls -l && ls -l || ls -l; ls -l||ls -l &&ls -l &&ls -l || ls -l\n");
-    cr_assert_eq(get_ast(&mysh, input), SUCCESS);
+    cr_assert_eq(get_ast(&mysh, "ls -l && ls -l || ls -l;"
+    "ls -l||ls -l &&ls -l &&ls -l || ls -l\n"), SUCCESS);
 
     cr_assert_eq(mysh.ast.nb_grocommand, 2);
 
@@ -296,8 +301,7 @@ Test(parser12, all_operators){
 Test(parser13, quotes){
     mysh_t mysh = {0};
 
-    char *input = strdup("ls -l 'ds ds' `ddd`\n");
-    cr_assert_eq(get_ast(&mysh, input), SUCCESS);
+    cr_assert_eq(get_ast(&mysh, "ls -l 'ds ds' `ddd`\n"), SUCCESS);
 
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
     cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
@@ -318,5 +322,3 @@ Test(parser13, quotes){
     cr_assert_str_eq(tree_leef.tab_command[0].command[3], "ddd`");
     free_ast(mysh.ast);
 }
-
-//

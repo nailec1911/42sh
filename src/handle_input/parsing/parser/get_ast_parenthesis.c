@@ -9,8 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "macro_errors.h"
-#include "parser/ast.h"
-#include "parser/token.h"
+#include "parser/create_ast.h"
 int create_ast(parser_t *parser, ast_t *ast);
 
 int get_ast_parenthesis(parser_t *parser, command_t *new)

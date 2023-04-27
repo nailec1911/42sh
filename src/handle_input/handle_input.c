@@ -61,6 +61,7 @@ int handle_input(mysh_t *mysh, char *input)
         return res;
     if ((res = set_all_ast(&(mysh->ast))) != SUCCESS) {
         mysh->last_status = res;
+        free_ast(mysh->ast);
         return res;
     }
     return SUCCESS;
