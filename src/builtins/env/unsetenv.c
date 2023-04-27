@@ -20,15 +20,13 @@ static char **remove_from_env(char **env, int idx)
     char **result = malloc(sizeof(char *) * (len));
 
     result[len - 1] = NULL;
-
-    for (; i < idx; ++i) result[i] = strdup(env[i]);
-
+    for (; i < idx; ++i)
+        result[i] = strdup(env[i]);
     temp = i + 1;
     for (; i < len - 1; ++i) {
         result[i] = strdup(env[temp]);
         temp++;
     }
-
     free_array(env);
     return result;
 }
@@ -36,6 +34,7 @@ static char **remove_from_env(char **env, int idx)
 static int get_var_idx(char *env[], char *var)
 {
     int len = strlen(var);
+
     for (int i = 0; env[i]; ++i) {
         if (strncmp(env[i], var, len) == 0 && env[i][len] == '=')
             return i;

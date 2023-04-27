@@ -52,10 +52,4 @@
         grocommand_t *tab_grocommands;
     } ast_t;
 
-    typedef struct parser_s {
-        token_t *list_tokens;
-        int cursor;
-        int error;
-    } parser_t;
-
 #endif /* !AST_H_ */

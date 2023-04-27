@@ -20,6 +20,8 @@ void error_redirect(int type)
 
 void check_error(parser_t *parser, command_t new)
 {
+    if (parser->error != 0)
+        return;
     if (new.nb_command != 0 && new.is_ast == true) {
         parser->error = 1;
         fprintf(stderr, "Badly placed ()'s.\n");

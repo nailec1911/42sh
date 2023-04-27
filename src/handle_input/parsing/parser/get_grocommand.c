@@ -6,20 +6,8 @@
 */
 
 #include <stdlib.h>
-#include "parser/token.h"
-#include "parser/ast.h"
+#include "parser/create_ast.h"
 #include "macro_errors.h"
-or_command_t get_or_command(parser_t *parser);
-
-static bool is_end_grocommand(token_t token)
-{
-    if (token.type == END_LINE
-    || token.type == R_PARENTHESIS
-    || token.type == SEMICOLON
-    || token.type == UNMATCHED_QUOTE)
-        return true;
-    return false;
-}
 
 static int add_elt_in_tab(grocommand_t *grocommand, or_command_t new_command)
 {
@@ -28,10 +16,8 @@ static int add_elt_in_tab(grocommand_t *grocommand, or_command_t new_command)
     if ((grocommand->tab_command =
     malloc(sizeof(or_command_t) * (grocommand->nb_command + 1))) == NULL)
         return ERROR;
-
     for (int i = 0; i < grocommand->nb_command - 1; i += 1)
         grocommand->tab_command[i] = temp[i];
-
     grocommand->tab_command[grocommand->nb_command - 1] = new_command;
     grocommand->tab_command[grocommand->nb_command].nb_command = -1;
     if (temp != NULL)
@@ -46,16 +32,15 @@ static int fill_tab_command(parser_t *parser, grocommand_t *grocommand)
         parser->error = ERROR;
         return ERROR;
     }
-    while (is_end_grocommand(parser->list_tokens[parser->cursor]) == false
-    && parser->error == SUCCESS) {
+    while (!END_GRO_CMD(parser_peek(parser)) && parser->error == SUCCESS) {
         parser->cursor += 1;
         grocommand->nb_command += 1;
         if (add_elt_in_tab(grocommand, get_or_command(parser)) == ERROR)
             parser->error = ERROR;
         if (parser->error != 0)
             return parser->error;
-        if (is_end_grocommand(parser->list_tokens[parser->cursor]) == false
-        && parser->list_tokens[parser->cursor].type != OPERATOR_OR) {
+        if (!END_GRO_CMD(parser_peek(parser))
+        && parser_peek(parser).type != OPERATOR_OR) {
             parser->error = FAILURE;
             return parser->error;
         }
@@ -70,7 +55,6 @@ grocommand_t get_grocommand(parser_t *parser)
 
     grocommand.tab_command = NULL;
     grocommand.nb_command = 0;
-
     if (( res = fill_tab_command(parser, &grocommand)) == ERROR){
         parser->error = ERROR;
         return (grocommand_t){0, 0};

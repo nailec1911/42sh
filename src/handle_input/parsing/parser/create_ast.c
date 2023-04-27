@@ -6,11 +6,8 @@
 */
 
 #include <stdlib.h>
-#include "parser/token.h"
-#include "parser/ast.h"
+#include "parser/create_ast.h"
 #include "macro_errors.h"
-grocommand_t get_grocommand(parser_t *parser);
-bool is_end_command(token_t token);
 
 static int add_elt_in_tab(ast_t *ast, grocommand_t new_command)
 {
@@ -19,10 +16,8 @@ static int add_elt_in_tab(ast_t *ast, grocommand_t new_command)
     if ((ast->tab_grocommands =
     malloc(sizeof(grocommand_t) * (ast->nb_grocommand + 1))) == NULL)
         return ERROR;
-
     for (int i = 0; i < ast->nb_grocommand - 1; i += 1)
         ast->tab_grocommands[i] = temp[i];
-
     ast->tab_grocommands[ast->nb_grocommand - 1] = new_command;
     ast->tab_grocommands[ast->nb_grocommand].nb_command = -1;
     if (temp != NULL)
@@ -32,21 +27,17 @@ static int add_elt_in_tab(ast_t *ast, grocommand_t new_command)
 
 static int fill_tab_grocommand(parser_t *parser, ast_t *ast)
 {
-    while (parser->list_tokens[parser->cursor].type != END_LINE
-    && parser->list_tokens[parser->cursor].type != R_PARENTHESIS
-    && parser->list_tokens[parser->cursor].type != UNMATCHED_QUOTE) {
-        while (parser->list_tokens[parser->cursor].type == SEMICOLON)
+    while (!END_AST(parser_peek(parser)) && parser->error == SUCCESS) {
+        while (parser_peek(parser).type == SEMICOLON)
             parser->cursor += 1;
-        if (parser->list_tokens[parser->cursor].type == END_LINE)
+        if (parser_peek(parser).type == END_LINE)
             return SUCCESS;
         ast->nb_grocommand += 1;
         if (add_elt_in_tab(ast, get_grocommand(parser)) == ERROR)
             parser->error = ERROR;
         if (parser->error != 0)
             return parser->error;
-        if (parser->list_tokens[parser->cursor].type != END_LINE
-        && parser->list_tokens[parser->cursor].type != R_PARENTHESIS
-        && parser->list_tokens[parser->cursor].type != SEMICOLON) {
+        if (!END_GRO_CMD(parser_peek(parser))) {
             parser->error = FAILURE;
             return parser->error;
         }
