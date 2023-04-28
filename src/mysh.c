@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <signal.h>
 
+#include "job_control.h"
 #include "launch_command.h"
 #include "builtins/env.h"
 #include "str_func.h"
@@ -50,20 +51,26 @@ int loop_sh(mysh_t *mysh, char *input)
     return res;
 }
 
+static void set_main_process(mysh_t *mysh)
+{
+    mysh->tty = true;
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
+    signal(SIGTSTP, SIG_IGN);
+    signal(SIGTTIN, SIG_IGN);
+    signal(SIGTTOU, SIG_IGN);
+    signal(SIGCHLD, SIG_IGN);
+    mysh->shell_pgid = getpid();
+    mysh->shell_descriptor = STDIN_FILENO;
+    setpgid(mysh->shell_pgid, mysh->shell_pgid);
+    tcsetpgrp(0, mysh->shell_pgid);
+}
+
 static int init_all(mysh_t *mysh, char * const env[])
 {
-    if (isatty(0) == 1) {
-        mysh->tty = true;
-        signal(SIGINT, SIG_IGN);
-        signal(SIGQUIT, SIG_IGN);
-        signal(SIGTSTP, SIG_IGN);
-        signal(SIGTTIN, SIG_IGN);
-        signal(SIGTTOU, SIG_IGN);
-        signal(SIGCHLD, SIG_IGN);
-        mysh->shell_pgid = getpid();
-        setpgid(mysh->shell_pgid, mysh->shell_pgid);
-        tcsetpgrp(0, mysh->shell_pgid);
-    }
+    mysh->list = NULL;
+    if (isatty(0) == 1)
+        set_main_process(mysh);
     if ((mysh->env = init_mysh_env(env)) == NULL)
         return ERROR;
     if (init_history(mysh) == ERROR)

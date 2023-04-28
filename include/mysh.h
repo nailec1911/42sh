@@ -28,9 +28,9 @@
         history_t history;
         alias_t alias;
         pid_t shell_pgid;
-        int shell_descriptor;
-        and_command_t **job_array;
-        job_stack stack;
+        short shell_descriptor;
+        job_list *list;
+        job_stack *stack;
     } mysh_t;
 
 

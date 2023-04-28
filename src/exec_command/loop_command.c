@@ -8,7 +8,8 @@
 #include "mysh.h"
 #include "macro_errors.h"
 #include "exec_command.h"
-/*#include "job_control.h"*/
+#include "job_control.h"
+#include "parser/ast.h"
 #include <stdlib.h>
 
 static int loop_and_command(mysh_t *mysh, or_command_t *or_command)
@@ -26,6 +27,8 @@ static int loop_and_command(mysh_t *mysh, or_command_t *or_command)
             exit = EXIT;
         i += 1;
     } while (i < or_command->nb_and_command && mysh->last_status == SUCCESS);
+    for (int i = 0; i < or_command->nb_and_command; ++i)
+        mysh->list = add_job_to_list(mysh->list, &or_command->tab_and_command[i]);
 
     return exit;
 }
@@ -62,6 +65,5 @@ int loop_grocommand(mysh_t *mysh)
         if (res == EXIT)
             exit = EXIT;
     }
-
     return exit;
 }

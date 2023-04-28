@@ -55,12 +55,21 @@
     int wait_job(job *j);
     */
 
+    typedef struct job_list {
+        struct job_list *next;
+        and_command_t *job;
+    } job_list;
+
     typedef struct job_stack {
         short top;
         and_command_t **job;
     } job_stack;
 
-    job_stack init_stack(job_stack stack);
+    //job_list
+    job_list *add_job_to_list(job_list *list, and_command_t* job);
+
+    // stack
+    job_stack *init_stack(job_stack *stack);
     bool is_full(job_stack *stack);
     bool is_empty(job_stack *stack);
     void peek(job_stack stack);
