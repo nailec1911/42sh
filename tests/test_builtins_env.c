@@ -24,7 +24,7 @@ Test(env1, normal_env){
     args.env = init_mysh_env(env);
     args.command = (char *[2]){"env"};
     command_t command = {0};
-    command.command = (char *[2]){"env"};
+    command.args = (char *[2]){"env"};
     command.fd_out = STDOUT_FILENO;
     cr_assert_eq(do_env(&args, command), SUCCESS);
     cr_assert_stdout_eq_str("test=12AZ\nhello=world\n");
@@ -36,7 +36,7 @@ Test(env2, env_null){
     args.env = (char *[]){NULL};
     args.command = (char *[2]){"env"};
     command_t command = {0};
-    command.command = (char *[2]){"env"};
+    command.args = (char *[2]){"env"};
     cr_assert_eq(do_env(&args, command), SUCCESS);
     cr_assert_eq(args.last_status, 0);
 }
@@ -50,7 +50,7 @@ Test(env3, too_much_args){
     args.last_status = 0;
 
     command_t command = {0};
-    command.command = (char *[3]){"env", "hello"};
+    command.args = (char *[3]){"env", "hello"};
 
     cr_assert_eq(do_env(&args, command), SUCCESS);
     cr_assert_stderr_eq_str("env: ‘hello’: No such file or directory\n");
@@ -64,7 +64,7 @@ Test(setenv1, not_existing_var){
     args.command = (char *[4]){"setenv", "wait", "what?"};
 
     command_t command = {0};
-    command.command = (char *[4]){"setenv", "wait", "what?"};
+    command.args = (char *[4]){"setenv", "wait", "what?"};
     cr_assert_eq(do_setenv(&args, command), SUCCESS);
     cr_assert_str_eq(args.env[2], "wait=what?");
     cr_assert_null(args.env[3]);
@@ -76,7 +76,7 @@ Test(setenv2, modify_existing_var){
     args.env = init_mysh_env(env);
     args.command = (char *[4]){"setenv", "hello", "itsme"};
     command_t command = {0};
-    command.command = (char *[4]){"setenv", "hello", "itsme"};
+    command.args = (char *[4]){"setenv", "hello", "itsme"};
     cr_assert_eq(do_setenv(&args, command), SUCCESS);
     cr_assert_str_eq(args.env[1], "hello=itsme");
 }
@@ -88,7 +88,7 @@ Test(setenv3, modify_existing_var_no_value){
     args.command = (char *[3]){"setenv", "hello"};
 
     command_t command = {0};
-    command.command = (char *[3]){"setenv", "hello"};
+    command.args = (char *[3]){"setenv", "hello"};
     cr_assert_eq(do_setenv(&args, command), SUCCESS);
     cr_assert_str_eq(args.env[1], "hello=");
 }
@@ -99,7 +99,7 @@ Test(setenv4, env_is_null){
     args.command = (char *[4]){"setenv", "wait", "what?"};
 
     command_t command = {0};
-    command.command = (char *[4]){"setenv", "wait", "what?"};
+    command.args = (char *[4]){"setenv", "wait", "what?"};
     cr_assert_eq(do_setenv(&args, command), SUCCESS);
     cr_assert_str_eq(args.env[0], "wait=what?");
     cr_assert_null(args.env[1]);
@@ -113,7 +113,7 @@ Test(setenv5, non_alphanum_char){
     args.command = (char *[4]){"setenv", "hz;s,zd", "itsme"};
 
     command_t command = {0};
-    command.command = (char *[4]){"setenv", "hz;s,zd", "itsme"};
+    command.args = (char *[4]){"setenv", "hz;s,zd", "itsme"};
     cr_assert_eq(do_setenv(&args, command), SUCCESS);
     cr_assert_stderr_eq_str("setenv: Variable name must contain alphanumeric characters.\n");
     cr_assert_eq(args.last_status, 1);
@@ -127,7 +127,7 @@ Test(setenv6, too_much_argument){
     args.command = (char *[4]){"setenv", "hello", "itsme", "hey"};
 
     command_t command = {0};
-    command.command = (char *[4]){"setenv", "hello", "itsme", "hey"};
+    command.args = (char *[4]){"setenv", "hello", "itsme", "hey"};
     cr_assert_eq(do_setenv(&args, command), SUCCESS);
     cr_assert_stderr_eq_str("setenv: Too many arguments.\n");
     cr_assert_eq(args.last_status, 1);
@@ -141,7 +141,7 @@ Test(setenv7, no_args){
     args.command = (char *[2]){"setenv"};
 
     command_t command = {0};
-    command.command = (char *[2]){"setenv"};
+    command.args = (char *[2]){"setenv"};
     command.fd_out = STDOUT_FILENO;
     cr_assert_eq(do_setenv(&args, command), SUCCESS);
     cr_assert_stdout_eq_str ("test=12AZ\nhello=world\n");
@@ -156,7 +156,7 @@ Test(unsetenv1, single_existing_var){
     args.command = (char *[4]){"unsetenv", "hello"};
 
     command_t command = {0};
-    command.command = (char *[4]){"unsetenv", "hello"};
+    command.args = (char *[4]){"unsetenv", "hello"};
     command.fd_out = STDOUT_FILENO;
     cr_assert_eq(do_unsetenv(&args, command), SUCCESS);
     cr_assert_str_eq(args.env[1], "third=time");
@@ -172,7 +172,7 @@ Test(unsetenv2, unset_first_var){
     args.command = (char *[4]){"unsetenv", "test"};
 
     command_t command = {0};
-    command.command = (char *[4]){"unsetenv", "test"};
+    command.args = (char *[4]){"unsetenv", "test"};
     command.fd_out = STDOUT_FILENO;
     cr_assert_eq(do_unsetenv(&args, command), SUCCESS);
 
@@ -189,7 +189,7 @@ Test(unsetenv3, unset_multiple_existing_var){
     args.command = (char *[4]){"unsetenv", "test", "third"};
 
     command_t command = {0};
-    command.command = (char *[4]){"unsetenv", "test", "third"};
+    command.args = (char *[4]){"unsetenv", "test", "third"};
     command.fd_out = STDOUT_FILENO;
     cr_assert_eq(do_unsetenv(&args, command), SUCCESS);
 
@@ -205,7 +205,7 @@ Test(unsetenv4, unset_not_existing_var){
     args.command = (char *[4]){"unsetenv", "dumb"};
 
     command_t command = {0};
-    command.command = (char *[4]){"unsetenv", "dumb"};
+    command.args = (char *[4]){"unsetenv", "dumb"};
     command.fd_out = STDOUT_FILENO;
     cr_assert_eq(do_unsetenv(&args, command), SUCCESS);
 
@@ -224,7 +224,7 @@ Test(unsetenv5, no_arg){
     args.command = (char *[2]){"unsetenv"};
 
     command_t command = {0};
-    command.command = (char *[2]){"unsetenv"};
+    command.args = (char *[2]){"unsetenv"};
     command.fd_out = STDOUT_FILENO;
     cr_assert_eq(do_unsetenv(&args, command), SUCCESS);
 
@@ -242,7 +242,7 @@ Test(unsetenv6, no_env){
     args.command = (char *[4]){"unsetenv", "test"};
 
     command_t command = {0};
-    command.command = (char *[4]){"unsetenv", "test"};
+    command.args = (char *[4]){"unsetenv", "test"};
     command.fd_out = STDOUT_FILENO;
     cr_assert_eq(do_unsetenv(&args, command), SUCCESS);
 
@@ -257,7 +257,7 @@ Test(unsetenv7, longer_value_than_searched){
     args.command = (char *[5]){"unsetenv", "hello", "third", "test"};
 
     command_t command = {0};
-    command.command = (char *[5]){"unsetenv", "hello", "third", "test"};
+    command.args = (char *[5]){"unsetenv", "hello", "third", "test"};
     command.fd_out = STDOUT_FILENO;
     cr_assert_eq(do_unsetenv(&args, command), SUCCESS);
 
@@ -275,7 +275,7 @@ Test(exit1, exit_standar){
     args.last_status = 0;
 
     command_t command = {0};
-    command.command = (char *[2]){"exit"};
+    command.args = (char *[2]){"exit"};
     cr_assert_eq(do_exit(&args, command), EXIT);
     cr_assert_eq(args.last_status, 0);
 }
@@ -287,7 +287,7 @@ Test(exit2, exit_to_many_args){
     args.last_status = 0;
 
     command_t command = {0};
-    command.command = (char *[3]){"exit", "test"};
+    command.args = (char *[3]){"exit", "test"};
     cr_assert_eq(do_exit(&args, command), SUCCESS);
     cr_assert_stderr_eq_str ("exit: Expression Syntax.\n");
     cr_assert_eq(args.last_status, 1);

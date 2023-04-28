@@ -63,16 +63,16 @@ int display_history(tab_hist_t **tab, int fd, mysh_t *mysh)
 
 int do_history(mysh_t *mysh, command_t to_exec)
 {
-    if (to_exec.command[1] == NULL) {
+    if (to_exec.args[1] == NULL) {
         return display_history(mysh->history.tab_hist, to_exec.fd_out, mysh);
     }
-    if (strcmp(to_exec.command[1], "-c") == 0)
+    if (strcmp(to_exec.args[1], "-c") == 0)
         return opt_clear(mysh);
-    if (strcmp(to_exec.command[1], "-r") == 0)
+    if (strcmp(to_exec.args[1], "-r") == 0)
         return opt_sort(mysh->history.tab_hist, to_exec.fd_out);
-    if (strcmp(to_exec.command[1], "-h") == 0)
+    if (strcmp(to_exec.args[1], "-h") == 0)
         return opt_without_info(mysh->history.tab_hist, to_exec.fd_out);
-    if (strcmp(to_exec.command[1], "-T") == 0)
+    if (strcmp(to_exec.args[1], "-T") == 0)
         return display_history(mysh->history.tab_hist, to_exec.fd_out, mysh);
     else {
         printf("Usage: history [-chrSLMT] [# number of events].\n");

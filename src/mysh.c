@@ -52,8 +52,18 @@ int loop_sh(mysh_t *mysh, char *input)
 
 static int init_all(mysh_t *mysh, char * const env[])
 {
-    if (isatty(0) == 1)
+    if (isatty(0) == 1) {
         mysh->tty = true;
+        signal(SIGINT, SIG_IGN);
+        signal(SIGQUIT, SIG_IGN);
+        signal(SIGTSTP, SIG_IGN);
+        signal(SIGTTIN, SIG_IGN);
+        signal(SIGTTOU, SIG_IGN);
+        signal(SIGCHLD, SIG_IGN);
+        mysh->shell_pgid = getpid();
+        setpgid(mysh->shell_pgid, mysh->shell_pgid);
+        tcsetpgrp(0, mysh->shell_pgid);
+    }
     if ((mysh->env = init_mysh_env(env)) == NULL)
         return ERROR;
     if (init_history(mysh) == ERROR)
@@ -72,7 +82,7 @@ int mysh(char * const env[])
         return ERROR;
     while (res == 0) {
         if (mysh.tty)
-            write(1, "xD ", 3);
+            write(1, ":)  ", 3);
         if ((input = choose_get_line(mysh)) == NULL) {
             res = EXIT;
             break;

@@ -12,6 +12,7 @@
     #include "parser/ast.h"
     #include "alias.h"
     #include "history.h"
+    #include "job_control.h"
 
     typedef struct mysh_s {
         char **env;
@@ -26,8 +27,15 @@
         bool display_line;
         history_t history;
         alias_t alias;
+        pid_t shell_pgid;
+        int shell_descriptor;
+        and_command_t **job_array;
+        job_stack stack;
     } mysh_t;
 
-int check_last_command(mysh_t *mysh, char *input);
-int init_alias(mysh_t *mysh);
+
+    //history
+    int check_last_command(mysh_t *mysh, char *input);
+    int init_alias(mysh_t *mysh);
+
 #endif /* !MYSH_H_ */

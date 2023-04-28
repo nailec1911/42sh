@@ -13,7 +13,7 @@
 
 static int set_new_params(mysh_t *mysh, command_t *command, int to_mod)
 {
-    FILE *res_cmd = get_file_res_command(mysh, command->command[to_mod]);
+    FILE *res_cmd = get_file_res_command(mysh, command->args[to_mod]);
 
     if (res_cmd == NULL)
         return ERROR;
@@ -28,7 +28,7 @@ static int set_magic_command(mysh_t *mysh, command_t *command)
     int res = SUCCESS;
 
     for (int i = 0; i < command->nb_command; i += 1) {
-        if (command->command[i][strlen(command->command[i]) - 1] == '`')
+        if (command->args[i][strlen(command->args[i]) - 1] == '`')
             res = set_new_params(mysh, command, i);
         if (res != SUCCESS)
             return res;

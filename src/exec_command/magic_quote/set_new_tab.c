@@ -30,9 +30,9 @@ static int add_elt_in_tab(char ***tab, char *new_elt, int nb_elt)
 
 static int keep_old_from_to(command_t *command, char ***new, int from, int to)
 {
-    for (int i = from; command->command[i] != NULL && i != to; i += 1){
+    for (int i = from; command->args[i] != NULL && i != to; i += 1){
         command->nb_command += 1;
-        if (add_elt_in_tab(new, command->command[i], command->nb_command)
+        if (add_elt_in_tab(new, command->args[i], command->nb_command)
             == ERROR)
             return ERROR;
     }
@@ -57,8 +57,8 @@ int set_new_tab(command_t *command, FILE *res, int ind)
     }
     if (keep_old_from_to(command, &new, ind + 1, -1) == ERROR)
         return ERROR;
-    free_array(command->command);
+    free_array(command->args);
     free(line);
-    command->command = new;
+    command->args= new;
     return SUCCESS;
 }

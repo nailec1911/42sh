@@ -112,7 +112,7 @@ Test(cd_1, too_many_args){
     args.last_status = 0;
 
     command_t command = {0};
-    command.command = (char *[3]){"cd", "tests", "too_many"};
+    command.args = (char *[3]){"cd", "tests", "too_many"};
     command.fd_out = STDOUT_FILENO;
 
     cr_assert_eq(do_cd(&args, command), 0);
@@ -129,7 +129,7 @@ Test(cd_2, no_oldpwd){
     args.last_status = 0;
 
     command_t command = {0};
-    command.command = (char *[3]){"cd", "-"};
+    command.args = (char *[3]){"cd", "-"};
     command.fd_out = STDOUT_FILENO;
 
     cr_assert_eq(do_cd(&args, command), 0);
@@ -146,7 +146,7 @@ Test(cd_3, not_a_directory){
     args.last_status = 0;
 
     command_t command = {0};
-    command.command = (char *[3]){"cd", "Makefile"};
+    command.args = (char *[3]){"cd", "Makefile"};
     command.fd_out = STDOUT_FILENO;
 
     cr_assert_eq(do_cd(&args, command), 0);
@@ -163,7 +163,7 @@ Test(cd_4, wrongly_named){
     args.last_status = 0;
 
     command_t command = {0};
-    command.command = (char *[3]){"cd", "YMCA"};
+    command.args = (char *[3]){"cd", "YMCA"};
     command.fd_out = STDOUT_FILENO;
 
     cr_assert_eq(do_cd(&args, command), 0);
@@ -184,7 +184,7 @@ Test(cd_5, working_cd){
     int len = strlen(actual);
 
     command_t command = {0};
-    command.command = (char *[3]){"cd", "tests"};
+    command.args = (char *[3]){"cd", "tests"};
     command.fd_out = STDOUT_FILENO;
 
     cr_assert_eq(do_cd(&args, command), 0);
@@ -206,14 +206,14 @@ Test(cd_6, working_cd){
     char *actual = NULL;
     actual = getcwd(actual, 0);
         command_t command = {0};
-    command.command = (char *[3]){"cd", "tests"};
+    command.args = (char *[3]){"cd", "tests"};
     command.fd_out = STDOUT_FILENO;
 
     cr_assert_eq(do_cd(&args, command), 0);
 
 
     args.command = (char *[3]){"cd", "-"};
-    command.command = (char *[3]){"cd", "-"};
+    command.args = (char *[3]){"cd", "-"};
     cr_assert_eq(do_cd(&args, command), 0);
     cr_assert_eq(args.last_status, 0);
 

@@ -8,6 +8,8 @@
 #include "mysh.h"
 #include "macro_errors.h"
 #include "exec_command.h"
+/*#include "job_control.h"*/
+#include <stdlib.h>
 
 static int loop_and_command(mysh_t *mysh, or_command_t *or_command)
 {
@@ -17,13 +19,13 @@ static int loop_and_command(mysh_t *mysh, or_command_t *or_command)
 
     do {
         mysh->last_status = 0;
-        res = exec_and_command(mysh, &(or_command->tab_command[i]));
+        res = exec_and_command(mysh, &(or_command->tab_and_command[i]));
         if (res == ERROR)
             return ERROR;
         if (res == EXIT)
             exit = EXIT;
         i += 1;
-    } while (i < or_command->nb_command && mysh->last_status == SUCCESS);
+    } while (i < or_command->nb_and_command && mysh->last_status == SUCCESS);
 
     return exit;
 }
@@ -36,13 +38,13 @@ static int loop_or_command(mysh_t *mysh, grocommand_t *grocommand)
 
     do {
         mysh->last_status = SUCCESS;
-        res = loop_and_command(mysh, &(grocommand->tab_command[i]));
+        res = loop_and_command(mysh, &(grocommand->tab_or_command[i]));
         if (res == ERROR)
             return ERROR;
         if (res == EXIT)
             exit = EXIT;
         i += 1;
-    } while ( i < grocommand->nb_command && mysh->last_status != SUCCESS);
+    } while ( i < grocommand->nb_or_command&& mysh->last_status != SUCCESS);
 
     return exit;
 }

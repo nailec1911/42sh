@@ -14,6 +14,8 @@
 #include "macro_errors.h"
 #include "globbins.h"
 
+/*
+
 static void close_all_fd_except(and_command_t to_exec, int except)
 {
     for (int i = 0; i < to_exec.nb_command; i += 1) {
@@ -57,6 +59,8 @@ static int exec_all_function(mysh_t *mysh, and_command_t to_exec)
     return SUCCESS;
 }
 
+*/
+
 int exec_and_command(mysh_t *mysh, and_command_t *to_exec)
 {
     int res = 0;
@@ -72,8 +76,10 @@ int exec_and_command(mysh_t *mysh, and_command_t *to_exec)
     if (set_fd_output(&(to_exec->tab_command[to_exec->nb_command - 1]))
             == ERROR)
         return ERROR;
+    /*
     if ((res = exec_all_function(mysh, *to_exec)) != SUCCESS)
         return res;
+    */
 
     return SUCCESS;
 }

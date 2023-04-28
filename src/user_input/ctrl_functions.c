@@ -31,6 +31,7 @@ void ctrl_functions(int *index, int *length, int ch)
     read(STDIN_FILENO, &ch, 1);
     read(STDIN_FILENO, &ch, 1);
     read(STDIN_FILENO, &ch, 1);
+    /*
     switch (ch) {
         case 68:
             left_ctrl(index);
@@ -38,4 +39,5 @@ void ctrl_functions(int *index, int *length, int ch)
         case 67:
             right_ctrl(index, length);
     }
+    */
 }

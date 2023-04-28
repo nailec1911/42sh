@@ -24,7 +24,7 @@ static int add_elt_in_tab(ast_t *ast, grocommand_t new_command)
         ast->tab_grocommands[i] = temp[i];
 
     ast->tab_grocommands[ast->nb_grocommand - 1] = new_command;
-    ast->tab_grocommands[ast->nb_grocommand].nb_command = -1;
+    ast->tab_grocommands[ast->nb_grocommand].nb_or_command= -1;
     if (temp != NULL)
         free(temp);
     return SUCCESS;

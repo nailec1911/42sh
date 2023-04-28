@@ -37,6 +37,8 @@ SRC	=	mysh.c		\
 		exec_command/exec_command.c		\
 		exec_command/exec_builtins.c	\
 		exec_command/handle_errors.c	\
+		exec_command/exec_job.c 				\
+		exec_command/wait_job.c 			\
 		str_func/is_in.c			\
 		str_func/is_num.c			\
 		str_func/my_strlen.c			\

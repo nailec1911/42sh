@@ -57,20 +57,20 @@ static void handle_redirect(parser_t *parser, command_t *command)
 
 static int add_elt_in_tab(parser_t *parser, command_t *command)
 {
-    char ** temp = command->command;
+    char ** temp = command->args;
     command->nb_command += 1;
 
-    if ((command->command =
+    if ((command->args=
     malloc(sizeof(char *) * (command->nb_command + 1))) == NULL)
         return ERROR;
 
     for (int i = 0; i < command->nb_command - 1; i += 1)
-        command->command[i] = temp[i];
+        command->args[i] = temp[i];
 
-    command->command[command->nb_command - 1] =
+    command->args[command->nb_command - 1] =
     parser->list_tokens[parser->cursor].value;
 
-    command->command[command->nb_command] = NULL;
+    command->args[command->nb_command] = NULL;
 
     parser->cursor += 1;
     if (temp != NULL)
@@ -80,7 +80,7 @@ static int add_elt_in_tab(parser_t *parser, command_t *command)
 
 command_t get_command(parser_t *parser)
 {
-    command_t new = {0, NULL, NULL, false, STDIN_FILENO, STDOUT_FILENO,
+    command_t new = {0, NULL, false, STDIN_FILENO, STDOUT_FILENO,
     false, {NO_REDIRECT, NULL}, {NO_REDIRECT, NULL}};
 
     while (IS_REDIRECT(parser->list_tokens[parser->cursor].type)
@@ -95,7 +95,7 @@ command_t get_command(parser_t *parser)
     }
     if (parser->list_tokens[parser->cursor].type == UNMATCHED_QUOTE) {
         parser->error = 1;
-    } else if (new.command == NULL) {
+    } else if (new.args== NULL) {
         parser->error = 1;
         fprintf(stderr, "Invalid null command.\n");
     }
