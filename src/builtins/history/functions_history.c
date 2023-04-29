@@ -35,8 +35,10 @@ int add_in_history(history_t *history, char *input)
 
 static int get_num_command(history_t *history)
 {
-    if (file_to_tab_hist(HISTORY_FILE, history) == ERROR)
+    if (file_to_tab_hist(HISTORY_FILE, history) == ERROR) {
+        printf("Wrong syntaxe : %s\n", HISTORY_FILE);
         return ERROR;
+    }
     history->num_command += 1;
     history->len_tab_hist = length_tab_hist(history->tab_hist);
     return SUCCESS;
@@ -53,7 +55,6 @@ int init_history(history_t *history)
         return ERROR;
     if (file.st_size == 0) {
         history->num_command = 1;
-        history->tab_file = NULL;
         history->tab_hist = NULL;
     } else {
         if (get_num_command(history) == ERROR)

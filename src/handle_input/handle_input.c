@@ -29,28 +29,10 @@ static token_t *get_list_tokens(mysh_t *mysh, char *input)
     return list_token;
 }
 
-static int error_in_tokens(mysh_t *mysh, token_t *list)
-{
-    if (list == NULL)
-        return ERROR;
-    for (int i = 0; list[i].type != END_LINE; i += 1) {
-        if (list[i].type == ERROR) {
-            free(list);
-            mysh->last_status = ERROR;
-            return ERROR;
-        }
-        if (list[i].type == UNMATCHED_QUOTE) {
-            free(list);
-            mysh->last_status = FAILURE;
-            return FAILURE;
-        }
-    }
-    return SUCCESS;
-}
-
 static int get_ast(mysh_t *mysh, token_t *list_token)
 {
-    int res = create_ast(list_token, &(mysh->ast));
+    parser_t parser = {list_token, 0, 0};
+    int res = create_ast(&parser, &(mysh->ast));
 
     if (res == FAILURE) {
         free_ast(mysh->ast);
@@ -79,6 +61,7 @@ int handle_input(mysh_t *mysh, char *input)
         return res;
     if ((res = set_all_ast(&(mysh->ast))) != SUCCESS) {
         mysh->last_status = res;
+        free_ast(mysh->ast);
         return res;
     }
     return SUCCESS;
