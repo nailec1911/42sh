@@ -52,6 +52,7 @@ SRC	=	mysh.c		\
 		user_input/arrows_func.c	\
 		user_input/get_input_line.c	\
 		user_input/get_input.c	\
+		user_input/tab_function.c	\
 		user_input/set_terminal.c	\
 		user_input/remove_functions.c	\
 		user_input/ctrl_functions.c	\
