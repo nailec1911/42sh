@@ -69,7 +69,7 @@ Test(unit_globings3, brackets){
 
     chdir("tests/");
 
-    char *input = strdup("./disp_args t[1-3]\n");
+    char *input = "./disp_args t[1-3]\n";
     cr_assert_eq(get_ast(&mysh, input), SUCCESS);
     cr_assert_eq(mysh.last_status, 0);
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
@@ -88,7 +88,7 @@ Test(unit_globings3, brackets){
     cr_assert_str_eq(args[3], "t3");
 }
 
-Test(mysh_globings1, star){
+Test(full_mysh_globings, star){
     cr_redirect_stdout();
     chdir("tests/");
     FILE *inputs = cr_get_redirected_stdin();
@@ -102,7 +102,7 @@ Test(mysh_globings1, star){
     cr_assert_stdout_eq_str("./disp_args\ntest_full_sh.c\ntest_full_sh_operators.c\n");
 }
 
-Test(mysh_globings2, question_mark){
+Test(full_mysh_globings, question_mark){
     cr_redirect_stdout();
     chdir("tests/");
     FILE *inputs = cr_get_redirected_stdin();
@@ -116,7 +116,7 @@ Test(mysh_globings2, question_mark){
     cr_assert_stdout_eq_str("./disp_args\nhello2world\nhello_world\n");
 }
 
-Test(mysh_globings3, brackets){
+Test(full_mysh_globings, brackets){
     cr_redirect_stdout();
     chdir("tests/");
     FILE *inputs = cr_get_redirected_stdin();
@@ -130,7 +130,7 @@ Test(mysh_globings3, brackets){
     cr_assert_stdout_eq_str("./disp_args\nt1\nt2\nt3\n");
 }
 
-Test(mysh_globings4, no_globs){
+Test(full_mysh_globings, no_globs){
     cr_redirect_stdout();
     chdir("tests/");
     FILE *inputs = cr_get_redirected_stdin();
@@ -144,7 +144,7 @@ Test(mysh_globings4, no_globs){
     cr_assert_stdout_eq_str("./disp_args\nt1\n");
 }
 
-Test(mysh_globings5, no_match){
+Test(full_mysh_globings, no_match){
     cr_redirect_stdout();
     cr_redirect_stderr();
     chdir("tests/");

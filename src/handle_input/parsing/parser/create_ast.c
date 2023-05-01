@@ -27,17 +27,17 @@ static int add_elt_in_tab(ast_t *ast, grocommand_t new_command)
 
 static int fill_tab_grocommand(parser_t *parser, ast_t *ast)
 {
-    while (!END_AST(parser_peek(parser)) && parser->error == SUCCESS) {
-        while (parser_peek(parser).type == SEMICOLON)
+    while (!END_AST(PEEK(parser)) && parser->error == SUCCESS) {
+        while (PEEK(parser).type == SEMICOLON)
             parser->cursor += 1;
-        if (parser_peek(parser).type == END_LINE)
+        if (PEEK(parser).type == END_LINE)
             return SUCCESS;
         ast->nb_grocommand += 1;
         if (add_elt_in_tab(ast, get_grocommand(parser)) == ERROR)
             parser->error = ERROR;
         if (parser->error != 0)
             return parser->error;
-        if (!END_GRO_CMD(parser_peek(parser))) {
+        if (!END_GRO_CMD(PEEK(parser))) {
             parser->error = FAILURE;
             return parser->error;
         }

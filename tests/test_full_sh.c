@@ -9,212 +9,217 @@
 #include <criterion/redirect.h>
 #include "macro_errors.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 int mysh(char * const env[]);
 
-Test(mysh1, simple_command_with_path){
+Test(full_mysh, simple_command_with_path){
     cr_redirect_stdout();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"PATH=tests/", "hello", "third"};
 
-    fwrite("hello_world\n", 1, 12, inputs);
-    fwrite("exit\n", 1, 5, inputs);
+    fprintf(inputs, "hello_world\n");
+    fprintf(inputs, "exit\n");
+    fflush(inputs);
+    fclose(inputs);
 
+    cr_assert_eq(mysh(env), SUCCESS);
+    cr_assert_stdout_eq_str("hello world\n");
+}
+
+Test(full_mysh, simple_command_full_path){
+    cr_redirect_stdout();
+    FILE *inputs = cr_get_redirected_stdin();
+    char *const env[4] = {"PATH=tests/", "hello", "third"};
+
+    fprintf(inputs,"./tests/hello_world\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), SUCCESS);
     cr_assert_stdout_eq_str("hello world\n");
 }
 
-Test(mysh2, simple_command_full_path){
-    cr_redirect_stdout();
-    FILE *inputs = cr_get_redirected_stdin();
-    char *const env[4] = {"PATH=tests/", "hello", "third"};
-
-    fwrite("./tests/hello_world\n", 1, 20, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
-    fclose(inputs);
-    cr_assert_eq(mysh(env), SUCCESS);
-    cr_assert_stdout_eq_str("hello world\n");
-}
-
-Test(mysh3, error_seggfault){
+Test(full_mysh, error_seggfault){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"PATH=tests/", "hello", "third"};
 
-    fwrite("./tests/seggfault\n", 1, 18, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,"seggfault\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 139);
     cr_assert_stderr_eq_str("Segmentation fault (core dumped)\n");
 }
 
-Test(mysh4, command_not_found){
+Test(full_mysh, command_not_found){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"PATH=tests/", "hello", "third"};
 
-    fwrite("sfdsfds\n", 1, 8, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,"sfdsfds\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 1);
     cr_assert_stderr_eq_str("sfdsfds: Command not found.\n");
 }
 
-Test(mysh5, builtins_env){
+Test(full_mysh, builtins_env){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"hi", "hello", "third"};
 
-    fwrite("env\n", 1, 4, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,"env\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 0);
     cr_assert_stdout_eq_str("hi\nhello\nthird\n");
 }
 
-Test(mysh6, piped_function){
+Test(full_mysh, piped_function){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"hi", "hello", "third"};
 
-    fwrite("setenv coco | env\n", 1, 18, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,"setenv coco | env\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 0);
     cr_assert_stdout_eq_str("hi\nhello\nthird\n");
 }
 
-Test(mysh7, semicolon_command){
+Test(full_mysh, semicolon_command){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"hi", "hello", "third"};
 
-    fwrite(";;env;;;;./tests/hello_world;;;;\n", 1, 33, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,";;env;;;;./tests/hello_world;;;;\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 0);
     cr_assert_stdout_eq_str("hi\nhello\nthird\nhello world\n");
 }
 
-Test(mysh8, null_function){
+Test(full_mysh, null_function){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"hi", "hello", "third"};
 
-    fwrite("ls |;\n", 1, 6, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,"ls |;\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 1);
     cr_assert_stderr_eq_str("Invalid null command.\n");
 }
 
-Test(mysh9, ambiguous_redirect){
+Test(full_mysh, ambiguous_redirect){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"hi", "hello", "third"};
 
-    fwrite("ls > te| ls\n", 1, 12, inputs);
-    fwrite("ls | ls < l\n", 1, 12, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,"ls > te| ls\n");
+    fprintf(inputs,"ls | ls < l\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 1);
     cr_assert_stderr_eq_str("Ambiguous output redirect.\nAmbiguous input redirect.\n");
 }
 
-Test(mysh10, redirect){
+Test(full_mysh, redirect){
     cr_redirect_stdout();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"PATH=tests/", "hello", "third"};
 
-    fwrite("hello_world > tests/temp\n", 1, 25, inputs);
-    fwrite("hello_world < tests/temp\n", 1, 25, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,"hello_world > temp\n");
+    fprintf(inputs,"hello_world < temp\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), SUCCESS);
     cr_assert_stdout_eq_str("hello world\n");
+    remove("temp");
 }
 
-Test(mysh11, cd){
+Test(full_mysh, cd){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"hi", "hello", "third"};
 
-    fwrite("cd tests; ./hello_world; cd -; ./tests/hello_world\n", 1, 50, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs, "cd tests; ./hello_world; cd -; ./tests/hello_world\n");
+    fprintf(inputs, "exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 0);
     cr_assert_stdout_eq_str("hello world\nhello world\n");
 }
 
-Test(mysh12, double_red_right){
+Test(full_mysh, double_red_right){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"hi", "hello", "third"};
 
-    fwrite("./tests/hello_world << end\n", 1, 27, inputs);
-    fwrite("dsfdf\nfdfd\nendfdf\nend\n", 1, 22, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,"./tests/hello_world << end\n");
+    fprintf(inputs,"dsfdf\nfdfd\nendfdf\nend\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 0);
 }
 
-Test(mysh13, error_zero_divide){
+Test(full_mysh, error_zero_divide){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"PATH=tests/", "hello", "third"};
 
-    fwrite("./tests/zero_divide\n", 1, 20, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,"zero_divide\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 136);
     cr_assert_stderr_eq_str("Floating exception (core dumped)\n");
 }
 
-Test(mysh14, quotes){
+Test(full_mysh, quotes){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"PATH=tests/", "hello", "third"};
 
-    fwrite("./tests/disp_args 'hello world' hi\n", 1, 35, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,"./tests/disp_args 'hello world' hi\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 0);
     cr_assert_stdout_eq_str("./tests/disp_args\nhello world\nhi\n");
 }
 
-Test(mysh15, backticks){
+Test(full_mysh, backticks){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"PATH=tests/", "hello", "third"};
 
-    fwrite("./tests/disp_args `env`\n", 1, 24, inputs);
-    fwrite("exit\n", 1, 5, inputs);
-
+    fprintf(inputs,"./tests/disp_args `env`\n");
+    fprintf(inputs,"exit\n");
+    fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 0);
     cr_assert_stdout_eq_str("./tests/disp_args\nPATH=tests/\nhello\nthird\n");

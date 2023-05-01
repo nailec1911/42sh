@@ -26,10 +26,10 @@ redirect_t *redirect, int new_type, char *name)
 
 static void handle_redirect(parser_t *parser, command_t *command)
 {
-    token_t redirect = parser_peek(parser);
+    token_t redirect = PEEK(parser);
     parser->cursor += 1;
 
-    if (parser_peek(parser).type != IDENTIFIER){
+    if (PEEK(parser).type != IDENTIFIER){
         command->nb_command = -1;
         parser->error = 1;
         fprintf(stderr, "Missing name for redirect.\n");
@@ -37,11 +37,11 @@ static void handle_redirect(parser_t *parser, command_t *command)
     }
     if (redirect.type == REDIRECT_IN_1 || redirect.type == REDIRECT_IN_2) {
         set_redirect(parser, &command->redirect_in,
-        redirect.type, parser_peek(parser).value);
+        redirect.type, PEEK(parser).value);
     }
     if (redirect.type == REDIRECT_OUT_1 || redirect.type == REDIRECT_OUT_2) {
         set_redirect(parser, &command->redirect_out,
-        redirect.type, parser_peek(parser).value);
+        redirect.type, PEEK(parser).value);
     }
     parser->cursor += 1;
 }
@@ -56,7 +56,7 @@ static int add_elt_in_tab(parser_t *parser, command_t *command)
         return ERROR;
     for (int i = 0; i < command->nb_command - 1; i += 1)
         command->command[i] = temp[i];
-    command->command[command->nb_command - 1] = parser_peek(parser).value;
+    command->command[command->nb_command - 1] = PEEK(parser).value;
     command->command[command->nb_command] = NULL;
     parser->cursor += 1;
     if (temp != NULL)
@@ -69,16 +69,16 @@ command_t get_command(parser_t *parser)
     command_t new = {false, NULL, 0, NULL, NULL, false, STDIN_FILENO,
     STDOUT_FILENO, false, {NO_REDIRECT, NULL}, {NO_REDIRECT, NULL}};
 
-    while (!END_CMD(parser_peek(parser)) && parser->error == SUCCESS) {
-        if (parser_peek(parser).type == L_PARENTHESIS
+    while (!END_CMD(PEEK(parser)) && parser->error == SUCCESS) {
+        if (PEEK(parser).type == L_PARENTHESIS
         && get_ast_parenthesis(parser, &new) != SUCCESS)
             return new;
-        if (parser_peek(parser).type == IDENTIFIER
+        if (PEEK(parser).type == IDENTIFIER
         && add_elt_in_tab(parser, &new) == ERROR) {
             parser->error = ERROR;
             return new;
         }
-        if (IS_REDIRECT(parser_peek(parser).type))
+        if (IS_REDIRECT(PEEK(parser).type))
             handle_redirect(parser, &new);
     }
     check_error(parser, new);
