@@ -16,16 +16,23 @@
         int error;
     } parser_t;
 
-    #define END_AST(tokn) (tokn.type == END_LINE || tokn.type == R_PARENTHESIS)
-    #define END_GRO_CMD(token) (END_AST(token) || token.type == SEMICOLON)
-    #define END_OR_CMD(token) (END_GRO_CMD(token) || token.type == OPERATOR_OR)
-    #define END_AND_CMD(token) (END_OR_CMD(token) || token.type == OPERATOR_AND)
-    #define END_CMD(token) (END_AND_CMD(token) || token.type == PIPE)
+    #define END_AST(token) \
+        ((token).type == END_LINE || (token).type == R_PARENTHESIS)
 
-static inline token_t parser_peek(parser_t *parser)
-{
-    return parser->list_tokens[parser->cursor];
-}
+    #define END_GRO_CMD(token) \
+        (END_AST(token) || (token).type == SEMICOLON)
+
+    #define END_OR_CMD(token) \
+        (END_GRO_CMD(token) || (token).type == OPERATOR_OR)
+
+    #define END_AND_CMD(token) \
+        (END_OR_CMD(token) || (token).type == OPERATOR_AND)
+
+    #define END_CMD(token) \
+        (END_AND_CMD(token) || (token).type == PIPE)
+
+
+    #define PEEK(parser) ((parser)->list_tokens[(parser)->cursor])
 
 grocommand_t get_grocommand(parser_t *parser);
 or_command_t get_or_command(parser_t *parser);

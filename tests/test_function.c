@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "macro_errors.h"
 #include "mysh.h"
 #include "parser/parse.h"
@@ -22,6 +23,7 @@ int get_ast(mysh_t *mysh, char *input)
 
     mysh->ast.tab_grocommands = NULL;
     mysh->ast.nb_grocommand = 0;
+    mysh->ast = (ast_t){0, NULL};
     res = create_ast(&parser, &(mysh->ast));
     if (res != SUCCESS){
         mysh->last_status = res;

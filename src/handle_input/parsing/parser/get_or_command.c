@@ -32,15 +32,15 @@ static int fill_tab_command(parser_t *parser, or_command_t *or_command)
         parser->error = ERROR;
         return ERROR;
     }
-    while (!END_OR_CMD(parser_peek(parser)) && parser->error == SUCCESS) {
+    while (!END_OR_CMD(PEEK(parser)) && parser->error == SUCCESS) {
         parser->cursor += 1;
         or_command->nb_command += 1;
         if (add_elt_in_tab(or_command, get_and_command(parser)) == ERROR)
             parser->error = ERROR;
         if (parser->error != 0)
             return parser->error;
-        if (END_OR_CMD(parser_peek(parser)) == false
-        && parser_peek(parser).type != OPERATOR_AND) {
+        if (END_OR_CMD(PEEK(parser)) == false
+        && PEEK(parser).type != OPERATOR_AND) {
             parser->error = FAILURE;
             return parser->error;
         }
