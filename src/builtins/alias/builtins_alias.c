@@ -37,11 +37,11 @@ static int add_alias_rc(alias_t *alias, char *input)
 int do_alias(mysh_t *mysh, command_t to_exec)
 {
     char *command = NULL;
-    if (to_exec.command[1] == NULL) {
-        if (mysh->alias.tab_file == NULL)
-            return SUCCESS;
-        return display_alias(mysh->alias, to_exec.fd_out);
-    }
+
+    if (mysh->alias.have_alias == false)
+        return SUCCESS;
+    if (display_alias(mysh->alias, to_exec.fd_out, to_exec.command) == SUCCESS)
+        return SUCCESS;
     if (to_exec.command[2] == NULL) {
         if (mysh->alias.tab_file == NULL)
             return SUCCESS;
@@ -77,6 +77,8 @@ char *is_alias(alias_t *alias, char *input)
     char **tab_alias = NULL;
     char *res = NULL;
 
+    if (alias->have_alias == false)
+        return SUCCESS;
     if (alias->tab_file == NULL)
         return NULL;
     for (int i = 0; alias->tab_file[i] != NULL; i += 1) {

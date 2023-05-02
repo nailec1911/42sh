@@ -10,20 +10,27 @@
 #include "macro_errors.h"
 #include "str_func.h"
 
-int display_alias(alias_t alias, int fd)
+int display_alias(alias_t alias, int fd, char **command)
 {
-    int l_tab = length_tab(alias.tab_file) - 1;
+    int l_tab = 0;
 
-    for (; l_tab >= 0; l_tab -= 1) {
-        dprintf(fd, "%s", alias.tab_file[l_tab]);
+    if (command[1] == NULL) {
+        if (alias.tab_file == NULL)
+            return SUCCESS;
+        l_tab = length_tab(alias.tab_file) - 1;
+        for (; l_tab >= 0; l_tab -= 1) {
+            dprintf(fd, "%s", alias.tab_file[l_tab]);
+        }
+        return SUCCESS;
     }
-    return SUCCESS;
+    return FAILURE;
 }
 
 static int search_specific_alias(char *line, char *to_find, int fd)
 {
     char *to_display = NULL;
     char **tab_alias = my_str_to_word_array_separator(line, " \n");
+
     if (tab_alias == NULL || tab_alias[2] == NULL)
         return ERROR;
     to_display = remake_command(tab_alias);

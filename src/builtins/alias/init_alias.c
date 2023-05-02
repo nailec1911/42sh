@@ -14,24 +14,37 @@
 #include "alias.h"
 #include "macro_errors.h"
 
-int init_alias(alias_t *alias)
+static char *set_all_fd(alias_t *alias, char **env)
 {
-    struct stat file;
-    alias->fd_alias_file = open(ALIASRC_FILE, O_CREAT |
+    char *path = NULL;
+    alias->have_alias = true;
+
+    if ((path = get_path_home(ALIASRC_FILE, env)) == NULL)
+        return NULL;
+    alias->fd_alias_file = open(path, O_CREAT |
     O_APPEND | O_RDWR, S_IRWXU);
-    alias->fd_file = fopen(ALIASRC_FILE, "a+");
-    if (alias->fd_file == NULL)
+    if ((alias->fd_file = fopen(path, "a+")) == NULL)
+        return NULL;
+    return path;
+}
+
+int init_alias(alias_t *alias, char **env)
+{
+    char *path = NULL;
+    struct stat file;
+
+    if ((path = set_all_fd(alias, env)) == NULL)
         return ERROR;
-    if (stat(ALIASRC_FILE, &file) == -1)
+    if (stat(path, &file) == -1)
         return ERROR;
-    if (file.st_size == 0) {
+    if (file.st_size == 0)
         alias->tab_file = NULL;
-    } else {
-        alias->tab_file = file_to_tab(ALIASRC_FILE);
-        if (alias->tab_file == NULL) {
-            printf("Wrong syntaxe : %s\n", ALIASRC_FILE);
-            return ERROR;
+    else {
+        if ((alias->tab_file = file_to_tab(path)) == NULL) {
+            alias->have_alias = false;
+            return SUCCESS;
         }
     }
+    free(path);
     return SUCCESS;
 }

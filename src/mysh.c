@@ -54,9 +54,9 @@ static int init_all(mysh_t *mysh, char * const env[])
         mysh->tty = true;
     if ((mysh->env = init_mysh_env(env)) == NULL)
         return ERROR;
-    if (init_history(&mysh->history) == ERROR)
+    if (init_history(&mysh->history, mysh->env) == ERROR)
         return ERROR;
-    if (init_alias(&mysh->alias) == ERROR)
+    if (init_alias(&mysh->alias, mysh->env) == ERROR)
         return ERROR;
     return SUCCESS;
 }

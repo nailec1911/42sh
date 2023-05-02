@@ -26,7 +26,7 @@ void free_env(mysh_t *mysh)
     if (mysh->alias.tab_file != NULL) {
         free_array(mysh->alias.tab_file);
     }
-    if (mysh->history.tab_hist != NULL) {
+    if (mysh->history.tab_hist != NULL && mysh->history.have_hist == true) {
         free_tab_hist(mysh->history.tab_hist);
     }
 }

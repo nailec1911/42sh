@@ -17,7 +17,7 @@
     #define NO_FLAG 0
     #define IS_FLAG(flag, to_search) (to_search & flag)
 
-    #define HISTORY_FILE ".42shhistory"
+    #define HISTORY_FILE "/.cache/.42shhistory"
     typedef struct tab_hist_s {
         char *num;
         char *time;
@@ -32,6 +32,7 @@
         int len_tab_hist;
         tab_hist_t **tab_hist;
         uint8_t flags;
+        bool have_hist;
     }history_t;
 
 
@@ -47,5 +48,7 @@ char *create_time_line(void);
 int length_tab_hist(tab_hist_t **tab);
 void write_in_file(tab_hist_t **tab, FILE *fd);
 void free_tab_hist(tab_hist_t **tab);
+char *find_in_env(char **env, char *name);
+char *get_path_home(char *to, char **env);
 
 #endif /* !HISTORY_H_ */

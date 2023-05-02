@@ -13,7 +13,7 @@
     #include "history.h"
 
     int add_in_history(history_t *history, char *input);
-    int init_history(history_t *history);
+    int init_history(history_t *history, char **env);
     char *do_exclamation_mark(mysh_t *mysh, char *input);
     char *search_by_num(mysh_t *mysh, char *last_input);
     char *search_by_name(mysh_t *mysh, char *last_input);
