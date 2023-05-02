@@ -90,7 +90,10 @@ SRC	=	mysh.c		\
 		builtins/env/init_mysh_env.c	\
 		builtins/env/free_env.c		\
 		builtins/env/env.c			\
-		builtins/exit.c
+		builtins/exit.c				\
+		builtins/vars/vars.c		\
+		builtins/vars/set_var.c 	\
+		builtins/vars/unset_var.c 	\
 
 SRC_MAIN	=	src/main.c
 
