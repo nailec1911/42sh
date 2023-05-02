@@ -22,4 +22,4 @@
     vars_t *get_global_var_by_name(vars_t *list, char *name);
     void free_global_var(vars_t *var);
 
-#endif // !VARS_H
+#endif /* !VARS_H */
