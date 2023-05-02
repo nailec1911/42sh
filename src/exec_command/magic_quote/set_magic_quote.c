@@ -6,6 +6,7 @@
 */
 
 #include <string.h>
+#include <stdlib.h>
 #include "macro_errors.h"
 #include "mysh.h"
 #include "str_func.h"
@@ -14,12 +15,15 @@
 static int set_new_params(mysh_t *mysh, command_t *command, int to_mod)
 {
     FILE *res_cmd = get_file_res_command(mysh, command->command[to_mod]);
+    char **res_array = NULL;
 
     if (res_cmd == NULL)
         return ERROR;
-
-    if (set_new_tab(command, res_cmd, to_mod) == ERROR)
+    if ((res_array = file_stream_to_tab(res_cmd)) == NULL)
         return ERROR;
+    command->command =
+    insert_array_in_array(res_array, command->command, to_mod);
+    free(res_array);
     return SUCCESS;
 }
 

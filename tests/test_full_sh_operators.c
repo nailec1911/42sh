@@ -9,19 +9,19 @@
 #include <criterion/redirect.h>
 #include "macro_errors.h"
 #include <stdio.h>
+#include <unistd.h>
 int mysh(char * const env[]);
 
-
-Test(mysh14, or_command){
+Test(full_mysh, or_command){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"hi", "hello", "third"};
 
-    fwrite("env||./tests/hello_world\n", 1, 25, inputs);
-    fwrite("./tests/seggfault||./tests/hello_world\n", 1, 39, inputs);
-    fwrite("./tests/hello_world||./test/seggfaults\n", 1, 39, inputs);
-    fwrite("exit\n", 1, 5, inputs);
+    fprintf(inputs, "env||./tests/hello_world\n");
+    fprintf(inputs, "./tests/seggfault||./tests/hello_world\n");
+    fprintf(inputs, "./tests/hello_world||./tests/seggfaults\n");
+    fprintf(inputs, "exit\n");
 
     fclose(inputs);
     cr_assert_eq(mysh(env), 0);
@@ -29,16 +29,16 @@ Test(mysh14, or_command){
     cr_assert_stdout_eq_str("hi\nhello\nthird\nhello world\nhello world\nDONE\n");
 }
 
-Test(mysh15, and_command){
+Test(full_mysh, and_command){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[4] = {"hi", "hello", "third"};
 
-    fwrite("env&&./tests/hello_world\n", 1, 25, inputs);
-    fwrite("./tests/seggfault&&./tests/hello_world\n", 1, 39, inputs);
-    fwrite("./tests/hello_world&&./tests/seggfault\n", 1, 39, inputs);
-    fwrite("exit\n", 1, 5, inputs);
+    fprintf(inputs, "env&&./tests/hello_world\n");
+    fprintf(inputs, "./tests/seggfault&&./tests/hello_world\n");
+    fprintf(inputs, "./tests/hello_world&&./tests/seggfault\n");
+    fprintf(inputs, "exit\n");
 
     fclose(inputs);
     cr_assert_eq(mysh(env), 139);
@@ -46,14 +46,14 @@ Test(mysh15, and_command){
     cr_assert_stdout_eq_str("hi\nhello\nthird\nhello world\nhello world\n");
 }
 
-Test(mysh16, multiple_operators){
+Test(full_mysh, multiple_operators){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
     char *const env[2] = {"hi"};
 
-    fwrite("env&&./tests/seggfault || env ||env && ./tests/seggfault;./tests/hello_world\n", 1, 77, inputs);
-    fwrite("exit\n", 1, 5, inputs);
+    fprintf(inputs, "env&&./tests/seggfault || env ||env && ./tests/seggfault;./tests/hello_world\n");
+    fprintf(inputs, "exit\n");
 
     fclose(inputs);
     cr_assert_eq(mysh(env), 0);

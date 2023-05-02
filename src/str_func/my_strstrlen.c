@@ -10,6 +10,8 @@
 int my_strstrlen(char *str[])
 {
     int len = 0;
-    for (; str[len]; ++len);
+    if (!str)
+        return 0;
+    while (str[++len]);
     return len;
 }

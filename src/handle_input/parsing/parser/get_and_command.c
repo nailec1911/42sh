@@ -34,15 +34,15 @@ static int fill_tab_command(parser_t *parser, and_command_t *and_command)
         parser->error = ERROR;
         return ERROR;
     }
-    while (!END_AND_CMD(parser_peek(parser)) && parser->error == SUCCESS) {
+    while (!END_AND_CMD(PEEK(parser)) && parser->error == SUCCESS) {
         parser->cursor += 1;
         and_command->nb_command += 1;
         if (add_elt_in_tab(and_command, get_command(parser)) == ERROR)
             parser->error = ERROR;
         if (parser->error != 0)
             return parser->error;
-        if (END_AND_CMD(parser_peek(parser)) == false
-        && parser_peek(parser).type != PIPE) {
+        if (END_AND_CMD(PEEK(parser)) == false
+        && PEEK(parser).type != PIPE) {
             parser->error = FAILURE;
             return parser->error;
         }
