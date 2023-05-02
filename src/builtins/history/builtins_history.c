@@ -65,8 +65,6 @@ int display_history(tab_hist_t **tab, int fd, history_t *history)
 
 int do_history(mysh_t *mysh, command_t to_exec)
 {
-    if (mysh->history.have_hist == false)
-        return SUCCESS;
     if (to_exec.command[1] == NULL) {
         mysh->history.flags = NO_FLAG;
         return display_history(mysh->history.tab_hist, to_exec.fd_out,

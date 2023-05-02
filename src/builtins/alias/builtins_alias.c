@@ -16,18 +16,21 @@
 static int add_alias_rc(alias_t *alias, char *input)
 {
     int l_tab = 0;
-
     if (alias->tab_file == NULL) {
         alias->tab_file = malloc(sizeof(char *) * 2);
         if (alias->tab_file == NULL)
             return ERROR;
         alias->tab_file[0] = input;
         alias->tab_file[1] = NULL;
+        if (alias->have_alias == false)
+            return SUCCESS;
         fprintf(alias->fd_file, "%s", alias->tab_file[0]);
     } else {
         if (add_elem_tab_alias(alias, input) == ERROR)
             return ERROR;
         l_tab = length_tab(alias->tab_file);
+        if (alias->have_alias == false)
+            return SUCCESS;
         fprintf(alias->fd_file, "%s", alias->tab_file[l_tab - 1]);
     }
     fflush(alias->fd_file);
@@ -38,8 +41,6 @@ int do_alias(mysh_t *mysh, command_t to_exec)
 {
     char *command = NULL;
 
-    if (mysh->alias.have_alias == false)
-        return SUCCESS;
     if (display_alias(mysh->alias, to_exec.fd_out, to_exec.command) == SUCCESS)
         return SUCCESS;
     if (to_exec.command[2] == NULL) {
@@ -77,8 +78,6 @@ char *is_alias(alias_t *alias, char *input)
     char **tab_alias = NULL;
     char *res = NULL;
 
-    if (alias->have_alias == false)
-        return SUCCESS;
     if (alias->tab_file == NULL)
         return NULL;
     for (int i = 0; alias->tab_file[i] != NULL; i += 1) {

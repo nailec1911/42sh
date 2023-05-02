@@ -21,8 +21,6 @@ int file_to_tab_hist(char *filepath, history_t *history);
 
 int add_in_history(history_t *history, char *input)
 {
-    if (history->have_hist == false)
-        return SUCCESS;
     if (strcmp("history\n", input) == 0)
         return SUCCESS;
     if (ftruncate(history->fd_history_file, 0) == -1) {
@@ -68,8 +66,7 @@ int init_history(history_t *history, char **env)
     struct stat file;
     history->num_command = 0;
     history->have_hist = true;
-
-    if ((path = get_path_home(HISTORY_FILE, env)) == NULL)
+    if ((path = set_all_fd(history, env)) == NULL)
         return ERROR;
     if (stat(path, &file) == -1)
         return ERROR;
