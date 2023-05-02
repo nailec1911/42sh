@@ -16,7 +16,6 @@
 
     typedef struct mysh_s {
         char **env;
-        char **command;
         int last_status;
         int to_return;
         bool tty;
@@ -30,12 +29,15 @@
         pid_t shell_pgid;
         short shell_descriptor;
         job_list *list;
-        job_stack *stack;
+        int nb_current_job;
     } mysh_t;
 
 
     //history
     int check_last_command(mysh_t *mysh, char *input);
     int init_alias(mysh_t *mysh);
+
+    //job control
+    int exec_job(mysh_t *mysh, and_command_t *job);
 
 #endif /* !MYSH_H_ */

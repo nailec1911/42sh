@@ -33,7 +33,7 @@ int do_setenv(mysh_t *mysh, command_t to_exec)
         mysh->last_status = 1;
         return SUCCESS;
     }
-    if (mysh->command[1] == NULL || mysh->command[1][0] == '\0')
+    if (to_exec.args[1] == NULL || to_exec.args[1][0] == '\0')
         return do_env(mysh, to_exec);
     if (modify_env_var
     (to_exec.args[1], mysh, to_exec.args[2]) == ERROR)

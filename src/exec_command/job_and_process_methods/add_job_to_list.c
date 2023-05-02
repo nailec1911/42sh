@@ -15,6 +15,13 @@ static job_list *init_list(and_command_t *job)
         return NULL;
     list->job = job;
     list->next = NULL;
+    /*
+    list->job->pgid = job->pgid;
+    list->job->job_id = job->job_id;
+    list->job->job_mode = job->job_mode;
+    list->job->nb_command = job->nb_command;
+    list->job->tab_command = malloc(sizeof(and_command_t));
+    */
     return list;
 }
 

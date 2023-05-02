@@ -17,56 +17,32 @@
 #include "mysh.h"
 #include "job_control.h"
 #include "macro_errors.h"
+#include "parser/ast.h"
 
-bool job_is_stoped(job *j)
+void display_job_status(and_command_t *job)
 {
-    for (process *p = j->head; p; p = p->next) {
-        if (p->process_state != DONE && p->process_state != SUSPENDED)
-            return false;
-    }
-    return true;
-}
-
-bool job_is_completed(job *j)
-{
-    for (process *p = j->head; p; p = p->next) {
-        if (p->process_state != DONE)
-            return false;
-    }
-    return true;
-}
-
-static int update_process_status(job *j, pid_t process_id, int status)
-{
-    if (process_id < 0)
-        return -1;
-    for (job *tmp = j; tmp; tmp = tmp->next) {
-        for (process *p = tmp->head; p; p = p->next) {
-            if (p->pid == process_id) {
-                if (WSTOPSIG(status))
-                    p->process_state = SUSPENDED;
-                if (WIFEXITED(status)) {
-                    p->process_state = DONE;
-                }
-                if (WIFSIGNALED(status))
-                    p->process_state = TERMINATED;
-            }
+    if (job_is_completed(job)) {
+        printf("[%d] Done\n", job->job_id);
+        for (int i = 0; i < job->nb_command; ++i) {
+            printf("%s", job->tab_command[i].args[0]);
+            if (i + 1 < job->nb_command)
+                printf(" | ");
         }
+        printf("\n");
     }
-    return 0;
 }
 
-int wait_job(job *j)
+int wait_job(job_list *list, and_command_t *job)
 {
-    int status = 0;
-    pid_t pid = 0;
+    int status;
+    pid_t pid;
+    short count = 0;
 
-    printf("wait job %d\n", j->pgid);
     do {
-        pid = waitpid(j->pgid, &status, WUNTRACED);
-        printf("waitpid = %d\n", pid);
-    } while (!update_process_status(j, pid, status) &&
-            !job_is_stoped(j) &&
-            !job_is_completed(j));
-    return SUCCESS;
+        pid = waitpid(WAIT_ANY, &status, WUNTRACED);
+        update_process_status(list, pid, status);
+        count++;
+    } while (count < job->nb_command);
+
+    return status;
 }

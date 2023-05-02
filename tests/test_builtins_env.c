@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include "macro_errors.h"
 #include "mysh.h"
+#include "parser/ast.h"
 char **init_mysh_env(char * const env[]);
 int do_setenv(mysh_t *mysh, command_t to_exec);
 int do_env(mysh_t *mysh, command_t to_exec);
@@ -19,22 +20,21 @@ int do_exit(mysh_t *mysh, command_t to_exec);
 Test(env1, normal_env){
     cr_redirect_stdout();
     char *env[3] = {"test=12AZ", "hello=world"};
-    mysh_t args = {0};
+    mysh_t shell = {0};
 
-    args.env = init_mysh_env(env);
-    args.command = (char *[2]){"env"};
+    shell.env = init_mysh_env(env);
     command_t command = {0};
     command.args = (char *[2]){"env"};
     command.fd_out = STDOUT_FILENO;
-    cr_assert_eq(do_env(&args, command), SUCCESS);
+    cr_assert_eq(do_env(&shell, command), SUCCESS);
     cr_assert_stdout_eq_str("test=12AZ\nhello=world\n");
-    cr_assert_eq(args.last_status, 0);
+    cr_assert_eq(shell.last_status, 0);
 }
 
 Test(env2, env_null){
     mysh_t args = {0};
     args.env = (char *[]){NULL};
-    args.command = (char *[2]){"env"};
+    //args.command = (char *[2]){"env"};
     command_t command = {0};
     command.args = (char *[2]){"env"};
     cr_assert_eq(do_env(&args, command), SUCCESS);
@@ -46,7 +46,7 @@ Test(env3, too_much_args){
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[3]){"env", "hello"};
+    //args.command = (char *[3]){"env", "hello"};
     args.last_status = 0;
 
     command_t command = {0};
@@ -61,7 +61,7 @@ Test(setenv1, not_existing_var){
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[4]){"setenv", "wait", "what?"};
+    //args.command = (char *[4]){"setenv", "wait", "what?"};
 
     command_t command = {0};
     command.args = (char *[4]){"setenv", "wait", "what?"};
@@ -74,7 +74,7 @@ Test(setenv2, modify_existing_var){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[4]){"setenv", "hello", "itsme"};
+    //args.command = (char *[4]){"setenv", "hello", "itsme"};
     command_t command = {0};
     command.args = (char *[4]){"setenv", "hello", "itsme"};
     cr_assert_eq(do_setenv(&args, command), SUCCESS);
@@ -85,7 +85,7 @@ Test(setenv3, modify_existing_var_no_value){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[3]){"setenv", "hello"};
+    //args.command = (char *[3]){"setenv", "hello"};
 
     command_t command = {0};
     command.args = (char *[3]){"setenv", "hello"};
@@ -96,7 +96,7 @@ Test(setenv3, modify_existing_var_no_value){
 Test(setenv4, env_is_null){
     mysh_t args = {0};
     args.env = (char *[]){NULL};
-    args.command = (char *[4]){"setenv", "wait", "what?"};
+    //args.command = (char *[4]){"setenv", "wait", "what?"};
 
     command_t command = {0};
     command.args = (char *[4]){"setenv", "wait", "what?"};
@@ -110,7 +110,7 @@ Test(setenv5, non_alphanum_char){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[4]){"setenv", "hz;s,zd", "itsme"};
+    //args.command = (char *[4]){"setenv", "hz;s,zd", "itsme"};
 
     command_t command = {0};
     command.args = (char *[4]){"setenv", "hz;s,zd", "itsme"};
@@ -124,7 +124,7 @@ Test(setenv6, too_much_argument){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[4]){"setenv", "hello", "itsme", "hey"};
+    //args.command = (char *[4]){"setenv", "hello", "itsme", "hey"};
 
     command_t command = {0};
     command.args = (char *[4]){"setenv", "hello", "itsme", "hey"};
@@ -138,7 +138,7 @@ Test(setenv7, no_args){
     char *env[3] = {"test=12AZ", "hello=world"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[2]){"setenv"};
+    //args.command = (char *[2]){"setenv"};
 
     command_t command = {0};
     command.args = (char *[2]){"setenv"};
@@ -153,7 +153,7 @@ Test(unsetenv1, single_existing_var){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[4]){"unsetenv", "hello"};
+    //args.command = (char *[4]){"unsetenv", "hello"};
 
     command_t command = {0};
     command.args = (char *[4]){"unsetenv", "hello"};
@@ -169,7 +169,7 @@ Test(unsetenv2, unset_first_var){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[4]){"unsetenv", "test"};
+    //args.command = (char *[4]){"unsetenv", "test"};
 
     command_t command = {0};
     command.args = (char *[4]){"unsetenv", "test"};
@@ -186,7 +186,7 @@ Test(unsetenv3, unset_multiple_existing_var){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[4]){"unsetenv", "test", "third"};
+    //args.command = (char *[4]){"unsetenv", "test", "third"};
 
     command_t command = {0};
     command.args = (char *[4]){"unsetenv", "test", "third"};
@@ -202,7 +202,7 @@ Test(unsetenv4, unset_not_existing_var){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[4]){"unsetenv", "dumb"};
+    //args.command = (char *[4]){"unsetenv", "dumb"};
 
     command_t command = {0};
     command.args = (char *[4]){"unsetenv", "dumb"};
@@ -221,7 +221,7 @@ Test(unsetenv5, no_arg){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[2]){"unsetenv"};
+    //args.command = (char *[2]){"unsetenv"};
 
     command_t command = {0};
     command.args = (char *[2]){"unsetenv"};
@@ -239,7 +239,7 @@ Test(unsetenv5, no_arg){
 Test(unsetenv6, no_env){
     mysh_t args = {0};
     args.env = (char *[]){NULL};
-    args.command = (char *[4]){"unsetenv", "test"};
+    //args.command = (char *[4]){"unsetenv", "test"};
 
     command_t command = {0};
     command.args = (char *[4]){"unsetenv", "test"};
@@ -254,7 +254,7 @@ Test(unsetenv7, longer_value_than_searched){
     char *env[4] = {"testaaaa=12AZ", "helloaaa=world", "thirdaaa=time"};
     mysh_t args = {0};
     args.env = init_mysh_env(env);
-    args.command = (char *[5]){"unsetenv", "hello", "third", "test"};
+    //args.command = (char *[5]){"unsetenv", "hello", "third", "test"};
 
     command_t command = {0};
     command.args = (char *[5]){"unsetenv", "hello", "third", "test"};
@@ -271,7 +271,7 @@ Test(unsetenv7, longer_value_than_searched){
 Test(exit1, exit_standar){
     cr_redirect_stderr();
     mysh_t args = {0};
-    args.command = (char *[2]){"exit"};
+    //args.command = (char *[2]){"exit"};
     args.last_status = 0;
 
     command_t command = {0};
@@ -283,7 +283,7 @@ Test(exit1, exit_standar){
 Test(exit2, exit_to_many_args){
     cr_redirect_stderr();
     mysh_t args = {0};
-    args.command = (char *[3]){"exit", "test"};
+    //args.command = (char *[3]){"exit", "test"};
     args.last_status = 0;
 
     command_t command = {0};

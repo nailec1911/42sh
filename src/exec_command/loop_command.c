@@ -20,15 +20,17 @@ static int loop_and_command(mysh_t *mysh, or_command_t *or_command)
 
     do {
         mysh->last_status = 0;
-        res = exec_and_command(mysh, &(or_command->tab_and_command[i]));
+        exec_and_command(mysh, &(or_command->tab_and_command[i]));
+        mysh->nb_current_job++;
+        or_command->tab_and_command[i].job_id = mysh->nb_current_job;
+        mysh->list = add_job_to_list(mysh->list, &or_command->tab_and_command[i]);
+        res = exec_job(mysh, &or_command->tab_and_command[i]);
         if (res == ERROR)
             return ERROR;
         if (res == EXIT)
             exit = EXIT;
         i += 1;
     } while (i < or_command->nb_and_command && mysh->last_status == SUCCESS);
-    for (int i = 0; i < or_command->nb_and_command; ++i)
-        mysh->list = add_job_to_list(mysh->list, &or_command->tab_and_command[i]);
 
     return exit;
 }
@@ -65,5 +67,6 @@ int loop_grocommand(mysh_t *mysh)
         if (res == EXIT)
             exit = EXIT;
     }
+
     return exit;
 }

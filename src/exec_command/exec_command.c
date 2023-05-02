@@ -68,13 +68,12 @@ int exec_command(mysh_t *mysh, command_t to_exec)
 {
     int res = 0;
 
-    mysh->command = to_exec.args;
     if ((res = exec_builtins(mysh, to_exec)) != FAILURE)
         return res;
     if ((res = get_path(mysh, &(to_exec.args[0]))) == ERROR)
         return ERROR;
     if (res != SUCCESS) {
-        fprintf(stderr, "%s: Command not found.\n", mysh->command[0]);
+        fprintf(stderr, "%s: Command not found.\n", to_exec.args[0]);
         mysh->last_status = 1;
         return SUCCESS;
     }

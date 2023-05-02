@@ -36,6 +36,7 @@ int loop_sh(mysh_t *mysh, char *input)
 {
     int res = 0;
 
+    loopkup_job(mysh->list, &mysh->nb_current_job);
     mysh->to_return = mysh->last_status;
     mysh->last_status = 0;
     if (input[0] == '\n')
@@ -47,23 +48,21 @@ int loop_sh(mysh_t *mysh, char *input)
     if ((res = loop_grocommand(mysh)) == ERROR)
         return ERROR;
 
-    free_ast(mysh->ast);
+    //free_ast(mysh->ast);
     return res;
 }
 
 static void set_main_process(mysh_t *mysh)
 {
     mysh->tty = true;
-    signal(SIGINT, SIG_IGN);
     signal(SIGQUIT, SIG_IGN);
     signal(SIGTSTP, SIG_IGN);
     signal(SIGTTIN, SIG_IGN);
-    signal(SIGTTOU, SIG_IGN);
-    signal(SIGCHLD, SIG_IGN);
+    signal(SIGINT, SIG_IGN);
     mysh->shell_pgid = getpid();
     mysh->shell_descriptor = STDIN_FILENO;
     setpgid(mysh->shell_pgid, mysh->shell_pgid);
-    tcsetpgrp(0, mysh->shell_pgid);
+    tcsetpgrp(mysh->shell_descriptor, mysh->shell_pgid);
 }
 
 static int init_all(mysh_t *mysh, char * const env[])
