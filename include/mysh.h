@@ -12,9 +12,11 @@
     #include "parser/ast.h"
     #include "alias.h"
     #include "history.h"
+    #include "builtins/vars.h"
 
     typedef struct mysh_s {
         char **env;
+        vars_t *vars;
         char **command;
         int last_status;
         int to_return;
