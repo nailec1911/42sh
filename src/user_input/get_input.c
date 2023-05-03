@@ -16,18 +16,22 @@
 void arrow_function(int *index, int *length, char **line, mysh_t *mysh);
 void right_arrow_function(int *index, int length);
 void left_arrow_function(int *index);
-char *manage_tab_function(int *length, int *index, char **line, mysh_t *mysh);
+void manage_enter_function(mysh_t *mysh);
+void manage_tab_function(int *length, int *index, char **line, mysh_t *mysh);
 void set_terminal(struct termios *o_term, struct termios *term, mysh_t *mysh);
-void backward_function(int *length, int *index, char **line);
+void backward_function(mysh_t *mysh, int *length, int *index, char **line);
 char *remove_char(char *line, int index, int length);
 
-static char *fill_string(char *line, int ch, int *index, int *length)
+static char *fill_string(char *line, mysh_t *mysh, int *index, int *length)
 {
     int res = *index;
     int temp = res;
 
+    mysh->completion.display = false;
+    printf("\033[0J");
+    mysh->completion.index = -1;
     memmove(&line[*index + 1], &line[*index], *length - *index);
-    line[*index] = ch;
+    line[*index] = mysh->ch;
     *index += 1;
     *length += 1;
     for (int i = res; i <= *length; i += 1)
@@ -86,13 +90,16 @@ static char *ch_functions(mysh_t *mysh, int *index, int *length, char *line)
         case CTRL_D:
             return NULL;
         case DELETE:
-            backward_function(length, index, &line);
+            backward_function(mysh, length, index, &line);
             break;
         case '\t':
             manage_tab_function(length, index, &line, mysh);
             break;
+        case ENTER:
+            manage_enter_function(mysh);
+            break;
         default:
-            line = fill_string(line, mysh->ch, index, length);
+            line = fill_string(line, mysh, index, length);
     }
     fflush(stdout);
     return line;
@@ -109,10 +116,10 @@ char *get_input(mysh_t mysh)
     for (int i = 0; i < 1024; i += 1)
         line[i] = '\0';
     set_terminal(&o_term, &term, &mysh);
-    while (read(STDIN_FILENO, &mysh.ch, 1) > 0 && mysh.ch != ENTER) {
+    while (read(STDIN_FILENO, &mysh.ch, 1) > 0) {
         if ((line = ch_functions(&mysh, &index, &length, line)) == NULL)
             return NULL;
-        if (mysh.tab)
+        if (mysh.tab || mysh.enter)
             break;
     }
     printf("\n");
