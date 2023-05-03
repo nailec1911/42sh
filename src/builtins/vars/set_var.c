@@ -12,6 +12,7 @@
 #include "builtins/vars.h"
 #include "mysh.h"
 #include "macro_errors.h"
+#include "str_func.h"
 
 static int print_env(mysh_t *mysh, command_t to_exec)
 {
@@ -68,20 +69,50 @@ static int do_set(mysh_t *mysh, char *buf, char const read_only)
     return SUCCESS;
 }
 
+static char **recreate_args(char **args)
+{
+    char **new_args = calloc(1, sizeof(char*));
+    int idx = 0, new_idx = 0;
+
+    if (!new_args)
+        return 0;
+    for (; args[idx] != 0; new_idx++) {
+        char *next_arg = args[idx + 1];
+        if (next_arg && next_arg[0] == '=' && next_arg[1] == 0) {
+            int buf_len = strlen(args[idx]) + 1 + 1;
+            buf_len += next_arg && args[idx + 2] ? strlen(args[idx + 2]) : 0;
+            new_args[new_idx] = calloc(buf_len, sizeof(char));
+            sprintf(new_args[new_idx], "%s%s%s", args[idx], next_arg,
+                    next_arg && args[idx + 2] ? args[idx + 2] : "");
+            idx += next_arg && args[idx + 2] ? 3 : 2;
+        } else
+            new_args[new_idx] = strdup(args[idx++]);
+        new_args = realloc(new_args, sizeof(char*) * (new_idx + 2));
+    }
+    new_args[new_idx] = 0;
+    return new_args;
+}
+
 int do_setvar(mysh_t *mysh, command_t to_exec)
 {
-    if (check_args(to_exec.command) != SUCCESS) {
+    char **new_args = recreate_args(to_exec.command);
+
+    if (!new_args)
+        return FAILURE;
+    if (check_args(new_args) != SUCCESS) {
         mysh->last_status = 1;
+        free_array(new_args);
         return SUCCESS;
     }
-
     if ((mysh->command[1] == 0 || mysh->command[1][0] == 0) ||
-            (strcmp(mysh->command[1], "-r") == 0 && mysh->command[2] == 0))
+            (strcmp(mysh->command[1], "-r") == 0 && mysh->command[2] == 0)) {
+        free_array(new_args);
         return print_env(mysh, to_exec);
+    }
 
     char const read_only = strcmp(mysh->command[1], "-r") == 0;
-    for (int i = read_only ? 2 : 1; to_exec.command[i] != 0; i++) {
-        do_set(mysh, to_exec.command[i], read_only);
-    }
+    for (int i = read_only ? 2 : 1; new_args[i] != 0; i++)
+        do_set(mysh, new_args[i], read_only);
+    free_array(new_args);
     return 0;
 }
