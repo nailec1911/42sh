@@ -52,6 +52,7 @@ SRC	=	mysh.c		\
 		str_func/my_strstrlen.c	\
 		str_func/insert_array_in_array.c	\
 		user_input/arrows_func.c	\
+		user_input/prompt.c	\
 		user_input/get_input_line.c	\
 		user_input/get_input.c	\
 		user_input/set_terminal.c	\
@@ -70,6 +71,7 @@ SRC	=	mysh.c		\
 		builtins/history/builtins_history.c\
 		builtins/history/load_file_history.c\
 		builtins/history/clean_str.c\
+		builtins/history/search_env_var.c\
 		builtins/history/add_elem_tab.c\
 		builtins/history/combine_flags.c\
 		builtins/history/check_last_command.c\

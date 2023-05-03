@@ -88,9 +88,10 @@ int do_unalias(mysh_t *mysh, command_t to_exec)
         if (remove_alias(&mysh->alias, to_exec.command[i]) == ERROR)
             return ERROR;
     }
-    if (ftruncate(mysh->alias.fd_alias_file, 0) == -1) {
-        return ERROR;
+    if (mysh->alias.have_alias != false) {
+        if (ftruncate(mysh->alias.fd_alias_file, 0) == -1)
+            return ERROR;
+        write_in_file_alias(&mysh->alias);
     }
-    write_in_file_alias(&mysh->alias);
     return SUCCESS;
 }
