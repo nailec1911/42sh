@@ -83,8 +83,8 @@ int mysh(char * const env[])
     if (init_all(&mysh, env) == ERROR)
         return ERROR;
     while (res == 0) {
-        if (mysh.tty)
-            write(1, "xD ", 3);
+        if (init_prompt(&mysh) == ERROR)
+            return ERROR;
         if ((input = choose_get_line(mysh)) == NULL) {
             res = EXIT;
             break;

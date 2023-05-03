@@ -38,12 +38,18 @@ static int check_syntaxe(char **tab)
     if ((atoi(tab_time[0]) < 0 || atoi(tab_time[0]) > 23) ||
     (atoi(tab_time[1]) < 0 || atoi(tab_time[1]) > 59))
         return ERROR;
-    if (strlen(tab[1]) != 5)
+    if (strlen(tab[1]) != 5) {
+        free_array(tab_time);
         return ERROR;
-    if (!is_num_space(tab[0]))
+    }
+    if (!is_num_space(tab[0])) {
+        free_array(tab_time);
         return ERROR;
-    if (!is_num_colon(tab[1]))
+    }
+    if (!is_num_colon(tab[1])) {
+        free_array(tab_time);
         return ERROR;
+    }
     free_array(tab_time);
     return SUCCESS;
 }
@@ -59,13 +65,14 @@ static int check_and_fill_tab(char *line, int i, history_t *history)
         return ERROR;
     }
     if (check_syntaxe(tab) == ERROR) {
+        free_array(tab);
         return ERROR;
     }
     if (fill_tab(history->tab_hist, i, tab) == ERROR) {
         free_array(tab);
         return ERROR;
     }
-    history->num_command = atoi(tab[0]);
+    history->num_cmd = atoi(tab[0]);
     free_array(tab);
     return SUCCESS;
 }
@@ -98,9 +105,12 @@ int file_to_tab_hist(char *filepath, history_t *history)
     malloc(sizeof(tab_hist_t *) * (nb_line + 1))) == NULL)
         return ERROR;
     history->tab_hist[nb_line] = NULL;
-    stream = fopen(filepath, "r");
-    if (fill_tab_hist_from_file(stream, history, &i) == ERROR)
+    if ((stream = fopen(filepath, "r")) == NULL)
         return ERROR;
+    if (fill_tab_hist_from_file(stream, history, &i) == ERROR) {
+        free(history->tab_hist);
+        return ERROR;
+    }
     fclose(stream);
     return SUCCESS;
 }
