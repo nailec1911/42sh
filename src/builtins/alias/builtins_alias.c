@@ -17,8 +17,7 @@ static int add_alias_rc(alias_t *alias, char *input)
 {
     int l_tab = 0;
     if (alias->tab_file == NULL) {
-        alias->tab_file = malloc(sizeof(char *) * 2);
-        if (alias->tab_file == NULL)
+        if ((alias->tab_file = malloc(sizeof(char *) * 2)) == NULL)
             return ERROR;
         alias->tab_file[0] = input;
         alias->tab_file[1] = NULL;

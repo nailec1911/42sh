@@ -13,8 +13,10 @@ int detect_flags(command_t *to_exec, history_t *history);
 
 int opt_clear(mysh_t *mysh)
 {
-    tab_hist_t **tab = malloc(sizeof(tab_hist_t *) * 2);
     int l_tab = mysh->history.len_tab_hist;
+    tab_hist_t **tab = malloc(sizeof(tab_hist_t *) * 2);
+    if (tab == NULL)
+        return ERROR;
     tab_hist_t **to_free = mysh->history.tab_hist;
     if (tab == NULL)
         return ERROR;
@@ -25,6 +27,8 @@ int opt_clear(mysh_t *mysh)
     tab[0]->time = strdup(mysh->history.tab_hist[l_tab - 1]->time);
     tab[0]->command = strdup(mysh->history.tab_hist[l_tab - 1]->command);
     tab[1] = NULL;
+    if (tab[0]->command == NULL || tab[0]->num == NULL || tab[0]->time == NULL)
+        return ERROR;
     mysh->history.len_tab_hist = 1;
     mysh->history.tab_hist = tab;
     free_tab_hist(to_free);
@@ -45,10 +49,12 @@ static int init_flag(history_t *history, int *step, int *i)
 int display_history(tab_hist_t **tab, int fd, history_t *history)
 {
     char *time = create_time_line();
-    char *num = num_to_str(history->num_command);
+    char *num = num_to_str(history->num_cmd);
     int i = 0;
     int step = 1;
     int end = init_flag(history, &step, &i);
+    if (time == NULL || num == NULL)
+        return ERROR;
     for (; i != end; i += step) {
         if (IS_FLAG(history->flags, FLAG_H))
             dprintf(fd, "%s", tab[i]->command);

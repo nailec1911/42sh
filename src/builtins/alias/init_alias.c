@@ -21,8 +21,9 @@ static char *set_all_fd(alias_t *alias, char **env)
 
     if ((path = get_path_home(ALIASRC_FILE, env)) == NULL)
         return NULL;
-    alias->fd_alias_file = open(path, O_CREAT |
-    O_APPEND | O_RDWR, S_IRWXU);
+    if ((alias->fd_alias_file = open(path, O_CREAT |
+    O_APPEND | O_RDWR, S_IRWXU)) == NULL)
+        return NULL;
     if ((alias->fd_file = fopen(path, "a+")) == NULL)
         return NULL;
     return path;

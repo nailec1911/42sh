@@ -25,13 +25,17 @@ void write_in_file(tab_hist_t **tab, FILE *fd, bool have_file)
 int replace_last_line(history_t *history, char *input)
 {
     int l_tab = history->len_tab_hist;
+
     free(history->tab_hist[l_tab - 1]->num);
     free(history->tab_hist[l_tab - 1]->time);
     free(history->tab_hist[l_tab - 1]->command);
-    history->tab_hist[l_tab - 1]->num =
-    num_to_str(history->num_command);
+    history->tab_hist[l_tab - 1]->num = num_to_str(history->num_cmd);
     history->tab_hist[l_tab - 1]->time = create_time_line();
     history->tab_hist[l_tab - 1]->command = strdup(input);
+    if (history->tab_hist[l_tab - 1]->command == NULL ||
+    history->tab_hist[l_tab - 1]->num == NULL ||
+    history->tab_hist[l_tab - 1]->time == NULL)
+        return ERROR;
     write_in_file(history->tab_hist, history->fd_file, history->have_hist);
     return SUCCESS;
 }
@@ -39,7 +43,7 @@ int replace_last_line(history_t *history, char *input)
 int add_line(history_t *history, char *input)
 {
     if (add_elem_tab(history, input,
-    history->num_command) == ERROR)
+    history->num_cmd) == ERROR)
         return ERROR;
     write_in_file(history->tab_hist, history->fd_file, history->have_hist);
     return SUCCESS;
@@ -64,8 +68,10 @@ int check_last_command(history_t *history, char *input)
             return ERROR;
         if ((history->tab_hist[0] = malloc(sizeof(tab_hist_t))) == NULL)
             return ERROR;
-        history->tab_hist[0]->num = num_to_str(history->num_command);
-        history->tab_hist[0]->time = create_time_line();
+        if ((history->tab_hist[0]->num = num_to_str(history->num_cmd)) == NULL)
+            return ERROR;
+        if ((history->tab_hist[0]->time = create_time_line()) == NULL)
+            return ERROR;
         if ((history->tab_hist[0]->command = strdup(input)) == NULL)
             return ERROR;
         history->tab_hist[1] = NULL;

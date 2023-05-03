@@ -28,7 +28,7 @@ int add_in_history(history_t *history, char *input)
     }
     if (check_last_command(history, input) == ERROR)
         return ERROR;
-    history->num_command += 1;
+    history->num_cmd += 1;
     fflush(history->fd_file);
     return SUCCESS;
 }
@@ -41,7 +41,7 @@ static int get_num_command(history_t *history, char *path)
 this session\n");
         return SUCCESS;
     }
-    history->num_command += 1;
+    history->num_cmd += 1;
     history->len_tab_hist = length_tab_hist(history->tab_hist);
     return SUCCESS;
 }
@@ -64,14 +64,14 @@ int init_history(history_t *history, char **env)
 {
     char *path = NULL;
     struct stat file;
-    history->num_command = 0;
+    history->num_cmd = 0;
     history->have_hist = true;
     if ((path = set_all_fd(history, env)) == NULL)
         return ERROR;
     if (stat(path, &file) == -1)
         return ERROR;
     if (file.st_size == 0) {
-        history->num_command = 1;
+        history->num_cmd = 1;
         history->tab_hist = NULL;
     } else {
         if (get_num_command(history, path) == ERROR)

@@ -33,8 +33,7 @@ static int search_specific_alias(char *line, char *to_find, int fd)
 
     if (tab_alias == NULL || tab_alias[2] == NULL)
         return ERROR;
-    to_display = remake_command(tab_alias);
-    if (to_display == NULL)
+    if ((to_display = remake_command(tab_alias)) == NULL)
         return ERROR;
     if (strcmp(tab_alias[1], to_find) == 0) {
         dprintf(fd, "%s\n", to_display);
