@@ -23,7 +23,7 @@ int add_in_history(history_t *history, char *input)
 {
     if (strcmp("history\n", input) == 0)
         return SUCCESS;
-    if (ftruncate(history->fd_history_file, 0) == -1) {
+    if (history->have_hist && ftruncate(history->fd_history_file, 0) == -1) {
         return ERROR;
     }
     if (check_last_command(history, input) == ERROR)
@@ -71,11 +71,15 @@ int init_history(history_t *history, char **env)
     if (stat(path, &file) == -1)
         return ERROR;
     if (file.st_size == 0) {
+        free(path);
         history->num_cmd = 1;
         history->tab_hist = NULL;
     } else {
-        if (get_num_command(history, path) == ERROR)
+        if (get_num_command(history, path) == ERROR) {
+            free(path);
             return ERROR;
+        }
     }
+    free(path);
     return SUCCESS;
 }

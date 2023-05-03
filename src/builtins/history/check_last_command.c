@@ -62,8 +62,6 @@ int add_line_history(history_t *history, char *input)
 int check_last_command(history_t *history, char *input)
 {
     if (history->tab_hist == NULL || history->have_hist == false) {
-        if (history->tab_hist != NULL)
-            free_tab_hist(history->tab_hist);
         if ((history->tab_hist = malloc(sizeof(tab_hist_t *) * 2)) == NULL)
             return ERROR;
         if ((history->tab_hist[0] = malloc(sizeof(tab_hist_t))) == NULL)

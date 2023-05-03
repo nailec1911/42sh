@@ -68,13 +68,13 @@ static char **fill_tab_from_file(FILE *stream, int nb_line)
     char **tab = NULL;
     char *line = NULL;
     size_t len = 0;
-
     if ((tab = malloc(sizeof(char *) * (nb_line + 1))) == NULL)
         return NULL;
     tab[nb_line] = NULL;
     while (getline(&line, &len, stream) != -1) {
         if (check_syntaxe(line) == ERROR) {
             free(line);
+            free(tab);
             return NULL;
         }
         tab[i] = strdup(line);
