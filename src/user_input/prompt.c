@@ -32,12 +32,13 @@ char **set_all_for_prompt(char **user, char **pwd, int *tab_l, mysh_t *mysh)
 
 int init_prompt(mysh_t *mysh)
 {
-    if (!mysh->tty)
-        return SUCCESS;
     char *pwd = NULL;
     char *user = NULL;
     int tab_l = 0;
     char **tab = NULL;
+
+    if (!mysh->tty)
+        return SUCCESS;
     if ((tab = set_all_for_prompt(&user, &pwd, &tab_l, mysh)) == NULL)
         return ERROR;
     if (mysh->last_status == 0) {
