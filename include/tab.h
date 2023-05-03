@@ -12,13 +12,13 @@
 
     typedef struct tab_s {
         char *current;
-        int nb_lines;
         int length_word;
         int ind_space;
         bool display;
         char *path;
         char **names;
         int index;
+        int max_size;
     } tab_t;
 
 #endif /* !TAB_H_ */
