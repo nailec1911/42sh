@@ -14,12 +14,12 @@
 #include "alias.h"
 #include "macro_errors.h"
 
-static char *set_all_fd(alias_t *alias, char **env)
+static char *set_all_fd(alias_t *alias)
 {
     char *path = NULL;
     alias->have_alias = true;
 
-    if ((path = get_path_home(ALIASRC_FILE, env)) == NULL)
+    if ((path = get_path_home(ALIASRC_FILE)) == NULL)
         return NULL;
     if ((alias->fd_alias_file = open(path, O_CREAT |
     O_APPEND | O_RDWR, S_IRWXU)) == -1)
@@ -29,12 +29,12 @@ static char *set_all_fd(alias_t *alias, char **env)
     return path;
 }
 
-int init_alias(alias_t *alias, char **env)
+int init_alias(alias_t *alias)
 {
     char *path = NULL;
     struct stat file;
 
-    if ((path = set_all_fd(alias, env)) == NULL)
+    if ((path = set_all_fd(alias)) == NULL)
         return ERROR;
     if (stat(path, &file) == -1)
         return ERROR;

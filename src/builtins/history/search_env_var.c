@@ -7,6 +7,8 @@
 #include <string.h>
 #include "macro_errors.h"
 #include "str_func.h"
+#include <unistd.h>
+#include <pwd.h>
 
 char *find_in_env(char **env, char *name)
 {
@@ -16,14 +18,14 @@ char *find_in_env(char **env, char *name)
     return NULL;
 }
 
-char *get_path_home(char *to, char **env)
+char *get_path_home(char *filepath)
 {
     char *home = NULL;
-    char *path = NULL;
 
-    if ((home = find_in_env(env, "HOME=")) == NULL)
+    struct passwd *pwd;
+    pwd = getpwuid(getuid());
+    home = my_strcat_dup(pwd->pw_dir, filepath);
+    if (home == NULL)
         return NULL;
-    if ((path = my_strcat_dup(home, to)) == NULL)
-        return NULL;
-    return path;
+    return home;
 }

@@ -49,6 +49,6 @@ int length_tab_hist(tab_hist_t **tab);
 void write_in_file(tab_hist_t **tab, FILE *fd, bool have_file);
 void free_tab_hist(tab_hist_t **tab);
 char *find_in_env(char **env, char *name);
-char *get_path_home(char *to, char **env);
+char *get_path_home(char *filepath);
 
 #endif /* !HISTORY_H_ */

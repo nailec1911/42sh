@@ -46,11 +46,10 @@ this session\n");
     return SUCCESS;
 }
 
-static char *set_all_fd(history_t *history, char **env)
+static char *set_all_fd(history_t *history)
 {
     char *path = NULL;
-
-    if ((path = get_path_home(HISTORY_FILE, env)) == NULL)
+    if ((path = get_path_home(HISTORY_FILE)) == NULL)
         return NULL;
     if ((history->fd_history_file = open(path, O_CREAT |
     O_APPEND | O_RDWR, S_IRWXU)) == -1)
@@ -60,18 +59,17 @@ static char *set_all_fd(history_t *history, char **env)
     return path;
 }
 
-int init_history(history_t *history, char **env)
+int init_history(history_t *history)
 {
     char *path = NULL;
     struct stat file;
     history->num_cmd = 0;
     history->have_hist = true;
-    if ((path = set_all_fd(history, env)) == NULL)
-        return ERROR;
+    if ((path = set_all_fd(history)) == NULL)
+        return SUCCESS;
     if (stat(path, &file) == -1)
         return ERROR;
     if (file.st_size == 0) {
-        free(path);
         history->num_cmd = 1;
         history->tab_hist = NULL;
     } else {

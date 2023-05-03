@@ -31,5 +31,5 @@
     } mysh_t;
 
 int check_last_command(history_t *history, char *input);
-int init_alias(alias_t *alias, char **env);
+int init_alias(alias_t *alias);
 #endif /* !MYSH_H_ */
