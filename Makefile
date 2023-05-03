@@ -52,6 +52,7 @@ SRC	=	mysh.c		\
 		str_func/my_strstrlen.c	\
 		str_func/insert_array_in_array.c	\
 		user_input/arrows_func.c	\
+		user_input/prompt.c	\
 		user_input/get_input_line.c	\
 		user_input/get_input.c	\
 		user_input/set_terminal.c	\

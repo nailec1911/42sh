@@ -18,6 +18,6 @@
     char *search_by_num(mysh_t *mysh, char *last_input);
     char *search_by_name(mysh_t *mysh, char *last_input);
     int file_to_tab_hist(char *filepath, history_t *history);
-
+    int init_prompt(mysh_t *mysh);
 
 #endif /* !INIT_H_ */
