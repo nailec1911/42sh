@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
+#include "builtins/vars.h"
 #include "mysh.h"
 #include "launch_command.h"
 #include "builtins/env.h"
@@ -50,6 +51,7 @@ int loop_sh(mysh_t *mysh, char *input)
 
 static int init_all(mysh_t *mysh, char * const env[])
 {
+    mysh->vars = 0;
     if (isatty(0) == 1)
         mysh->tty = true;
     if ((mysh->env = init_mysh_env(env)) == NULL)
@@ -58,6 +60,18 @@ static int init_all(mysh_t *mysh, char * const env[])
         return ERROR;
     if (init_alias(&mysh->alias, mysh->env) == ERROR)
         return ERROR;
+    return SUCCESS;
+}
+
+static int destroy_all(mysh_t *mysh)
+{
+    free_env(mysh);
+    vars_t *vars = mysh->vars;
+    while (vars) {
+        vars_t *tmp = vars->next;
+        free_global_var(vars);
+        vars = tmp;
+    }
     return SUCCESS;
 }
 
@@ -81,6 +95,6 @@ int mysh(char * const env[])
         fprintf(stdout, "exit\n");
     if (res == ERROR)
         return ERROR;
-    free_env(&mysh);
+    destroy_all(&mysh);
     return mysh.to_return;
 }
