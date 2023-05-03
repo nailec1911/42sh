@@ -21,9 +21,11 @@ char *remake_command(char **tab)
     }
     final_input = strdup(tab[2]);
     for (; tab[i] != NULL; i += 1) {
-        temp = my_strcat_dup(final_input, " ");
+        if ((temp = my_strcat_dup(final_input, " ")) == NULL)
+            return NULL;
         free(final_input);
-        final_input = my_strcat_dup(temp, tab[i]);
+        if ((final_input = my_strcat_dup(temp, tab[i])) == NULL)
+            return NULL;
         free(temp);
     }
     return final_input;
@@ -34,8 +36,10 @@ char *clean_last_input(char **tab_alias)
     char *to_free = NULL;
     char *res = NULL;
 
-    to_free = remake_command(tab_alias);
-    res = my_strcat_dup(to_free, "\n");
+    if ((to_free = remake_command(tab_alias)) == NULL)
+        return NULL;
+    if ((res = my_strcat_dup(to_free, "\n")) == NULL)
+        return NULL;
     free(to_free);
     return res;
 }

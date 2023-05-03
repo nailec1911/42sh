@@ -33,7 +33,7 @@ SRC	=	mysh.c		\
 		exec_command/loop_command.c		\
 		exec_command/magic_quote/set_magic_quote.c		\
 		exec_command/magic_quote/get_res_command.c		\
-		exec_command/magic_quote/set_new_tab.c		\
+		exec_command/magic_quote/file_stream_to_tab.c		\
 		exec_command/exec_parenthesis/exec_parenthesis.c	\
 		exec_command/exec_pipes.c	\
 		exec_command/exec_command.c		\
@@ -49,8 +49,13 @@ SRC	=	mysh.c		\
 		str_func/free_array.c		\
 		str_func/str_is_alphanum.c	\
 		str_func/input_to_array.c	\
+		str_func/my_strstrlen.c	\
+		str_func/insert_array_in_array.c	\
 		user_input/arrows_func.c	\
+		user_input/prompt.c	\
 		user_input/get_input_line.c	\
+		user_input/change_target_tab.c	\
+		user_input/manage_enter_function.c	\
 		user_input/get_input.c	\
 		user_input/tab_function.c	\
 		user_input/set_terminal.c	\
@@ -69,6 +74,7 @@ SRC	=	mysh.c		\
 		builtins/history/builtins_history.c\
 		builtins/history/load_file_history.c\
 		builtins/history/clean_str.c\
+		builtins/history/search_env_var.c\
 		builtins/history/add_elem_tab.c\
 		builtins/history/combine_flags.c\
 		builtins/history/check_last_command.c\
@@ -80,7 +86,6 @@ SRC	=	mysh.c		\
 		builtins/history/word_array/nbr_word_separator.c\
 		builtins/history/num_to_str.c\
 		builtins/history/file_to_tab.c\
-		str_func/my_strstrlen.c	\
 		builtins/cd/cd.c				\
 		builtins/cd/get_path_to_go.c 	\
 		builtins/env/setenv.c			\
@@ -90,7 +95,11 @@ SRC	=	mysh.c		\
 		builtins/env/init_mysh_env.c	\
 		builtins/env/free_env.c		\
 		builtins/env/env.c			\
-		builtins/exit.c
+		builtins/exit.c				\
+		builtins/vars/vars.c		\
+		builtins/vars/set_var.c 	\
+		builtins/vars/vars_utils.c 	\
+		builtins/vars/unset_var.c 	\
 
 SRC_MAIN	=	src/main.c
 

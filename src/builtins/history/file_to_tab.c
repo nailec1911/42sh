@@ -68,13 +68,13 @@ static char **fill_tab_from_file(FILE *stream, int nb_line)
     char **tab = NULL;
     char *line = NULL;
     size_t len = 0;
-
     if ((tab = malloc(sizeof(char *) * (nb_line + 1))) == NULL)
         return NULL;
     tab[nb_line] = NULL;
     while (getline(&line, &len, stream) != -1) {
         if (check_syntaxe(line) == ERROR) {
             free(line);
+            free(tab);
             return NULL;
         }
         tab[i] = strdup(line);
@@ -94,10 +94,14 @@ char **file_to_tab(char *filepath)
 
     if (nb_line == -1)
         return NULL;
-    stream = fopen(filepath, "r");
-    tab = fill_tab_from_file(stream, nb_line);
-    if (tab == NULL)
+    if ((stream = fopen(filepath, "r")) == NULL)
         return NULL;
+    tab = fill_tab_from_file(stream, nb_line);
+    if (tab == NULL) {
+        printf("Wrong syntaxe : None alias will be saved during \
+this session\n");
+        return NULL;
+    }
     fclose(stream);
     return tab;
 }
