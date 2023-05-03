@@ -15,6 +15,8 @@
         int length_word;
         int ind_space;
         bool display;
+        int count;
+        int color;
         char *path;
         char **names;
         int index;
