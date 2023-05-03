@@ -35,6 +35,7 @@
     typedef struct command_s {
         int nb_command;
         char **args;
+        char *path;
         bool is_builtin;
         int fd_in;
         int fd_out;

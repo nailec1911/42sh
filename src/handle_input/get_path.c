@@ -12,6 +12,7 @@
 #include "builtins/env.h"
 #include "str_func.h"
 #include "macro_errors.h"
+#include "exec_command.h"
 
 static int is_absolute_path(char *path)
 {

@@ -9,6 +9,7 @@
 #include <criterion/redirect.h>
 #include "macro_errors.h"
 #include <stdio.h>
+
 int mysh(char * const env[]);
 
 Test(mysh1, simple_command_with_path){

@@ -101,12 +101,15 @@ char *get_input(mysh_t mysh)
     int length = 0;
     char *line = malloc(sizeof(char) * 1024);
 
-    for (int i = 0; i < 1024; i += 1)
-        line[i] = '\0';
+    memset(line, 1024, '0');
     set_terminal(&old_term, &term);
-    while (read(STDIN_FILENO, &mysh.ch, 1) > 0 && mysh.ch != 10)
+    mysh.ch = 0;
+    int bytes_read = read(STDIN_FILENO, &mysh.ch, 1);
+    while (bytes_read > 0 && mysh.ch != 10) {
         if ((line = ch_functions(&mysh, &index, &length, line)) == NULL)
             return NULL;
+        bytes_read = read(STDIN_FILENO, &mysh.ch, 1);
+    }
     printf("\n");
     line[strlen(line)] = '\n';
     tcsetattr(STDIN_FILENO, TCSANOW, &old_term);

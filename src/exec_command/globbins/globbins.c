@@ -88,7 +88,7 @@ int update_glob_argv(and_command_t *cmd)
         if (!new_argv)
             continue;
         free_array(cur_cmd->args);
-        cur_cmd->args= new_argv;
+        cur_cmd->args = new_argv;
         cur_cmd->nb_command = size;
         size = 0;
     }

@@ -36,7 +36,7 @@ int loop_sh(mysh_t *mysh, char *input)
 {
     int res = 0;
 
-    loopkup_job(mysh->list, &mysh->nb_current_job);
+    mysh->list = lookup_job(mysh->list, &mysh->nb_current_job);
     mysh->to_return = mysh->last_status;
     mysh->last_status = 0;
     if (input[0] == '\n')
@@ -87,7 +87,7 @@ int mysh(char * const env[])
     if (init_all(&mysh, env) == ERROR)
         return ERROR;
     while (res == 0) {
-        if (mysh.tty)
+        if (isatty(mysh.shell_descriptor))
             write(1, ":)  ", 3);
         if ((input = choose_get_line(mysh)) == NULL) {
             res = EXIT;

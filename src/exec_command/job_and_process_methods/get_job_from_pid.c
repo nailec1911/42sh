@@ -1,13 +1,16 @@
 /*
 ** EPITECH PROJECT, 2023
-** exec_command
+** 42sh
 ** File description:
-** get_job_id
+** get_job_from_pid
 */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "job_control.h"
+#include "parser/ast.h"
 
-static int get_job_id_loop(and_command_t *job, pid_t pid)
+static int get_job_loop(and_command_t *job, pid_t pid)
 {
     for (int i = 0; i < job->nb_command; ++i) {
         if (job->tab_command[i].pid == pid)
@@ -16,14 +19,14 @@ static int get_job_id_loop(and_command_t *job, pid_t pid)
     return -1;
 }
 
-int get_job_id(job_list *list, pid_t pid)
+and_command_t *get_job_from_pid(job_list *list, pid_t pid)
 {
     int id = -1;
 
     for (job_list *tmp = list; tmp; tmp = tmp->next) {
-        if ((id = get_job_id_loop(tmp->job, pid)) != -1)
-            return id;
+        if ((id = get_job_loop(tmp->job, pid)) != -1)
+            return tmp->job;
     }
 
-    return -1;
+    return NULL;
 }

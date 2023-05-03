@@ -19,30 +19,21 @@
 #include "macro_errors.h"
 #include "parser/ast.h"
 
-void display_job_status(and_command_t *job)
-{
-    if (job_is_completed(job)) {
-        printf("[%d] Done\n", job->job_id);
-        for (int i = 0; i < job->nb_command; ++i) {
-            printf("%s", job->tab_command[i].args[0]);
-            if (i + 1 < job->nb_command)
-                printf(" | ");
-        }
-        printf("\n");
-    }
-}
-
 int wait_job(job_list *list, and_command_t *job)
 {
     int status;
+    int res = 0;
     pid_t pid;
     short count = 0;
 
     do {
-        pid = waitpid(WAIT_ANY, &status, WUNTRACED);
+        pid = waitpid(WAIT_ANY, &status, WUNTRACED);    
+        res = handle_errors(status);
         update_process_status(list, pid, status);
         count++;
     } while (count < job->nb_command);
+
+    status = (res != 0) ? res : status;
 
     return status;
 }

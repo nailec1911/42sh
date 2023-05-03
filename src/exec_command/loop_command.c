@@ -12,6 +12,18 @@
 #include "parser/ast.h"
 #include <stdlib.h>
 
+void display_list(job_list *list)
+{
+    for (job_list *tmp = list; tmp; tmp = tmp->next) {
+        printf("[id : %d ", tmp->job->job_id);
+        for (int i = 0; i < tmp->job->nb_command; ++i) {
+            printf("args : %s", tmp->job->tab_command[i].args[0]);
+        }
+        printf("]->");
+    }
+    printf("\n");
+}
+
 static int loop_and_command(mysh_t *mysh, or_command_t *or_command)
 {
     int res = 0;

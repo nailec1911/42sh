@@ -15,23 +15,6 @@
 #include "macro_errors.h"
 #include "exec_command.h"
 
-static void display_error_exec(int error_code, char *path)
-{
-    if (error_code == 8) {
-        fprintf(stderr, "%s: Exec format error. Wrong Architecture.\n", path);
-        return;
-    }
-    if (error_code == 20) {
-        fprintf(stderr, "%s: Not a directory.\n", path);
-        return;
-    }
-    if (error_code == 13) {
-        fprintf(stderr, "%s: Permission denied.\n", path);
-        return;
-    }
-    perror(path);
-}
-
 static void parent_fork(mysh_t *mysh, int cpid, command_t command)
 {
     int status = 0;
@@ -70,7 +53,7 @@ int exec_command(mysh_t *mysh, command_t to_exec)
 
     if ((res = exec_builtins(mysh, to_exec)) != FAILURE)
         return res;
-    if ((res = get_path(mysh, &(to_exec.args[0]))) == ERROR)
+    if ((res = get_path(mysh, &(to_exec.args[0]), to_exec)) == ERROR)
         return ERROR;
     if (res != SUCCESS) {
         fprintf(stderr, "%s: Command not found.\n", to_exec.args[0]);

@@ -80,7 +80,7 @@ static int add_elt_in_tab(parser_t *parser, command_t *command)
 
 command_t get_command(parser_t *parser)
 {
-    command_t new = {0, NULL, false, STDIN_FILENO, STDOUT_FILENO,
+    command_t new = {0, NULL, NULL, false, STDIN_FILENO, STDOUT_FILENO,
     false, {NO_REDIRECT, NULL}, {NO_REDIRECT, NULL}, 0, 0};
 
     while (IS_REDIRECT(parser->list_tokens[parser->cursor].type)

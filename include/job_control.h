@@ -15,45 +15,6 @@
     #include <stdlib.h>
 
     #define MAX_JOBS 1000
-    /*
-    typedef enum status {
-        RUNNING,
-        DONE,
-        SUSPENDED,
-        CONTINUED,
-        TERMINATED
-    } status;
-
-    typedef enum mode {
-        FOREGROUND,
-        BACKGROUND
-    } mode;
-
-    typedef struct process {
-        char **     args;
-        redirect_t  redirect_in;
-        redirect_t  redirect_out;
-        int         fd_in;
-        int         fd_out;
-        pid_t       pid;
-        bool        is_builtin;
-        status      process_state;
-        struct      process *next;
-    } process;
-
-    typedef struct job {
-        int     job_id;
-        pid_t   pgid;
-        mode    job_mode;
-        process *head;
-        struct  job *next;
-    } job;
-
-    job *add_job(job *j, and_command_t *command_tab, int job_id);
-    process *add_process(process *p, command_t *command);
-    int exec_job(job *j);
-    int wait_job(job *j);
-    */
 
     typedef struct job_list {
         struct job_list *next;
@@ -71,10 +32,11 @@
     int get_job_id(job_list *list, pid_t pid);
     job_list *remove_job_from_list(job_list *list, pid_t pid);
     void display_job_status(and_command_t *job);
+    void display_background(and_command_t *job);
     bool job_is_stoped(and_command_t *job);
     bool job_is_completed(and_command_t *job);
     int update_process_status(job_list *list, pid_t pid, int status);
-    void loopkup_job(job_list *list, int *nb_job);
+    job_list *lookup_job(job_list *list, int *nb_job);
 
     // stack
     job_stack *init_stack(job_stack *stack);
@@ -86,5 +48,6 @@
     bool job_is_completed(and_command_t *job);
     bool job_is_stoped(and_command_t *job);
     and_command_t *get_job_from_id(job_list *list, int job_id);
+    and_command_t *get_job_from_pid(job_list *list, pid_t pid);
 
 #endif /* JOB_CONTROL_H_ */
