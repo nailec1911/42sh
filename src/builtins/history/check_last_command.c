@@ -13,12 +13,12 @@
 #include <time.h>
 #include "str_func.h"
 
-void write_in_file(tab_hist_t **tab, FILE *fd, bool have_file)
+void write_in_file(tab_hist_t **tab, int fd, bool have_file)
 {
     if (have_file == false)
         return;
     for (int i = 0; tab[i] != NULL; i += 1) {
-        fprintf(fd, "%s  %s   %s", tab[i]->num, tab[i]->time, tab[i]->command);
+        dprintf(fd, "%s  %s   %s", tab[i]->num, tab[i]->time, tab[i]->command);
     }
 }
 
@@ -36,7 +36,7 @@ int replace_last_line(history_t *history, char *input)
     history->tab_hist[l_tab - 1]->num == NULL ||
     history->tab_hist[l_tab - 1]->time == NULL)
         return ERROR;
-    write_in_file(history->tab_hist, history->fd_file, history->have_hist);
+    write_in_file(history->tab_hist, history->fd_history_file, history->have_hist);
     return SUCCESS;
 }
 
@@ -45,7 +45,7 @@ int add_line(history_t *history, char *input)
     if (add_elem_tab(history, input,
     history->num_cmd) == ERROR)
         return ERROR;
-    write_in_file(history->tab_hist, history->fd_file, history->have_hist);
+    write_in_file(history->tab_hist, history->fd_history_file, history->have_hist);
     return SUCCESS;
 }
 
@@ -74,7 +74,7 @@ int check_last_command(history_t *history, char *input)
             return ERROR;
         history->tab_hist[1] = NULL;
         history->len_tab_hist = 1;
-        write_in_file(history->tab_hist, history->fd_file, history->have_hist);
+        write_in_file(history->tab_hist, history->fd_history_file, history->have_hist);
     } else {
         return add_line_history(history, input);
     }

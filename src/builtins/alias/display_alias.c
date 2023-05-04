@@ -14,14 +14,14 @@ int display_alias(alias_t alias, int fd, char **command)
 {
     int l_tab = 0;
 
-    if (command[1] == NULL) {
-        if (alias.tab_file == NULL)
-            return SUCCESS;
-        l_tab = length_tab(alias.tab_file) - 1;
-        for (; l_tab >= 0; l_tab -= 1) {
-            dprintf(fd, "%s", alias.tab_file[l_tab]);
-        }
+    if (command[1] != NULL) {
+        return FAILURE;
+    }
+    if (alias.tab_file == NULL)
         return SUCCESS;
+    l_tab = length_tab(alias.tab_file) - 1;
+    for (; l_tab >= 0; l_tab -= 1) {
+        dprintf(fd, "%s", alias.tab_file[l_tab]);
     }
     return FAILURE;
 }
