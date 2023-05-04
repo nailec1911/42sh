@@ -82,6 +82,7 @@ void display_completion(mysh_t *mysh, char **line, int *length)
     strlen(&(*line)[mysh->completion.ind_space]);
     display_spaces_comp(mysh, count);
     printf("\033[u");
+    printf("\033[s");
     if (mysh->first_tab)
         for (int k = mysh->completion.ind_space; k < *length; k += 1)
             printf("\033[C");
