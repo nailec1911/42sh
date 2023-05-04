@@ -4,6 +4,7 @@
 ** File description:
 ** main
 */
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,17 +39,19 @@ static int add_alias_rc(alias_t *alias, char *input)
 int do_alias(mysh_t *mysh, command_t to_exec)
 {
     char *command = NULL;
-
-    if (display_alias(mysh->alias, to_exec.fd_out, to_exec.command) == SUCCESS)
-        return SUCCESS;
-    if (to_exec.command[2] == NULL) {
+    if (to_exec.args[1] == NULL) {
+        if (mysh->alias.tab_file == NULL)
+            return SUCCESS;
+        return display_alias(mysh->alias, to_exec.fd_out);
+    }
+    if (to_exec.args[2] == NULL) {
         if (mysh->alias.tab_file == NULL)
             return SUCCESS;
         return display_specific_alias
-        (mysh->alias, to_exec.command[1], to_exec.fd_out);
+        (mysh->alias, to_exec.args[1], to_exec.fd_out);
     } else {
-        command = remake_input(to_exec.command);
-        if (add_alias_rc(&mysh->alias, command) == ERROR) {
+        command = remake_input(to_exec.args);
+        if (add_alias_rc(mysh, command) == ERROR) {
             mysh->last_status = 1;
             return ERROR;
         }

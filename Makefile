@@ -39,6 +39,22 @@ SRC	=	mysh.c		\
 		exec_command/exec_command.c		\
 		exec_command/exec_builtins.c	\
 		exec_command/handle_errors.c	\
+		exec_command/wait_job.c	\
+		exec_command/display_error_exec.c	\
+		exec_command/job_and_process_methods/add_job_to_list.c 		\
+		exec_command/job_and_process_methods/init_stack.c 		\
+		exec_command/job_and_process_methods/is_empty.c 		\
+		exec_command/job_and_process_methods/is_full.c 		\
+		exec_command/job_and_process_methods/pop.c 		\
+		exec_command/job_and_process_methods/push.c 		\
+		exec_command/job_and_process_methods/remove_job_from_list.c 	\
+		exec_command/job_and_process_methods/get_job_from_id.c 	\
+		exec_command/job_and_process_methods/get_job_id.c 		\
+		exec_command/job_and_process_methods/update_process_status.c 		\
+		exec_command/job_and_process_methods/get_job_status.c 		\
+		exec_command/job_and_process_methods/get_job_from_pid.c 		\
+		exec_command/job_and_process_methods/display_job.c 		\
+		exec_command/exec_job.c 							\
 		str_func/is_in.c			\
 		str_func/is_num.c			\
 		str_func/my_strlen.c			\

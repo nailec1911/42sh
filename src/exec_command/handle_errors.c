@@ -18,7 +18,7 @@ int handle_errors(int status)
         if (WTERMSIG(status) == SIGFPE)
             fprintf(stderr, "Floating exception");
         else
-            fprintf(stderr, strsignal(WTERMSIG(status)));
+            fprintf(stderr, "%s", strsignal(WTERMSIG(status)));
         if (WCOREDUMP(status))
             fprintf(stderr, " (core dumped)");
         fprintf(stderr, "\n");

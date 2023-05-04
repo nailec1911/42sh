@@ -46,13 +46,13 @@ int do_unsetenv(mysh_t *mysh, command_t to_exec)
 {
     int idx = 0;
 
-    if (to_exec.command[1] == NULL) {
+    if (to_exec.args[1] == NULL) {
         fprintf(stderr, "unsetenv: Too few arguments.\n");
         mysh->last_status = 1;
         return SUCCESS;
     }
-    for (int i = 1; to_exec.command[i] != NULL; i += 1) {
-        idx = get_var_idx(mysh->env, to_exec.command[i]);
+    for (int i = 1; to_exec.args[i] != NULL; i += 1) {
+        idx = get_var_idx(mysh->env, to_exec.args[i]);
         if (idx != -1)
             mysh->env = remove_from_env(mysh->env, idx);
     }
