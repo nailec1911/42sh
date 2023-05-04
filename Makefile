@@ -8,6 +8,7 @@
 SOURCE_DIR	=	src/
 
 SRC	=	mysh.c		\
+		loop_sh.c 	\
 		handle_input/handle_input.c			\
 		handle_input/error_in_token_list.c			\
 		handle_input/tokens_to_history.c			\

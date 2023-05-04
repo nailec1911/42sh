@@ -27,7 +27,7 @@ void check_error(parser_t *parser, command_t new)
         fprintf(stderr, "Badly placed ()'s.\n");
         return;
     }
-    if (new.args== NULL && new.is_ast == false) {
+    if (new.args == NULL && new.is_ast == false) {
         parser->error = 1;
         fprintf(stderr, "Invalid null command.\n");
         return;

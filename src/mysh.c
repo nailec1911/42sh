@@ -32,24 +32,6 @@ static char *choose_get_line(mysh_t mysh)
     return input;
 }
 
-int loop_sh(mysh_t *mysh, char *input)
-{
-    int res = 0;
-
-    mysh->list = lookup_job(mysh->list, &mysh->nb_current_job);
-    mysh->to_return = mysh->last_status;
-    mysh->last_status = 0;
-    if (input[0] == '\n')
-        return SUCCESS;
-    if ((res = handle_input(mysh, input)) == ERROR)
-        return ERROR;
-    if (res != SUCCESS)
-        return SUCCESS;
-    if ((res = loop_grocommand(mysh, &(mysh->ast))) == ERROR)
-        return ERROR;
-    return res;
-}
-
 static void set_main_process(mysh_t *mysh)
 {
     mysh->tty = true;
@@ -100,8 +82,6 @@ int mysh(char * const env[])
     while (res == 0) {
         if (init_prompt(&mysh) == ERROR)
             return ERROR;
-        if (isatty(mysh.shell_descriptor))
-            write(1, ":)  ", 3);
         if ((input = choose_get_line(mysh)) == NULL) {
             res = EXIT;
             break;

@@ -43,4 +43,6 @@
     //job control
     int exec_job(mysh_t *mysh, and_command_t *job);
 
+    int loop_sh(mysh_t *mysh, char *input);
+
 #endif /* !MYSH_H_ */
