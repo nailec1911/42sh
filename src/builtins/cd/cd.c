@@ -14,7 +14,7 @@
 #include "mysh.h"
 #include "str_func.h"
 #include "macro_errors.h"
-char *get_path_to_go(mysh_t *mysh);
+#include "builtins/cd.h"
 
 static int update_env_var(char *old_pwd, mysh_t *mysh)
 {
@@ -53,10 +53,9 @@ static void display_error_chdir(int error_code, char *path)
 
 int do_cd(mysh_t *mysh, command_t to_exec)
 {
-    char *path = get_path_to_go(mysh);
+    char *path = get_path_to_go(mysh, to_exec);
     char *old_pwd = NULL;
-    (void)to_exec;
-    if (mysh->command[1] != NULL && mysh->command[2] != NULL) {
+    if (to_exec.args[1] != NULL && to_exec.args[2] != NULL) {
         fprintf(stderr, "cd: Too many arguments.\n");
         mysh->last_status = 1;
         return SUCCESS;
@@ -66,7 +65,7 @@ int do_cd(mysh_t *mysh, command_t to_exec)
     if ((old_pwd = getcwd(old_pwd, 0)) == NULL)
         return ERROR;
     if (chdir(path) == -1) {
-        display_error_chdir(errno, mysh->command[1]);
+        display_error_chdir(errno, to_exec.args[1]);
         mysh->last_status = 1;
         free(old_pwd);
         return SUCCESS;

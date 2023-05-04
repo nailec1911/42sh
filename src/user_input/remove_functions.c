@@ -69,7 +69,7 @@ char *suppr_function(int *index, int *length, char *line)
         memmove(&line[*index], &line[*index + 1], *length - *index);
         *length -= 1;
         for (int i = res; i <= *length; i += 1)
-        printf("\033[C");
+            printf("\033[C");
         for (int k = 0; k <= *length; k += 1)
             printf("\b \b");
         printf("%s", line);

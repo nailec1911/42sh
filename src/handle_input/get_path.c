@@ -12,6 +12,7 @@
 #include "builtins/env.h"
 #include "str_func.h"
 #include "macro_errors.h"
+#include "exec_command.h"
 
 static int is_absolute_path(char *path)
 {
@@ -40,16 +41,16 @@ static int try_all_paths(char **all_prefixes, char **path)
     return FAILURE;
 }
 
-int get_path(mysh_t *mysh, char **path)
+int get_path(mysh_t *mysh, char **path, command_t to_exec)
 {
     char *env_path = NULL;
     char **all_prefix = NULL;
     int res_all_try = 0;
 
-    if ((*path = strdup(mysh->command[0])) == NULL)
+    if ((*path = strdup(to_exec.args[0])) == NULL)
         return ERROR;
     if (is_absolute_path(*path) == SUCCESS) {
-        if (access(mysh->command[0], F_OK) == 0)
+        if (access(to_exec.args[0], F_OK) == 0)
             return SUCCESS;
         return FAILURE;
     }

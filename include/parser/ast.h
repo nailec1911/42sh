@@ -9,6 +9,7 @@
     #define AST_H_
 
     #include <stdbool.h>
+    #include <unistd.h>
     #include "parser/token.h"
 
     #define NO_REDIRECT 0
@@ -18,33 +19,51 @@
         char *name;
     } redirect_t;
 
+    typedef enum status {
+        RUNNING,
+        DONE,
+        SUSPENDED,
+        CONTINUED,
+        TERMINATED
+    } status;
+
+    typedef enum mode {
+        FOREGROUND,
+        BACKGROUND
+    } mode;
+
     typedef struct command_s {
         bool is_ast;
         struct ast_s *parenthesis;
         int nb_command;
-        char **command;
-        char *to_exec;
+        char **args;
+        char *path;
         bool is_builtin;
         int fd_in;
         int fd_out;
         bool is_last;
         redirect_t redirect_in;
         redirect_t redirect_out;
+        pid_t pid;
+        status process_state;
     } command_t;
 
     typedef struct and_command_s {
+        mode job_mode;
         int nb_command;
         command_t *tab_command;
+        int job_id;
+        pid_t pgid;
     } and_command_t;
 
     typedef struct or_command_s {
-        int nb_command;
-        and_command_t *tab_command;
+        int nb_and_command;
+        and_command_t *tab_and_command;
     } or_command_t;
 
     typedef struct grocommand_s {
-        int nb_command;
-        or_command_t *tab_command;
+        int nb_or_command;
+        or_command_t *tab_or_command;
     } grocommand_t;
 
     typedef struct ast_s {

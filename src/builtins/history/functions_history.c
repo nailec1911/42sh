@@ -51,7 +51,7 @@ static char *set_all_fd(history_t *history)
     if ((path = get_path_home(HISTORY_FILE)) == NULL)
         return NULL;
     if ((history->fd_history_file = open(path, O_CREAT |
-    O_APPEND | O_RDWR, S_IRWXU)) == -1)
+    O_APPEND | O_RDWR, 0644)) == -1)
         return NULL;
     return path;
 }

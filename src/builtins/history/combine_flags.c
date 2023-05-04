@@ -29,8 +29,8 @@ int compare_char(char **command, int i, history_t *history)
 
 int detect_flags(command_t *to_exec, history_t *history)
 {
-    for (int i = 1; to_exec->command[i] != NULL; i += 1) {
-        if (compare_char(to_exec->command, i, history) == ERROR)
+    for (int i = 1; to_exec->args[i] != NULL; i += 1) {
+        if (compare_char(to_exec->args, i, history) == ERROR)
             return ERROR;
     }
     return SUCCESS;

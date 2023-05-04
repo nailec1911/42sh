@@ -25,14 +25,14 @@ Test(unit_globings1, star_in_arg){
     cr_assert_eq(get_ast(&(mysh), input), SUCCESS);
     cr_assert_eq(mysh.last_status, 0);
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
-    cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
-    cr_assert_eq(mysh.ast.tab_grocommands[0].tab_command[0].nb_command, 1);
+    cr_assert_eq(mysh.ast.tab_grocommands[0].nb_or_command, 1);
+    cr_assert_eq(mysh.ast.tab_grocommands[0].tab_or_command[0].nb_and_command, 1);
 
-    and_command_t *cmd = &(mysh.ast.tab_grocommands[0].tab_command[0].tab_command[0]);
+    and_command_t *cmd = &(mysh.ast.tab_grocommands[0].tab_or_command[0].tab_and_command[0]);
     cr_assert_eq(cmd->nb_command, 1);
     update_glob_argv(cmd);
     cr_assert_eq(cmd->tab_command[0].nb_command, 3);
-    char **args = cmd->tab_command[0].command;
+    char **args = cmd->tab_command[0].args;
 
     cr_assert_str_eq(args[0], "./disp_args");
     cr_assert_str_eq(args[1], "test_full_sh.c");
@@ -49,14 +49,14 @@ Test(unit_globings2, question_mark){
     cr_assert_eq(get_ast(&mysh, input), SUCCESS);
     cr_assert_eq(mysh.last_status, 0);
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
-    cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
-    cr_assert_eq(mysh.ast.tab_grocommands[0].tab_command[0].nb_command, 1);
+    cr_assert_eq(mysh.ast.tab_grocommands[0].nb_or_command, 1);
+    cr_assert_eq(mysh.ast.tab_grocommands[0].tab_or_command[0].nb_and_command, 1);
 
-    and_command_t *cmd = &(mysh.ast.tab_grocommands[0].tab_command[0].tab_command[0]);
+    and_command_t *cmd = &(mysh.ast.tab_grocommands[0].tab_or_command[0].tab_and_command[0]);
     cr_assert_eq(cmd->nb_command, 1);
     update_glob_argv(cmd);
     cr_assert_eq(cmd->tab_command[0].nb_command, 3);
-    char **args = cmd->tab_command[0].command;
+    char **args = cmd->tab_command[0].args;
 
     cr_assert_str_eq(args[0], "./disp_args");
     cr_assert_str_eq(args[1], "hello2world");
@@ -73,14 +73,14 @@ Test(unit_globings3, brackets){
     cr_assert_eq(get_ast(&mysh, input), SUCCESS);
     cr_assert_eq(mysh.last_status, 0);
     cr_assert_eq(mysh.ast.nb_grocommand, 1);
-    cr_assert_eq(mysh.ast.tab_grocommands[0].nb_command, 1);
-    cr_assert_eq(mysh.ast.tab_grocommands[0].tab_command[0].nb_command, 1);
+    cr_assert_eq(mysh.ast.tab_grocommands[0].nb_or_command, 1);
+    cr_assert_eq(mysh.ast.tab_grocommands[0].tab_or_command[0].nb_and_command, 1);
 
-    and_command_t *cmd = &(mysh.ast.tab_grocommands[0].tab_command[0].tab_command[0]);
+    and_command_t *cmd = &(mysh.ast.tab_grocommands[0].tab_or_command[0].tab_and_command[0]);
     cr_assert_eq(cmd->nb_command, 1);
     update_glob_argv(cmd);
     cr_assert_eq(cmd->tab_command[0].nb_command, 4);
-    char **args = cmd->tab_command[0].command;
+    char **args = cmd->tab_command[0].args;
 
     cr_assert_str_eq(args[0], "./disp_args");
     cr_assert_str_eq(args[1], "t1");

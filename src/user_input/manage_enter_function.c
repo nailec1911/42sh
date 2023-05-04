@@ -6,6 +6,7 @@
 */
 
 #include "mysh.h"
+#include "str_func.h"
 
 void manage_enter_function(mysh_t *mysh)
 {
@@ -13,6 +14,7 @@ void manage_enter_function(mysh_t *mysh)
         mysh->enter = true;
         return;
     }
+    free_array(mysh->completion.names);
     mysh->completion.display = false;
     printf("\033[0J");
     mysh->completion.index = -1;

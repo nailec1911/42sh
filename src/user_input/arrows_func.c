@@ -20,6 +20,7 @@ void arrow_function(int *index, int *length, char **line, mysh_t *mysh)
         mysh->completion.display = false;
         printf("\033[0J");
         mysh->completion.index = -1;
+        free_array(mysh->completion.names);
     }
     read(STDIN_FILENO, &mysh->ch, 1);
     if (mysh->ch == BRACKET) {

@@ -35,18 +35,18 @@ static int check_syntaxe(char **tab)
     char **tab_time = NULL;
     if ((tab_time = my_str_to_word_array_separator(tab[1], ":")) == NULL)
         return ERROR;
-    if ((atoi(tab_time[0]) < 0 || atoi(tab_time[0]) > 23) ||
-    (atoi(tab_time[1]) < 0 || atoi(tab_time[1]) > 59))
-        return ERROR;
-    if (strlen(tab[1]) != 5) {
-        free_array(tab_time);
-        return ERROR;
-    }
-    if (!is_num_space(tab[0])) {
+    if (length_tab(tab_time) < 2 || !is_num_space(tab[0])) {
         free_array(tab_time);
         return ERROR;
     }
     if (!is_num_colon(tab[1])) {
+        free_array(tab_time);
+        return ERROR;
+    }
+    if ((atoi(tab_time[0]) < 0 || atoi(tab_time[0]) > 23) ||
+    (atoi(tab_time[1]) < 0 || atoi(tab_time[1]) > 59))
+        return ERROR;
+    if (strlen(tab[1]) != 5) {
         free_array(tab_time);
         return ERROR;
     }

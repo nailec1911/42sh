@@ -16,6 +16,7 @@
 void arrow_function(int *index, int *length, char **line, mysh_t *mysh);
 void right_arrow_function(int *index, int length);
 void left_arrow_function(int *index);
+char *ctrl_d_function(mysh_t *mysh);
 void manage_enter_function(mysh_t *mysh);
 void manage_tab_function(int *length, int *index, char **line, mysh_t *mysh);
 void set_terminal(struct termios *o_term, struct termios *term, mysh_t *mysh);
@@ -26,11 +27,11 @@ static char *fill_string(char *line, mysh_t *mysh, int *index, int *length)
 {
     int res = *index;
     int temp = res;
-
     if (mysh->completion.display) {
         mysh->completion.display = false;
         printf("\033[0J");
         mysh->completion.index = -1;
+        free_array(mysh->completion.names);
     }
     memmove(&line[*index + 1], &line[*index], *length - *index);
     line[*index] = mysh->ch;
@@ -90,7 +91,7 @@ static char *ch_functions(mysh_t *mysh, int *index, int *length, char *line)
             arrow_function(index, length, &line, mysh);
             break;
         case CTRL_D:
-            return NULL;
+            return ctrl_d_function(mysh);
         case DELETE:
             backward_function(mysh, length, index, &line);
             break;
@@ -115,9 +116,9 @@ char *get_input(mysh_t mysh)
     int length = 0;
     char *line = malloc(sizeof(char) * 1024);
 
-    for (int i = 0; i < 1024; i += 1)
-        line[i] = '\0';
+    memset(line, 1024, '0');
     set_terminal(&o_term, &term, &mysh);
+    mysh.ch = 0;
     while (read(STDIN_FILENO, &mysh.ch, 1) > 0) {
         if ((line = ch_functions(&mysh, &index, &length, line)) == NULL)
             return NULL;

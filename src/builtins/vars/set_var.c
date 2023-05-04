@@ -17,7 +17,7 @@
 static int print_env(mysh_t *mysh, command_t to_exec)
 {
     vars_t *var = mysh->vars;
-    char print_r = to_exec.command[1] && strcmp(to_exec.command[1], "-r") == 0;
+    char print_r = to_exec.args[1] && strcmp(to_exec.args[1], "-r") == 0;
 
     for (; var; var = var->next) {
         if ((print_r && !var->read_only) || (!print_r && var->read_only))
@@ -95,7 +95,7 @@ static char **recreate_args(char **args)
 
 int do_setvar(mysh_t *mysh, command_t to_exec)
 {
-    char **new_args = recreate_args(to_exec.command);
+    char **new_args = recreate_args(to_exec.args);
 
     if (!new_args)
         return FAILURE;

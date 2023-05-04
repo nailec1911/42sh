@@ -12,6 +12,7 @@
 #include <signal.h>
 #include "builtins/vars.h"
 #include "mysh.h"
+#include "job_control.h"
 #include "launch_command.h"
 #include "builtins/env.h"
 #include "str_func.h"
@@ -31,33 +32,30 @@ static char *choose_get_line(mysh_t mysh)
     return input;
 }
 
-int loop_sh(mysh_t *mysh, char *input)
+static void set_main_process(mysh_t *mysh)
 {
-    int res = 0;
-
-    mysh->to_return = mysh->last_status;
-    mysh->last_status = 0;
-    if (input[0] == '\n')
-        return SUCCESS;
-    if ((res = handle_input(mysh, input)) == ERROR)
-        return ERROR;
-    if (res != SUCCESS)
-        return SUCCESS;
-    if ((res = loop_grocommand(mysh, &(mysh->ast))) == ERROR)
-        return ERROR;
-    free_ast(mysh->ast);
-    return res;
+    mysh->tty = true;
+    signal(SIGQUIT, SIG_IGN);
+    signal(SIGTSTP, SIG_IGN);
+    signal(SIGTTIN, SIG_IGN);
+    signal(SIGINT, SIG_IGN);
+    mysh->shell_pgid = getpid();
+    mysh->shell_descriptor = STDIN_FILENO;
+    setpgid(mysh->shell_pgid, mysh->shell_pgid);
+    tcsetpgrp(mysh->shell_descriptor, mysh->shell_pgid);
 }
 
 static int init_all(mysh_t *mysh, char * const env[])
 {
     mysh->vars = 0;
+    mysh->list = NULL;
     if (isatty(0) == 1)
         mysh->tty = true;
     mysh->completion.display = false;
     mysh->completion.index = -1;
     mysh->enter = false;
     mysh->completion.nb_lines = 0;
+    set_main_process(mysh);
     if ((mysh->env = init_mysh_env(env)) == NULL)
         return ERROR;
     if (init_history(&mysh->history) == ERROR)

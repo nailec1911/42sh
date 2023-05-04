@@ -14,6 +14,7 @@
 char *find_in_env(char **env, char *name);
 void display_spaces_comp(mysh_t *mysh, int count, int *length);
 void get_name_max_size(mysh_t *mysh);
+void parse_line(mysh_t *mysh, char **line, int *length);
 void change_target_tab(mysh_t *mysh, int *index, int *length, char **line);
 
 static int fill_tab_list(mysh_t *mysh, DIR *dir, struct dirent *ent, int length)
@@ -31,6 +32,7 @@ static int fill_tab_list(mysh_t *mysh, DIR *dir, struct dirent *ent, int length)
     mysh->completion.names[index] = NULL;
     free(mysh->completion.current);
     free(mysh->completion.path);
+    closedir(dir);
     return SUCCESS;
 }
 
@@ -47,31 +49,8 @@ static int malloc_tab_list(mysh_t *mysh)
         if (strncmp(mysh->completion.current, ent->d_name, length) == 0)
             count += 1;
     mysh->completion.names = malloc(sizeof(char *) * (count + 1));
+    closedir(dir);
     return fill_tab_list(mysh, dir, ent, length);
-}
-
-static void parse_line(mysh_t *mysh, char **line, int *length)
-{
-    int ind = *length;
-    int memo = 0;
-    int index = 0;
-    char *mid_line = NULL;
-    for (; ind > 0 && (*line)[ind - 1] != ' ' &&
-    (*line)[ind - 1] != '/'; ind -= 1);
-    memo = ind;
-    mysh->completion.ind_space = memo;
-    for (; memo > 0 && (*line)[memo - 1] != ' '; memo -= 1);
-    mid_line = malloc(sizeof(char) * (*length));
-    for (; memo < ind; memo += 1) {
-        mid_line[index] = (*line)[memo];
-        index += 1;
-    }
-    mid_line[index] = '\0';
-    mysh->completion.current =
-    malloc(sizeof(char) * strlen(&((*line)[ind])) + 1);
-    mysh->completion.current = strcpy(mysh->completion.current, &(*line)[ind]);
-    mysh->completion.path = my_strcat_dup(find_in_env(mysh->env, "PWD="), "/");
-    mysh->completion.path = my_strcat_dup(mysh->completion.path, mid_line);
 }
 
 void display_completion(mysh_t *mysh, char **line, int *length)
