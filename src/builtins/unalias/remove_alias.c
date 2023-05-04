@@ -16,9 +16,8 @@
 static void write_in_file_alias(alias_t *alias)
 {
     for (int i = 0; alias->tab_file[i] != NULL; i += 1) {
-        fprintf(alias->fd_file, "%s", alias->tab_file[i]);
+        dprintf(alias->fd_alias_file, "%s", alias->tab_file[i]);
     }
-    fflush(alias->fd_file);
 }
 
 static int nb_elem_to_remove(char **tab, char *to_find)

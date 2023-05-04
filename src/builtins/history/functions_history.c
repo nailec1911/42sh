@@ -29,7 +29,6 @@ int add_in_history(history_t *history, char *input)
     if (check_last_command(history, input) == ERROR)
         return ERROR;
     history->num_cmd += 1;
-    fflush(history->fd_file);
     return SUCCESS;
 }
 
@@ -53,8 +52,6 @@ static char *set_all_fd(history_t *history)
         return NULL;
     if ((history->fd_history_file = open(path, O_CREAT |
     O_APPEND | O_RDWR, S_IRWXU)) == -1)
-        return NULL;
-    if ((history->fd_file = fdopen(history->fd_history_file, "a+")) == NULL)
         return NULL;
     return path;
 }

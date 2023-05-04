@@ -23,16 +23,15 @@ static int add_alias_rc(alias_t *alias, char *input)
         alias->tab_file[1] = NULL;
         if (alias->have_alias == false)
             return SUCCESS;
-        fprintf(alias->fd_file, "%s", alias->tab_file[0]);
+        dprintf(alias->fd_alias_file, "%s", alias->tab_file[0]);
     } else {
         if (add_elem_tab_alias(alias, input) == ERROR)
             return ERROR;
         l_tab = length_tab(alias->tab_file);
         if (alias->have_alias == false)
             return SUCCESS;
-        fprintf(alias->fd_file, "%s", alias->tab_file[l_tab - 1]);
+        dprintf(alias->fd_alias_file, "%s", alias->tab_file[l_tab - 1]);
     }
-    fflush(alias->fd_file);
     return SUCCESS;
 }
 
