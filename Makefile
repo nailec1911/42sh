@@ -74,6 +74,8 @@ SRC	=	mysh.c		\
 		user_input/change_target_tab.c	\
 		user_input/manage_enter_function.c	\
 		user_input/get_input.c	\
+		user_input/line_parsing.c	\
+		user_input/ctrl_d_function.c	\
 		user_input/display_spaces_comp.c	\
 		user_input/tab_function.c	\
 		user_input/set_terminal.c	\
