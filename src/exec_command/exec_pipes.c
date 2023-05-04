@@ -5,11 +5,6 @@
 ** exec_pipes
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <fcntl.h>
 #include "exec_command.h"
 #include "macro_errors.h"
 #include "globbins.h"

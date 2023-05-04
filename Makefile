@@ -37,9 +37,10 @@ SRC	=	mysh.c		\
 		exec_command/magic_quote/file_stream_to_tab.c		\
 		exec_command/exec_parenthesis/exec_parenthesis.c	\
 		exec_command/exec_pipes.c	\
-		exec_command/exec_command.c		\
+		exec_command/exec_process.c	\
 		exec_command/exec_builtins.c	\
 		exec_command/handle_errors.c	\
+		exec_command/exec_job.c 		\
 		exec_command/wait_job.c	\
 		exec_command/display_error_exec.c	\
 		exec_command/job_and_process_methods/add_job_to_list.c 		\
@@ -55,7 +56,6 @@ SRC	=	mysh.c		\
 		exec_command/job_and_process_methods/get_job_status.c 		\
 		exec_command/job_and_process_methods/get_job_from_pid.c 		\
 		exec_command/job_and_process_methods/display_job.c 		\
-		exec_command/exec_job.c 							\
 		str_func/is_in.c			\
 		str_func/is_num.c			\
 		str_func/my_strlen.c			\
