@@ -36,7 +36,8 @@ int replace_last_line(history_t *history, char *input)
     history->tab_hist[l_tab - 1]->num == NULL ||
     history->tab_hist[l_tab - 1]->time == NULL)
         return ERROR;
-    write_in_file(history->tab_hist, history->fd_history_file, history->have_hist);
+    write_in_file(history->tab_hist, history->fd_history_file,
+    history->have_hist);
     return SUCCESS;
 }
 
@@ -45,7 +46,8 @@ int add_line(history_t *history, char *input)
     if (add_elem_tab(history, input,
     history->num_cmd) == ERROR)
         return ERROR;
-    write_in_file(history->tab_hist, history->fd_history_file, history->have_hist);
+    write_in_file(history->tab_hist, history->fd_history_file,
+    history->have_hist);
     return SUCCESS;
 }
 
@@ -74,7 +76,8 @@ int check_last_command(history_t *history, char *input)
             return ERROR;
         history->tab_hist[1] = NULL;
         history->len_tab_hist = 1;
-        write_in_file(history->tab_hist, history->fd_history_file, history->have_hist);
+        write_in_file(history->tab_hist, history->fd_history_file,
+        history->have_hist);
     } else {
         return add_line_history(history, input);
     }
