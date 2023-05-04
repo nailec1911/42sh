@@ -42,14 +42,14 @@ static int add_elt_in_tab(or_command_t *or_command, and_command_t new_command)
 
 static int fill_tab_command(parser_t *parser, or_command_t *or_command)
 {
-    or_command->nb_and_command= 1;
+    or_command->nb_and_command = 1;
     if (add_elt_in_tab(or_command, get_and_command(parser)) == ERROR) {
         parser->error = ERROR;
         return ERROR;
     }
     while (is_end_and_command(parser->list_tokens[parser->cursor]) == false) {
         parser->cursor += 1;
-        or_command->nb_and_command+= 1;
+        or_command->nb_and_command += 1;
         if (add_elt_in_tab(or_command, get_and_command(parser)) == ERROR)
             parser->error = ERROR;
         if (parser->error != 0)
@@ -68,8 +68,8 @@ or_command_t get_or_command(parser_t *parser)
     or_command_t or_command = {0, 0};
     int res = 0;
 
-    or_command.tab_and_command= NULL;
-    or_command.nb_and_command= 0;
+    or_command.tab_and_command = NULL;
+    or_command.nb_and_command = 0;
 
     if (( res = fill_tab_command(parser, &or_command)) == ERROR){
         parser->error = ERROR;

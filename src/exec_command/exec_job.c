@@ -96,7 +96,6 @@ int exec_job(mysh_t *mysh, and_command_t *job)
     int tube[2];
     int res = 0;
     lookup_job(mysh->list, &mysh->nb_current_job);
-    //job->job_mode = BACKGROUND;
     for (int i = 0; i < job->nb_command - 1; ++i) {
         pipe(tube);
         job->tab_command[i].fd_out = tube[1];

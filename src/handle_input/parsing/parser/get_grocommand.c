@@ -32,7 +32,7 @@ static int add_elt_in_tab(grocommand_t *grocommand, or_command_t new_command)
         grocommand->tab_or_command[i] = temp[i];
 
     grocommand->tab_or_command[grocommand->nb_or_command- 1] = new_command;
-    grocommand->tab_or_command[grocommand->nb_or_command].nb_and_command= -1;
+    grocommand->tab_or_command[grocommand->nb_or_command].nb_and_command = -1;
     if (temp != NULL)
         free(temp);
     return SUCCESS;
@@ -40,14 +40,14 @@ static int add_elt_in_tab(grocommand_t *grocommand, or_command_t new_command)
 
 static int fill_tab_command(parser_t *parser, grocommand_t *grocommand)
 {
-    grocommand->nb_or_command= 1;
+    grocommand->nb_or_command = 1;
     if (add_elt_in_tab(grocommand, get_or_command(parser)) == ERROR) {
         parser->error = ERROR;
         return ERROR;
     }
     while (is_end_grocommand(parser->list_tokens[parser->cursor]) == false) {
         parser->cursor += 1;
-        grocommand->nb_or_command+= 1;
+        grocommand->nb_or_command += 1;
         if (add_elt_in_tab(grocommand, get_or_command(parser)) == ERROR)
             parser->error = ERROR;
         if (parser->error != 0)
@@ -67,7 +67,7 @@ grocommand_t get_grocommand(parser_t *parser)
     int res = 0;
 
     grocommand.tab_or_command = NULL;
-    grocommand.nb_or_command= 0;
+    grocommand.nb_or_command = 0;
 
     if (( res = fill_tab_command(parser, &grocommand)) == ERROR){
         parser->error = ERROR;

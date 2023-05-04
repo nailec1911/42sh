@@ -39,7 +39,8 @@ static command_t *copy_cmd_tab(and_command_t *job)
     for (int i = 0; i < job->nb_command; ++i) {
         tab[i].nb_command = job->tab_command[i].nb_command;
         tab[i].pid = job->tab_command[i].pid;
-        if ((tab[i].args = copy_args(job->tab_command[i].args, job->nb_command)) == NULL)
+        if ((tab[i].args = copy_args(job->tab_command[i].args,
+        job->nb_command)) == NULL)
             return NULL;
         tab[i].path = job->tab_command[i].path;
         tab[i].fd_in = job->tab_command[i].fd_in;
@@ -57,15 +58,10 @@ static command_t *copy_cmd_tab(and_command_t *job)
 static job_list *init_list(and_command_t *job)
 {
     job_list *list = malloc(sizeof(job_list));
+    if (!list)
+        return NULL;
     list->job = job;
     list->next = NULL;
-    /*
-    list->job->pgid = job->pgid;
-    list->job->job_id = job->job_id;
-    list->job->job_mode = job->job_mode;
-    list->job->nb_command = job->nb_command;
-    list->job->tab_command = copy_cmd_tab(job);
-    */
     return list;
 }
 

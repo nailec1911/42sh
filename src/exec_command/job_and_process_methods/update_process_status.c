@@ -11,12 +11,18 @@
 
 static void set_process_status(command_t *process, int status)
 {
-    if (WIFEXITED(status))
+    if (WIFEXITED(status)) {
         process->process_state = DONE;
-    else if (WIFSTOPPED(status))
+        return;
+    }
+    if (WIFSTOPPED(status)) {
         process->process_state = SUSPENDED;
-    else if (WIFCONTINUED(status))
+        return;
+    }
+    if (WIFCONTINUED(status)) {
         process->process_state = CONTINUED;
+        return;
+    }
 }
 
 static bool iterate_process(and_command_t *job, pid_t pid, int status)

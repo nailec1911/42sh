@@ -34,7 +34,7 @@ static void free_or_command(or_command_t or_command)
 
 static void free_grocommand(grocommand_t grocommand)
 {
-    for (int i = 0; grocommand.tab_or_command[i].nb_and_command!= -1; i += 1) {
+    for (int i = 0; grocommand.tab_or_command[i].nb_and_command != -1; i += 1) {
         free_or_command(grocommand.tab_or_command[i]);
     }
     free(grocommand.tab_or_command);

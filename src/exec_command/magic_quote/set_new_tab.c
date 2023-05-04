@@ -59,6 +59,6 @@ int set_new_tab(command_t *command, FILE *res, int ind)
         return ERROR;
     free_array(command->args);
     free(line);
-    command->args= new;
+    command->args = new;
     return SUCCESS;
 }

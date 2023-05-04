@@ -48,7 +48,6 @@ int loop_sh(mysh_t *mysh, char *input)
     if ((res = loop_grocommand(mysh)) == ERROR)
         return ERROR;
 
-    //free_ast(mysh->ast);
     return res;
 }
 

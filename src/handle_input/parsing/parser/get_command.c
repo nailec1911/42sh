@@ -60,7 +60,7 @@ static int add_elt_in_tab(parser_t *parser, command_t *command)
     char ** temp = command->args;
     command->nb_command += 1;
 
-    if ((command->args=
+    if ((command->args =
     malloc(sizeof(char *) * (command->nb_command + 1))) == NULL)
         return ERROR;
 
@@ -95,7 +95,7 @@ command_t get_command(parser_t *parser)
     }
     if (parser->list_tokens[parser->cursor].type == UNMATCHED_QUOTE) {
         parser->error = 1;
-    } else if (new.args== NULL) {
+    } else if (new.args == NULL) {
         parser->error = 1;
         fprintf(stderr, "Invalid null command.\n");
     }
