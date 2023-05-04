@@ -16,23 +16,6 @@
 #include "exec_command.h"
 int exec_parenthesis(mysh_t *mysh, command_t *to_exec);
 
-static void display_error_exec(int error_code, char *path)
-{
-    if (error_code == 8) {
-        fprintf(stderr, "%s: Exec format error. Wrong Architecture.\n", path);
-        return;
-    }
-    if (error_code == 20) {
-        fprintf(stderr, "%s: Not a directory.\n", path);
-        return;
-    }
-    if (error_code == 13) {
-        fprintf(stderr, "%s: Permission denied.\n", path);
-        return;
-    }
-    perror(path);
-}
-
 static void parent_fork(mysh_t *mysh, int cpid, command_t command)
 {
     int status = 0;
@@ -57,8 +40,8 @@ static int exec_binary(mysh_t *mysh, command_t command)
     if (cpid == 0) {
         dup2(command.fd_out, STDOUT_FILENO);
         dup2(command.fd_in, STDIN_FILENO);
-        execvp(command.to_exec, command.command);
-        display_error_exec(errno, command.command[0]);
+        execvp(command.args[0], command.args);
+        display_error_exec(errno, command.args[0]);
         exit(errno);
     }
     parent_fork(mysh, cpid, command);
@@ -69,21 +52,18 @@ int exec_command(mysh_t *mysh, command_t to_exec)
 {
     int res = 0;
 
-    to_exec.to_exec = NULL;
-    mysh->command = to_exec.command;
-    if (to_exec.is_ast)
-        return exec_parenthesis(mysh, &to_exec);
+    to_exec.path = NULL;
+    mysh->command = to_exec.args;
     if ((res = exec_builtins(mysh, to_exec)) != FAILURE)
         return res;
-    if ((res = get_path(mysh, &(to_exec.to_exec))) == ERROR)
+    if ((res = get_path(mysh, &(to_exec.args[0]), to_exec)) == ERROR)
         return ERROR;
-    if (res != SUCCESS){
-        fprintf(stderr, "%s: Command not found.\n", mysh->command[0]);
+    if (res != SUCCESS) {
+        fprintf(stderr, "%s: Command not found.\n", to_exec.args[0]);
         mysh->last_status = 1;
         return SUCCESS;
     }
     if (exec_binary(mysh, to_exec) == ERROR)
         return ERROR;
-    free(to_exec.to_exec);
     return SUCCESS;
 }
