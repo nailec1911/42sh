@@ -40,9 +40,11 @@ void backward_function(mysh_t *mysh, int *length, int *index, char **line)
     int res = *index;
     int temp = res;
 
-    mysh->completion.display = false;
-    printf("\033[0J");
-    mysh->completion.index = -1;
+    if (mysh->completion.display) {
+        mysh->completion.display = false;
+        printf("\033[0J");
+        mysh->completion.index = -1;
+    }
     if (*index != 0) {
         *line = remove_char(*line, *index, *length);
         *length -= 1;

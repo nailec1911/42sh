@@ -30,6 +30,8 @@ static int fill_tab_list(mysh_t *mysh, DIR *dir, struct dirent *ent, int length)
             index += 1;
         }
     mysh->completion.names[index] = NULL;
+    free(mysh->completion.current);
+    free(mysh->completion.path);
     return SUCCESS;
 }
 
@@ -45,7 +47,7 @@ static int malloc_tab_list(mysh_t *mysh)
     while ((ent = readdir(dir)) != NULL)
         if (strncmp(mysh->completion.current, ent->d_name, length) == 0)
             count += 1;
-    mysh->completion.names = malloc(sizeof(char *) * count + 1);
+    mysh->completion.names = malloc(sizeof(char *) * (count + 1));
     return fill_tab_list(mysh, dir, ent, length);
 }
 

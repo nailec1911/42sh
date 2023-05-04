@@ -27,9 +27,11 @@ static char *fill_string(char *line, mysh_t *mysh, int *index, int *length)
     int res = *index;
     int temp = res;
 
-    mysh->completion.display = false;
-    printf("\033[0J");
-    mysh->completion.index = -1;
+    if (mysh->completion.display) {
+        mysh->completion.display = false;
+        printf("\033[0J");
+        mysh->completion.index = -1;
+    }
     memmove(&line[*index + 1], &line[*index], *length - *index);
     line[*index] = mysh->ch;
     *index += 1;
