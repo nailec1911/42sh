@@ -13,6 +13,8 @@
     typedef struct tab_s {
         char *current;
         int length_word;
+        int length_comp;
+        int nb_lines;
         int ind_space;
         bool display;
         int count;
