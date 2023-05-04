@@ -37,8 +37,8 @@
 
 
     //history
-    int check_last_command(mysh_t *mysh, char *input);
-    int init_alias(mysh_t *mysh);
+    int check_last_command(history_t *history, char *input);
+    int init_alias(alias_t *alias);
 
     //job control
     int exec_job(mysh_t *mysh, and_command_t *job);

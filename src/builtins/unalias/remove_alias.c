@@ -84,7 +84,7 @@ int do_unalias(mysh_t *mysh, command_t to_exec)
     if (mysh->alias.tab_file == NULL || mysh->alias.tab_file[0] == NULL)
         return SUCCESS;
     for (int i = 1; to_exec.args[i] != NULL; i += 1) {
-        if (remove_alias(mysh, to_exec.args[i]) == ERROR)
+        if (remove_alias(&mysh->alias, to_exec.args[i]) == ERROR)
             return ERROR;
     }
     if (mysh->alias.have_alias != false) {

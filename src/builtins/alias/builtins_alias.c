@@ -42,7 +42,7 @@ int do_alias(mysh_t *mysh, command_t to_exec)
     if (to_exec.args[1] == NULL) {
         if (mysh->alias.tab_file == NULL)
             return SUCCESS;
-        return display_alias(mysh->alias, to_exec.fd_out);
+        return display_alias(mysh->alias, to_exec.fd_out, to_exec.args);
     }
     if (to_exec.args[2] == NULL) {
         if (mysh->alias.tab_file == NULL)
@@ -51,7 +51,7 @@ int do_alias(mysh_t *mysh, command_t to_exec)
         (mysh->alias, to_exec.args[1], to_exec.fd_out);
     } else {
         command = remake_input(to_exec.args);
-        if (add_alias_rc(mysh, command) == ERROR) {
+        if (add_alias_rc(&mysh->alias, command) == ERROR) {
             mysh->last_status = 1;
             return ERROR;
         }
