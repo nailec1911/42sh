@@ -10,6 +10,7 @@
 
     #include "mysh.h"
 
+    int handle_input(mysh_t *mysh, char *input);
     int add_in_history(history_t *history, char *input);
     int tokens_to_history(mysh_t *mysh, token_t *list);
     token_t *loop_for_aliases(mysh_t *mysh, token_t *list);
