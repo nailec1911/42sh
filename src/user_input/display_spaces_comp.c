@@ -39,24 +39,35 @@ void choose_color(mysh_t *mysh)
         mysh->completion.color = 37;
 }
 
-void display_spaces_comp(mysh_t *mysh, int count)
+void choose_print(int i, mysh_t *mysh)
 {
-    int spaces = 0;
+    int spaces = mysh->completion.max_size - strlen(mysh->completion.names[i]);
 
+    if (mysh->completion.index != i)
+        printf("\033[0m%s%*s\033[0m",
+        mysh->completion.names[i], spaces, " ");
+    else {
+        choose_color(mysh);
+        printf("\033[%d;7m%s%*s\033[0m", mysh->completion.color,
+        mysh->completion.names[i], spaces, " ");
+        mysh->completion.count += 1;
+    }
+}
+
+void display_spaces_comp(mysh_t *mysh, int count, int *length)
+{
+    mysh->completion.nb_lines = 0;
     for (int i = 0; mysh->completion.names[i] != NULL; i += 1) {
         if (count % 3 == 0) {
             printf("\n");
+            mysh->completion.length_comp = 0;
+            mysh->completion.nb_lines += 1;
         }
-        spaces = mysh->completion.max_size - strlen(mysh->completion.names[i]);
-        if (mysh->completion.index != i)
-            printf("\033[0m%s%*s\033[0m",
-            mysh->completion.names[i], spaces, " ");
-        else {
-            choose_color(mysh);
-            printf("\033[%d;7m%s%*s\033[0m", mysh->completion.color,
-            mysh->completion.names[i], spaces, " ");
-            mysh->completion.count += 1;
-        }
+        choose_print(i, mysh);
+        mysh->completion.length_comp += 1;
         count += 1;
     }
+    mysh->completion.length_comp =
+    (mysh->completion.length_comp * mysh->completion.max_size) -
+    (*length + 18 - mysh->completion.length_word);
 }

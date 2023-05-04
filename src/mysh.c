@@ -57,7 +57,7 @@ static int init_all(mysh_t *mysh, char * const env[])
     mysh->completion.display = false;
     mysh->completion.index = -1;
     mysh->enter = false;
-    mysh->completion.count = 0;
+    mysh->completion.nb_lines = 0;
     if ((mysh->env = init_mysh_env(env)) == NULL)
         return ERROR;
     if (init_history(&mysh->history) == ERROR)

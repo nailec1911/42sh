@@ -12,8 +12,7 @@
 #include "macro_errors.h"
 #include "mysh.h"
 char *find_in_env(char **env, char *name);
-void display_spaces_comp(mysh_t *mysh, int count);
-void catch_cursor_postition(mysh_t *mysh, int *length);
+void display_spaces_comp(mysh_t *mysh, int count, int *length);
 void get_name_max_size(mysh_t *mysh);
 void change_target_tab(mysh_t *mysh, int *index, int *length, char **line);
 
@@ -80,9 +79,13 @@ void display_completion(mysh_t *mysh, char **line, int *length)
     int count = 0;
     mysh->completion.length_word =
     strlen(&(*line)[mysh->completion.ind_space]);
-    display_spaces_comp(mysh, count);
-    printf("\033[u");
-    printf("\033[s");
+    display_spaces_comp(mysh, count, length);
+    if (mysh->completion.length_comp < 0) {
+        printf("\033[%dC", mysh->completion.length_comp * -1);
+    } else {
+        printf("\033[%dD", mysh->completion.length_comp);
+    }
+    printf("\033[%dA", mysh->completion.nb_lines);
     if (mysh->first_tab)
         for (int k = mysh->completion.ind_space; k < *length; k += 1)
             printf("\033[C");
@@ -104,7 +107,6 @@ void manage_tab_function(int *length, int *index, char **line, mysh_t *mysh)
         if (malloc_tab_list(mysh) == ERROR ||
         mysh->completion.names[0] == NULL)
             return;
-        catch_cursor_postition(mysh, length);
         mysh->completion.display = true;
         get_name_max_size(mysh);
         display_completion(mysh, line, length);

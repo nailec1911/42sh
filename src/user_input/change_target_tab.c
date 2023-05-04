@@ -18,15 +18,6 @@ static void replace_string(mysh_t *mysh)
     printf("%s", mysh->completion.names[mysh->completion.index]);
 }
 
-void catch_cursor_postition(mysh_t *mysh, int *length)
-{
-    for (int i = mysh->completion.ind_space; i < *length; i += 1)
-        printf("\033[D");
-    printf("\033[s");
-    for (int k = mysh->completion.ind_space; k < *length; k += 1)
-        printf("\033[C");
-}
-
 void change_target_tab(mysh_t *mysh, int *index, int *length, char **line)
 {
     if (mysh->completion.index == -1)
