@@ -23,7 +23,7 @@ int display_alias(alias_t alias, int fd, char **command)
     for (; l_tab >= 0; l_tab -= 1) {
         dprintf(fd, "%s", alias.tab_file[l_tab]);
     }
-    return SUCCESS;
+    return FAILURE;
 }
 
 static int search_specific_alias(char *line, char *to_find, int fd)
