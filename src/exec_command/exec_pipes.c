@@ -15,6 +15,8 @@ int exec_and_command(mysh_t *mysh, and_command_t *to_exec)
     (void)mysh;
     update_glob_argv(to_exec);
 
+    if (set_magic_quote(mysh, to_exec) == ERROR)
+        return ERROR;
     if ((res = set_fd_input(&(to_exec->tab_command[0]))) == EXIT)
         return SUCCESS;
     if (res == ERROR)
