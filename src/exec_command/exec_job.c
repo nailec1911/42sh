@@ -9,6 +9,7 @@
 #include "exec_command.h"
 #include "job_control.h"
 #include "macro_errors.h"
+#include "parser/ast.h"
 
 job_list *lookup_job(job_list *list, int *nb_job)
 {

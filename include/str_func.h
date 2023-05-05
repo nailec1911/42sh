@@ -26,6 +26,8 @@
     char *remove_first_char(char *input);
     bool is_num_space(char *str);
     bool is_num_colon(char *str);
+    char **my_str_to_word_array(char *str);
+    int count_word(char const *str);
 
 
 #endif /* !STR_FUNC_H_ */
