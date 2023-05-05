@@ -12,7 +12,7 @@
 char *ctrl_d_function(mysh_t *mysh)
 {
     if (mysh->completion.display) {
-        printf("\033[0J");
+        printf("\033[0J\n");
         free_array(mysh->completion.names);
     }
     return NULL;

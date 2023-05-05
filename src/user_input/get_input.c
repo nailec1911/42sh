@@ -114,9 +114,8 @@ char *get_input(mysh_t mysh)
     struct termios o_term;
     int index = 0;
     int length = 0;
-    char *line = malloc(sizeof(char) * 1024);
+    char *line = calloc(1024, sizeof(char));
 
-    memset(line, 1024, '0');
     set_terminal(&o_term, &term, &mysh);
     mysh.ch = 0;
     while (read(STDIN_FILENO, &mysh.ch, 1) > 0) {
