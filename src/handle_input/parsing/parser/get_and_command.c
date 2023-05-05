@@ -52,14 +52,14 @@ static int fill_tab_command(parser_t *parser, and_command_t *and_command)
 
 and_command_t get_and_command(parser_t *parser)
 {
-    and_command_t and_command = {0, 0};
+    and_command_t and_command = {0};
     int res = 0;
 
     and_command.tab_command = NULL;
     and_command.nb_command = 0;
     if (( res = fill_tab_command(parser, &and_command)) == ERROR){
         parser->error = ERROR;
-        return (and_command_t){0, 0};
+        return (and_command_t){0};
     }
     return and_command;
 }

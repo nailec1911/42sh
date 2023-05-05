@@ -12,7 +12,8 @@
 #include <unistd.h>
 int mysh(char * const env[]);
 
-Test(full_mysh, or_command){
+
+Test(mysh14, or_command) {
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();

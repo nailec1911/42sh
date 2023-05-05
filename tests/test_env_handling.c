@@ -48,19 +48,19 @@ Test(create_list_env3, null_env){
 
 Test(modify_env_var1, modify_existing_var){
     char *env[4] = {"test=12AZ", "hello=world", "third=time"};
-    mysh_t args = {0};
-    args.env = init_mysh_env(env);
-    args.command = (char *[]){"setenv", "hello"};
-    cr_assert_eq(modify_env_var("hello", &args, "itsme"), SUCCESS);
-    cr_assert_str_eq(args.env[1], "hello=itsme");
+    mysh_t shell = {0};
+    shell.env = init_mysh_env(env);
+    //args.command = (char *[]){"setenv", "hello"};
+    cr_assert_eq(modify_env_var("hello", &shell, "itsme"), SUCCESS);
+    cr_assert_str_eq(shell.env[1], "hello=itsme");
 }
 
 Test(modify_env_var2, not_existing_var){
     char *env[3] = {"test=12AZ", "hello=world"};
-    mysh_t args = {0};
-    args.env = init_mysh_env(env);
-    args.command = (char *[]){"setenv", "wait"};
-    cr_assert_eq(modify_env_var("wait", &args, "what?"), SUCCESS);
-    cr_assert_str_eq(args.env[2], "wait=what?");
-    cr_assert_null(args.env[3]);
+    mysh_t shell = {0};
+    shell.env = init_mysh_env(env);
+    //args.command = (char *[]){"setenv", "wait"};
+    cr_assert_eq(modify_env_var("wait", &shell, "what?"), SUCCESS);
+    cr_assert_str_eq(shell.env[2], "wait=what?");
+    cr_assert_null(shell.env[3]);
 }

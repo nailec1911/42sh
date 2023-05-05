@@ -8,11 +8,15 @@
 SOURCE_DIR	=	src/
 
 SRC	=	mysh.c		\
+		loop_sh.c 	\
 		handle_input/handle_input.c			\
 		handle_input/error_in_token_list.c			\
 		handle_input/tokens_to_history.c			\
-		handle_input/loop_for_aliases.c				\
 		handle_input/loop_exclamation_mark.c		\
+		handle_input/loop_for_aliases.c				\
+		handle_input/remove_inhibitors.c	\
+		handle_input/quote_and_inhib.c	\
+		handle_input/replace_magic.c	\
 		handle_input/parsing/set_all_ast.c			\
 		handle_input/parsing/free_ast.c				\
 		handle_input/parsing/lexer/lexer.c					\
@@ -36,9 +40,25 @@ SRC	=	mysh.c		\
 		exec_command/magic_quote/file_stream_to_tab.c		\
 		exec_command/exec_parenthesis/exec_parenthesis.c	\
 		exec_command/exec_pipes.c	\
-		exec_command/exec_command.c		\
+		exec_command/exec_process.c	\
 		exec_command/exec_builtins.c	\
 		exec_command/handle_errors.c	\
+		exec_command/exec_job.c 		\
+		exec_command/wait_job.c	\
+		exec_command/display_error_exec.c	\
+		exec_command/job_and_process_methods/add_job_to_list.c 		\
+		exec_command/job_and_process_methods/init_stack.c 		\
+		exec_command/job_and_process_methods/is_empty.c 		\
+		exec_command/job_and_process_methods/is_full.c 		\
+		exec_command/job_and_process_methods/pop.c 		\
+		exec_command/job_and_process_methods/push.c 		\
+		exec_command/job_and_process_methods/remove_job_from_list.c 	\
+		exec_command/job_and_process_methods/get_job_from_id.c 	\
+		exec_command/job_and_process_methods/get_job_id.c 		\
+		exec_command/job_and_process_methods/update_process_status.c 		\
+		exec_command/job_and_process_methods/get_job_status.c 		\
+		exec_command/job_and_process_methods/get_job_from_pid.c 		\
+		exec_command/job_and_process_methods/display_job.c 		\
 		str_func/is_in.c			\
 		str_func/is_num.c			\
 		str_func/my_strlen.c			\
@@ -54,7 +74,13 @@ SRC	=	mysh.c		\
 		user_input/arrows_func.c	\
 		user_input/prompt.c	\
 		user_input/get_input_line.c	\
+		user_input/change_target_tab.c	\
+		user_input/manage_enter_function.c	\
 		user_input/get_input.c	\
+		user_input/line_parsing.c	\
+		user_input/ctrl_d_function.c	\
+		user_input/display_spaces_comp.c	\
+		user_input/tab_function.c	\
 		user_input/set_terminal.c	\
 		user_input/remove_functions.c	\
 		user_input/ctrl_functions.c	\

@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "mysh.h"
 
 char *remove_line(int res, int *length, int *index, char *line)
 {
@@ -34,11 +35,16 @@ char *remove_char(char *line, int index, int length)
     return line;
 }
 
-void backward_function(int *length, int *index, char **line)
+void backward_function(mysh_t *mysh, int *length, int *index, char **line)
 {
     int res = *index;
     int temp = res;
 
+    if (mysh->completion.display) {
+        mysh->completion.display = false;
+        printf("\033[0J");
+        mysh->completion.index = -1;
+    }
     if (*index != 0) {
         *line = remove_char(*line, *index, *length);
         *length -= 1;
@@ -63,7 +69,7 @@ char *suppr_function(int *index, int *length, char *line)
         memmove(&line[*index], &line[*index + 1], *length - *index);
         *length -= 1;
         for (int i = res; i <= *length; i += 1)
-        printf("\033[C");
+            printf("\033[C");
         for (int k = 0; k <= *length; k += 1)
             printf("\b \b");
         printf("%s", line);

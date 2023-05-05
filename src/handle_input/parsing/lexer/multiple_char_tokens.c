@@ -16,10 +16,13 @@ static int get_size_value(lexer_t *lex)
     int temp_cursor = lex->cursor;
     int size_val = 0;
 
-    while (lex->cursor < lex->len_input &&
-    is_in(lexer_peek(lex), SEPARATORS) != 0) {
-        if (lexer_peek(lex) == '\\')
+    lex->context = 0;
+    while (lex->cursor < lex->len_input && (lex->context == 1 ||
+    is_in(lexer_peek(lex), SEPARATORS) != 0)) {
+        if (lexer_peek(lex) == '\\') {
             lex->cursor += 1;
+            size_val += 1;
+        }
         size_val += 1;
         lex->cursor += 1;
     }
@@ -36,8 +39,6 @@ token_t multiple_char_token(lexer_t *lex)
         return new;
     }
     for (int i = 0; i < new.size_val; i += 1) {
-        if (lexer_peek(lex) == '\\')
-            lexer_get(lex);
         new.value[i] = lexer_get(lex);
     }
     new.value[new.size_val] = '\0';

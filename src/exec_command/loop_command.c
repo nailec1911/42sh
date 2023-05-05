@@ -8,6 +8,21 @@
 #include "mysh.h"
 #include "macro_errors.h"
 #include "exec_command.h"
+#include "job_control.h"
+#include "parser/ast.h"
+#include <stdlib.h>
+
+void display_list(job_list *list)
+{
+    for (job_list *tmp = list; tmp; tmp = tmp->next) {
+        printf("[id : %d ", tmp->job->job_id);
+        for (int i = 0; i < tmp->job->nb_command; ++i) {
+            printf("args : %s", tmp->job->tab_command[i].args[0]);
+        }
+        printf("]->");
+    }
+    printf("\n");
+}
 
 static int loop_and_command(mysh_t *mysh, or_command_t *or_command)
 {
@@ -17,13 +32,18 @@ static int loop_and_command(mysh_t *mysh, or_command_t *or_command)
 
     do {
         mysh->last_status = 0;
-        res = exec_and_command(mysh, &(or_command->tab_command[i]));
+        exec_and_command(mysh, &(or_command->tab_and_command[i]));
+        mysh->nb_current_job++;
+        or_command->tab_and_command[i].job_id = mysh->nb_current_job;
+        mysh->list = add_job_to_list(mysh->list,
+                &or_command->tab_and_command[i]);
+        res = exec_job(mysh, &or_command->tab_and_command[i]);
         if (res == ERROR)
             return ERROR;
         if (res == EXIT)
             exit = EXIT;
         i += 1;
-    } while (i < or_command->nb_command && mysh->last_status == SUCCESS);
+    } while (i < or_command->nb_and_command && mysh->last_status == SUCCESS);
 
     return exit;
 }
@@ -36,13 +56,13 @@ static int loop_or_command(mysh_t *mysh, grocommand_t *grocommand)
 
     do {
         mysh->last_status = SUCCESS;
-        res = loop_and_command(mysh, &(grocommand->tab_command[i]));
+        res = loop_and_command(mysh, &(grocommand->tab_or_command[i]));
         if (res == ERROR)
             return ERROR;
         if (res == EXIT)
             exit = EXIT;
         i += 1;
-    } while ( i < grocommand->nb_command && mysh->last_status != SUCCESS);
+    } while ( i < grocommand->nb_or_command && mysh->last_status != SUCCESS);
 
     return exit;
 }

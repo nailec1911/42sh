@@ -13,7 +13,7 @@
 
 int do_exit(mysh_t *mysh, command_t to_exec)
 {
-    if (to_exec.command[1] != NULL) {
+    if (to_exec.args[1] != NULL) {
         fprintf(stderr, "exit: Expression Syntax.\n");
         mysh->last_status = 1;
         return SUCCESS;

@@ -74,7 +74,7 @@ static int remove_alias(alias_t *alias, char *command)
 
 int do_unalias(mysh_t *mysh, command_t to_exec)
 {
-    int l_args = length_tab(to_exec.command);
+    int l_args = length_tab(to_exec.args);
 
     if (l_args == 1) {
         fprintf(stderr, "unalias: Too few arguments.\n");
@@ -83,8 +83,8 @@ int do_unalias(mysh_t *mysh, command_t to_exec)
     }
     if (mysh->alias.tab_file == NULL || mysh->alias.tab_file[0] == NULL)
         return SUCCESS;
-    for (int i = 1; to_exec.command[i] != NULL; i += 1) {
-        if (remove_alias(&mysh->alias, to_exec.command[i]) == ERROR)
+    for (int i = 1; to_exec.args[i] != NULL; i += 1) {
+        if (remove_alias(&mysh->alias, to_exec.args[i]) == ERROR)
             return ERROR;
     }
     if (mysh->alias.have_alias != false) {
