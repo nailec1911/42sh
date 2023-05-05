@@ -53,6 +53,23 @@ static int malloc_tab_list(mysh_t *mysh)
     return fill_tab_list(mysh, dir, ent, length);
 }
 
+static bool check_if_alone(mysh_t *mysh, char **line, int *length, int *index)
+{
+    int length_word = strlen(&(*line)[mysh->completion.ind_space]);
+
+    if (length_tab(mysh->completion.names) > 1)
+        return false;
+    for (int i = mysh->completion.ind_space; i < *length; i += 1)
+        printf("\033[D");
+    printf("%s", mysh->completion.names[0]);
+    for (int i = mysh->completion.ind_space; (*line)[i] != '\0'; i += 1)
+        (*line)[i] = '\0';
+    strcat(*line, mysh->completion.names[0]);
+    *length += strlen(mysh->completion.names[0]) - length_word;
+    *index = *length;
+    return true;
+}
+
 void display_completion(mysh_t *mysh, char **line, int *length)
 {
     int count = 0;
@@ -86,8 +103,10 @@ void manage_tab_function(int *length, int *index, char **line, mysh_t *mysh)
         if (malloc_tab_list(mysh) == ERROR ||
         mysh->completion.names[0] == NULL)
             return;
-        mysh->completion.display = true;
-        get_name_max_size(mysh);
-        display_completion(mysh, line, length);
+        if (!check_if_alone(mysh, line, length, index)) {
+            mysh->completion.display = true;
+            get_name_max_size(mysh);
+            display_completion(mysh, line, length);
+        }
     }
 }
