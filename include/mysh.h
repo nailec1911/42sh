@@ -13,6 +13,7 @@
     #include "alias.h"
     #include "history.h"
     #include "builtins/vars.h"
+    #include "tab.h"
     #include "job_control.h"
 
     typedef struct mysh_s {
@@ -22,9 +23,13 @@
         int last_status;
         int to_return;
         bool tty;
+        bool tab;
+        bool enter;
+        bool first_tab;
         int ch;
         int ind_history;
         int ind_init;
+        tab_t completion;
         ast_t ast;
         bool display_line;
         history_t history;

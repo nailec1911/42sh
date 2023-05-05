@@ -16,6 +16,12 @@ void choose_arrow(mysh_t *mysh, int *index, int *length, char **line);
 
 void arrow_function(int *index, int *length, char **line, mysh_t *mysh)
 {
+    if (mysh->completion.display) {
+        mysh->completion.display = false;
+        printf("\033[0J");
+        mysh->completion.index = -1;
+        free_array(mysh->completion.names);
+    }
     read(STDIN_FILENO, &mysh->ch, 1);
     if (mysh->ch == BRACKET) {
         read(STDIN_FILENO, &mysh->ch, 1);
