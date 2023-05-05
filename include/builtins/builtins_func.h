@@ -20,6 +20,7 @@
     int do_unalias(mysh_t *mysh, command_t to_exec);
     int do_setvar(mysh_t *mysh, command_t to_exec);
     int do_unsetvar(mysh_t *mysh, command_t to_exec);
+    int do_repeat(mysh_t *mysh, command_t to_exec);
 
     typedef struct builtin_s{
         char *command;
@@ -37,6 +38,7 @@
         {"unalias", &do_unalias},
         {"set", &do_setvar},
         {"unset", &do_unsetvar},
+        {"repeat", &do_repeat},
         {"\0", NULL}
     };
 
