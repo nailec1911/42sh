@@ -11,9 +11,10 @@
 #include "parser/parse.h"
 #include "handle_input.h"
 #include "mysh.h"
+#include "magic_quote.h"
 #include "macro_errors.h"
 
-static token_t *remove_quote(mysh_t *mysh, token_t *list, int i)
+static token_t *remove_quote(token_t *list, int i)
 {
     char type = list[i].value[0];
 
@@ -21,8 +22,7 @@ static token_t *remove_quote(mysh_t *mysh, token_t *list, int i)
     for (int j = 0; j < list[i].size_val - 1; j += 1)
         list[i].value[j] = list[i].value[j + 1];
     if (type == '`') {
-        list[i].value[strlen(list[i].value)] = '`';
-        return replace_magic(mysh, list, i);
+        list[i].value[strlen(list[i].value)] = MAGIC;
     }
     return list;
 }
@@ -36,7 +36,7 @@ static token_t *remove_quote_and_inhib(mysh_t *mysh, token_t *list, int i)
             return NULL;
         return list;
     }
-    return remove_quote(mysh, list, i);
+    return remove_quote(list, i);
 }
 
 token_t *quote_and_inhib(mysh_t *mysh, token_t *list)
