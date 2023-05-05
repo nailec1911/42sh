@@ -104,13 +104,13 @@ int do_setvar(mysh_t *mysh, command_t to_exec)
         free_array(new_args);
         return SUCCESS;
     }
-    if ((mysh->command[1] == 0 || mysh->command[1][0] == 0) ||
-            (strcmp(mysh->command[1], "-r") == 0 && mysh->command[2] == 0)) {
+    if ((to_exec.args[1] == 0 || to_exec.args[1][0] == 0) ||
+            (strcmp(to_exec.args[1], "-r") == 0 && to_exec.args[2] == 0)) {
         free_array(new_args);
         return print_env(mysh, to_exec);
     }
 
-    char const read_only = strcmp(mysh->command[1], "-r") == 0;
+    char const read_only = strcmp(to_exec.args[1], "-r") == 0;
     for (int i = read_only ? 2 : 1; new_args[i] != 0; i++)
         do_set(mysh, new_args[i], read_only);
     free_array(new_args);

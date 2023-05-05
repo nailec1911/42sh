@@ -138,11 +138,11 @@ Test(lexer10, quote){
     token_t *tokens = lexer("\"t|;>\" 'dsd' `dsdsd`\n");
 
     cr_assert_eq(tokens[0].type, IDENTIFIER);
-    cr_assert_str_eq(tokens[0].value, "t|;>");
+    cr_assert_str_eq(tokens[0].value, "\"t|;>\"");
     cr_assert_eq(tokens[1].type, IDENTIFIER);
-    cr_assert_str_eq(tokens[1].value, "dsd");
+    cr_assert_str_eq(tokens[1].value, "\'dsd\'");
     cr_assert_eq(tokens[2].type, IDENTIFIER);
-    cr_assert_str_eq(tokens[2].value, "dsdsd`");
+    cr_assert_str_eq(tokens[2].value, "`dsdsd`");
     cr_assert_eq(tokens[3].type, END_LINE);
 }
 
@@ -160,12 +160,12 @@ Test(lexer12, inhibitors){
     cr_assert_eq(tokens[0].type, IDENTIFIER);
     cr_assert_str_eq(tokens[0].value, "ls");
     cr_assert_eq(tokens[1].type, IDENTIFIER);
-    cr_assert_str_eq(tokens[1].value, "|");
+    cr_assert_str_eq(tokens[1].value, "\\|");
     cr_assert_eq(tokens[2].type, IDENTIFIER);
-    cr_assert_str_eq(tokens[2].value, " ");
+    cr_assert_str_eq(tokens[2].value, "\\ ");
     cr_assert_eq(tokens[3].type, IDENTIFIER);
     cr_assert_str_eq(tokens[3].value, "src");
     cr_assert_eq(tokens[4].type, IDENTIFIER);
-    cr_assert_str_eq(tokens[4].value, "\"lss");
+    cr_assert_str_eq(tokens[4].value, "\\\"ls\\s");
     cr_assert_eq(tokens[5].type, END_LINE);
 }
