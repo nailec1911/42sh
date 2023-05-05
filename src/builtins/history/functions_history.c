@@ -36,8 +36,8 @@ static int get_num_command(history_t *history, char *path)
 {
     if (file_to_tab_hist(path, history) == ERROR) {
         history->have_hist = false;
-        printf("Wrong syntaxe : The history will not be saved during \
-this session\n");
+        fprintf(stderr, "Wrong syntaxe : The history will not be saved "
+        "during this session\n");
         return SUCCESS;
     }
     history->num_cmd += 1;

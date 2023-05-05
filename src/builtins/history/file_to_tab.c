@@ -98,8 +98,8 @@ char **file_to_tab(char *filepath)
         return NULL;
     tab = fill_tab_from_file(stream, nb_line);
     if (tab == NULL) {
-        printf("Wrong syntaxe : None alias will be saved during \
-this session\n");
+        fprintf(stderr, "Wrong syntaxe : None alias will be saved "
+        "during this session\n");
         return NULL;
     }
     fclose(stream);

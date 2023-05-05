@@ -18,7 +18,7 @@ int mysh(char * const env[]);
 Test(full_mysh, simple_command_with_path){
     cr_redirect_stdout();
     FILE *inputs = cr_get_redirected_stdin();
-    char *const env[4] = {"PATH=tests/", "hello", "third"};
+    char *const env[4] = {"PATH=tests", "hello", "third"};
 
     fprintf(inputs, "hello_world\n");
     fprintf(inputs, "exit\n");
@@ -32,7 +32,7 @@ Test(full_mysh, simple_command_with_path){
 Test(full_mysh, simple_command_full_path){
     cr_redirect_stdout();
     FILE *inputs = cr_get_redirected_stdin();
-    char *const env[4] = {"PATH=tests/", "hello", "third"};
+    char *const env[4] = {"PATH=tests", "hello", "third"};
 
     fprintf(inputs,"./tests/hello_world\n");
     fprintf(inputs,"exit\n");
@@ -46,7 +46,7 @@ Test(full_mysh, error_seggfault){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
-    char *const env[4] = {"PATH=tests/", "hello", "third"};
+    char *const env[4] = {"PATH=tests", "hello", "third"};
 
     fprintf(inputs,"seggfault\n");
     fprintf(inputs,"exit\n");
@@ -60,7 +60,7 @@ Test(full_mysh, command_not_found){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
-    char *const env[4] = {"PATH=tests/", "hello", "third"};
+    char *const env[4] = {"PATH=tests", "hello", "third"};
 
     fprintf(inputs,"sfdsfds\n");
     fprintf(inputs,"exit\n");
@@ -144,7 +144,7 @@ Test(full_mysh, ambiguous_redirect){
 Test(full_mysh, redirect){
     cr_redirect_stdout();
     FILE *inputs = cr_get_redirected_stdin();
-    char *const env[4] = {"PATH=tests/", "hello", "third"};
+    char *const env[4] = {"PATH=tests", "hello", "third"};
 
     fprintf(inputs,"hello_world > temp\n");
     fprintf(inputs,"hello_world < temp\n");
@@ -188,7 +188,7 @@ Test(full_mysh, error_zero_divide){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
-    char *const env[4] = {"PATH=tests/", "hello", "third"};
+    char *const env[4] = {"PATH=tests", "hello", "third"};
 
     fprintf(inputs,"zero_divide\n");
     fprintf(inputs,"exit\n");
@@ -202,7 +202,7 @@ Test(full_mysh, quotes){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
-    char *const env[4] = {"PATH=tests/", "hello", "third"};
+    char *const env[4] = {"PATH=tests", "hello", "third"};
 
     fprintf(inputs,"./tests/disp_args 'hello world' hi\n");
     fprintf(inputs,"exit\n");
@@ -216,12 +216,12 @@ Test(full_mysh, backticks){
     cr_redirect_stdout();
     cr_redirect_stderr();
     FILE *inputs = cr_get_redirected_stdin();
-    char *const env[4] = {"PATH=tests/", "hello", "third"};
+    char *const env[4] = {"PATH=tests", "hello", "third"};
 
     fprintf(inputs,"./tests/disp_args `env`\n");
     fprintf(inputs,"exit\n");
     fflush(inputs);
     fclose(inputs);
     cr_assert_eq(mysh(env), 0);
-    cr_assert_stdout_eq_str("./tests/disp_args\nPATH=tests/\nhello\nthird\n");
+    cr_assert_stdout_eq_str("./tests/disp_args\nPATH=tests\nhello\nthird\n");
 }
