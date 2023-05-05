@@ -17,7 +17,6 @@ SRC	=	mysh.c		\
 		handle_input/remove_inhibitors.c	\
 		handle_input/quote_and_inhib.c	\
 		handle_input/replace_var.c	\
-		handle_input/replace_magic.c	\
 		handle_input/parsing/set_all_ast.c			\
 		handle_input/parsing/free_ast.c				\
 		handle_input/parsing/lexer/lexer.c					\

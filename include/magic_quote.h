@@ -11,6 +11,8 @@
     #include <stdio.h>
     #include "mysh.h"
 
+    #define MAGIC (char)0b10101010
+
     FILE *get_file_res_command(mysh_t *mysh, char *quoted);
     char **file_stream_to_tab(FILE *file);
     char **insert_array_in_array(char **to_insert, char **dest, int index);

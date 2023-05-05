@@ -20,6 +20,5 @@
     int error_in_tokens(mysh_t *mysh, token_t *list);
     char *is_alias(alias_t *alias, char *input);
     int remove_inhibitors(char *command);
-    token_t *replace_magic(mysh_t *mysh, token_t *list, int i);
 
 #endif /* !HANDLE_INPUT_H_ */
