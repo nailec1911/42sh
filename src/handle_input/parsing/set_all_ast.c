@@ -18,34 +18,32 @@ static int error_redirect(int type)
         fprintf(stderr, "Ambiguous input redirect.\n");
     if (type == REDIRECT_OUT_1 || type == REDIRECT_OUT_2)
         fprintf(stderr, "Ambiguous output redirect.\n");
+    fflush(stderr);
     return FAILURE;
 }
 
-static int set_redirect_command(command_t *command)
+static int check_no_redirect(command_t *command, int i)
 {
-    if (command->redirect_in.type != NO_REDIRECT)
+    if (command->redirect_in.type != NO_REDIRECT && i != 0)
         return error_redirect(command->redirect_in.type);
 
-    if (command->redirect_out.type != NO_REDIRECT)
+    if (command->redirect_out.type != NO_REDIRECT && command->is_last == false)
         return error_redirect(command->redirect_out.type);
 
     return SUCCESS;
 }
 
-static int set_and_command(and_command_t *grocommand)
+static int set_and_command(and_command_t *and_command)
 {
     int res = 0;
     int i = 0;
 
-    for (; i < grocommand->nb_command - 1; i += 1) {
-        res = set_redirect_command(
-        &(grocommand->tab_command[i]));
+    and_command->tab_command[and_command->nb_command - 1].is_last = true;
+    for (; i < and_command->nb_command; i += 1) {
+        res = check_no_redirect(&(and_command->tab_command[i]), i);
         if (res != SUCCESS)
             return res;
     }
-    if (grocommand->tab_command[i].redirect_in.type != NO_REDIRECT)
-        return error_redirect(grocommand->tab_command[i].redirect_in.type);
-    grocommand->tab_command[grocommand->nb_command - 1].is_last = true;
     return SUCCESS;
 }
 

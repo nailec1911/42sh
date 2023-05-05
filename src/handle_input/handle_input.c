@@ -16,6 +16,7 @@ static token_t *get_list_tokens(mysh_t *mysh, char *input)
 {
     token_t *list_token = lexer(input);
 
+    free(input);
     mysh->display_line = false;
     if (list_token == NULL)
         return NULL;
@@ -25,7 +26,8 @@ static token_t *get_list_tokens(mysh_t *mysh, char *input)
         return NULL;
     if ((list_token = loop_for_aliases(mysh, list_token)) == NULL)
         return NULL;
-    free(input);
+    if ((list_token = quote_and_inhib(mysh, list_token)) == NULL)
+        return NULL;
     return list_token;
 }
 
