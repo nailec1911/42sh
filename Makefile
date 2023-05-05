@@ -12,8 +12,11 @@ SRC	=	mysh.c		\
 		handle_input/handle_input.c			\
 		handle_input/error_in_token_list.c			\
 		handle_input/tokens_to_history.c			\
-		handle_input/loop_for_aliases.c				\
 		handle_input/loop_exclamation_mark.c		\
+		handle_input/loop_for_aliases.c				\
+		handle_input/remove_inhibitors.c	\
+		handle_input/quote_and_inhib.c	\
+		handle_input/replace_magic.c	\
 		handle_input/parsing/set_all_ast.c			\
 		handle_input/parsing/free_ast.c				\
 		handle_input/parsing/lexer/lexer.c					\
