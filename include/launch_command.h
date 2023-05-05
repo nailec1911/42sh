@@ -12,8 +12,6 @@
 
     char *get_input(mysh_t mysh);
     char *get_input_line(void);
-    int loop_grocommand(mysh_t *mysh, ast_t *ast);
-    int handle_input(mysh_t *mysh, char *input);
     void free_ast(ast_t ast);
 
 #endif /* !LAUNCH_COMMAND_H_ */

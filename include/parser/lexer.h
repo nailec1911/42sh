@@ -19,7 +19,7 @@
         int len_input;
         int cursor;
         int nb_token;
-        int context;
+        char context;
     } lexer_t;
 
 static inline char lexer_get(lexer_t *lex)
