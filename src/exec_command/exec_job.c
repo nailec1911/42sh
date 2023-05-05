@@ -20,7 +20,8 @@ job_list *lookup_job(job_list *list, int *nb_job)
     while ((pid = waitpid(WAIT_ANY,
                     &status, WNOHANG | WUNTRACED | WCONTINUED)) > 0) {
         update_process_status(list, pid, status);
-        job = get_job_from_pid(list, pid);
+        if (!(job = get_job_from_pid(list, pid)))
+            return list;
         if (job_is_completed(job)) {
             display_job_status(get_job_from_id(list, job->job_id));
             list = remove_job_from_list(list, job->job_id);
