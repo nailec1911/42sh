@@ -16,24 +16,15 @@
 int get_ast(mysh_t *mysh, char *input)
 {
     parser_t parser;
-    char *input_test = strdup(input);
     int res = 0;
 
-    parser.list_tokens = lexer(input_test);
+    parser.list_tokens = lexer(input);
 
-    mysh->ast.tab_grocommands = NULL;
-    mysh->ast.nb_grocommand = 0;
-    mysh->ast = (ast_t){0, NULL};
     res = create_ast(&parser, &(mysh->ast));
     if (res != SUCCESS){
         mysh->last_status = res;
         return res;
     }
     free(parser.list_tokens);
-    res = set_all_ast(&(mysh->ast));
-    if (res != SUCCESS){
-        mysh->last_status = res;
-        return res;
-    }
     return SUCCESS;
 }
