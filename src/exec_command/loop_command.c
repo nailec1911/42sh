@@ -15,9 +15,10 @@
 void display_list(job_list *list)
 {
     for (job_list *tmp = list; tmp; tmp = tmp->next) {
-        printf("[id : %d ", tmp->job->job_id);
+        printf("[job id : %d ", tmp->job->job_id);
         for (int i = 0; i < tmp->job->nb_command; ++i) {
-            printf("args : %s", tmp->job->tab_command[i].args[0]);
+            printf("(args : %s)", tmp->job->tab_command[i].args[0]);
+            printf("(pid : %d)", tmp->job->tab_command[i].pid);
         }
         printf("]->");
     }
