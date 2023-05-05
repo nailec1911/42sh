@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "parser/create_ast.h"
 #include "macro_errors.h"
 
@@ -52,5 +53,9 @@ int create_ast(parser_t *parser, ast_t *ast)
     if (fill_tab_grocommand(parser, ast) == ERROR) {
         return ERROR;
     }
+    if (parser->error == 1)
+        fprintf(stderr, "Invalid null command.\n");
+    if (parser->error == 2)
+        parser->error = 1;
     return parser->error;
 }

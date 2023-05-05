@@ -12,7 +12,7 @@
         END_LINE,
         NOTHING,
         SEMICOLON,
-        AND,
+        BG,
         OPERATOR_AND,
         OPERATOR_OR,
         PIPE,
