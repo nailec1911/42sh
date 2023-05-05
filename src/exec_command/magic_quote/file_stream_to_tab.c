@@ -32,7 +32,7 @@ char **file_stream_to_tab(FILE *file)
     fclose(file);
     if (file_str == NULL)
         return NULL;
-    tab = my_str_to_word_array_separator(file_str, "\t \n\0");
+    tab = my_str_to_word_array(file_str);
     free(file_str);
     return tab;
 }

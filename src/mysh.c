@@ -28,10 +28,11 @@ static char *choose_get_line(mysh_t mysh)
 
 static void set_main_process(mysh_t *mysh)
 {
+    signal(SIGINT, SIG_IGN);
     signal(SIGQUIT, SIG_IGN);
     signal(SIGTSTP, SIG_IGN);
     signal(SIGTTIN, SIG_IGN);
-    signal(SIGINT, SIG_IGN);
+    signal(SIGTTOU, SIG_IGN);
     mysh->shell_pgid = getpid();
     mysh->shell_descriptor = STDIN_FILENO;
     setpgid(mysh->shell_pgid, mysh->shell_pgid);

@@ -16,6 +16,7 @@
 #include "mysh.h"
 #include "exec_command.h"
 #include "macro_errors.h"
+#include "parser/ast.h"
 
 static void launch_child(mysh_t *mysh, command_t *process)
 {
@@ -25,8 +26,10 @@ static void launch_child(mysh_t *mysh, command_t *process)
     signal(SIGTTIN, SIG_DFL);
     signal(SIGTTOU, SIG_DFL);
     signal(SIGCHLD, SIG_DFL);
-    dup2(process->fd_out, STDOUT_FILENO);
-    dup2(process->fd_in, STDIN_FILENO);
+    if (process->fd_out != STDOUT_FILENO)
+        dup2(process->fd_out, STDOUT_FILENO);
+    if (process->fd_in != STDIN_FILENO)
+        dup2(process->fd_in, STDIN_FILENO);
     if (execve(process->path, process->args, mysh->env) == -1) {
         display_error_exec(errno, process->args[0]);
         exit(1);
@@ -36,11 +39,11 @@ static void launch_child(mysh_t *mysh, command_t *process)
 static int
 set_foreground_execution(mysh_t *mysh, and_command_t *job, int status)
 {
-    tcsetpgrp(mysh->shell_descriptor, job->pgid);
+    //tcsetpgrp(mysh->shell_descriptor, job->pgid);
     if ((status = wait_job(mysh->list, job)) != SUCCESS)
         mysh->last_status = status;
     signal(SIGTTOU, SIG_IGN);
-    tcsetpgrp(mysh->shell_descriptor, getpid());
+    //tcsetpgrp(mysh->shell_descriptor, getpid());
     signal(SIGTTOU, SIG_DFL);
     return status;
 }
