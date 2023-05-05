@@ -27,29 +27,9 @@ static token_t *remove_quote(mysh_t *mysh, token_t *list, int i)
     return list;
 }
 
-static int replace_var(token_t *token)
-{
-    int start = 0;
-    int end = 0;
-    if (token->value[0] == '\'' || token->value[0] == '`')
-        return SUCCESS;
-    return SUCCESS;
-    for (int i = 0; i < token->size_val; i += 1) {
-        if (token->value[i] == '$') {
-            start = i;
-            end = start;
-        }
-        while (is_in(token->value[end], " \t") != 0
-        && end < token->size_val)
-            end += 1;
-    }
-    printf("%d, %d\n", start, end);
-    return SUCCESS;
-}
-
 static token_t *remove_quote_and_inhib(mysh_t *mysh, token_t *list, int i)
 {
-    if (replace_var(&list[i]) == ERROR)
+    if (replace_var(mysh, &list[i]) == ERROR)
         return NULL;
     if (is_in(list[i].value[0], QUOTED) != 0) {
         if (remove_inhibitors(list[i].value) == ERROR)

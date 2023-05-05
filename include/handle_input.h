@@ -16,6 +16,7 @@
     token_t *loop_for_aliases(mysh_t *mysh, token_t *list);
     token_t *loop_for_exclamation_mark(mysh_t *mysh, token_t *list);
     token_t *quote_and_inhib(mysh_t *mysh, token_t *list);
+    int replace_var(mysh_t *mysh, token_t *token);
     int error_in_tokens(mysh_t *mysh, token_t *list);
     char *is_alias(alias_t *alias, char *input);
     int remove_inhibitors(char *command);
