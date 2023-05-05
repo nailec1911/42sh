@@ -37,6 +37,8 @@ char *up_arrow_function(mysh_t *mysh, int *index, int *length, char *line)
     for (int k = 0; k < *length; k += 1)
         line[k] = '\0';
     line = strcpy(line, mysh->history.tab_hist[mysh->ind_history]->command);
+    if (line == NULL)
+        return NULL;
     line[strlen(line) - 1] = '\0';
     for (int i = res; i <= *length; i += 1)
         printf("\033[C");

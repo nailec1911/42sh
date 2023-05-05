@@ -50,7 +50,12 @@ static int init_all(mysh_t *mysh, char * const env[])
     mysh->vars = 0;
     mysh->list = NULL;
     if (isatty(0) == 1)
-        set_main_process(mysh);
+        mysh->tty = true;
+    mysh->completion.display = false;
+    mysh->completion.index = -1;
+    mysh->enter = false;
+    mysh->completion.nb_lines = 0;
+    set_main_process(mysh);
     if ((mysh->env = init_mysh_env(env)) == NULL)
         return ERROR;
     if (init_history(&mysh->history) == ERROR)
