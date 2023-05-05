@@ -22,7 +22,6 @@
         char **env;
         int last_status;
         int to_return;
-        bool tty;
         bool tab;
         bool enter;
         bool first_tab;
