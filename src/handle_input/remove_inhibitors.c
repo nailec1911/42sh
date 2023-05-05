@@ -24,7 +24,7 @@ int remove_inhibitors(char *command)
             i += 1;
         command[ind ++] = command[i];
     }
-    for (int i = 0; i < len; i += 1)
-        command[ind ++] = '\0';
+    for (; ind < len; ++ind)
+        command[ind] = '\0';
     return SUCCESS;
 }
