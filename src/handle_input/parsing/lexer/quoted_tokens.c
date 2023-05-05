@@ -12,23 +12,19 @@
 
 static void set_new(lexer_t *lex, token_t *new, char quote)
 {
-    if (quote == '`')
-        new->size_val += 1;
     if ((new->value = malloc(sizeof(char) * (new->size_val + 1))) == NULL) {
         new->type = T_ERROR;
         return;
     }
-    for (int i = 0; i < new->size_val; i += 1)
+    new->value[0] = quote;
+    for (int i = 1; i < new->size_val; i += 1)
         new->value[i] = lexer_get(lex);
     new->value[new->size_val] = '\0';
-
-    if (quote != '`')
-        lexer_get(lex);
 }
 
 token_t quoted_tokens(lexer_t *lex)
 {
-    token_t new = {IDENTIFIER, 0, 0};
+    token_t new = {IDENTIFIER, 0, 1};
     char quote = lexer_get(lex);
     int temp_cursor = lex->cursor;
 
@@ -40,6 +36,7 @@ token_t quoted_tokens(lexer_t *lex)
         fprintf(stderr, "Unmatched '%c'.\n", quote);
         new.type = UNMATCHED_QUOTE;
     }
+    new.size_val += 1;
     lex->cursor = temp_cursor;
     set_new(lex, &new, quote);
     return new;

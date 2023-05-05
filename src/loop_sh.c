@@ -5,19 +5,11 @@
 ** loop_sh
 */
 
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <signal.h>
-#include "builtins/vars.h"
 #include "mysh.h"
 #include "job_control.h"
-#include "launch_command.h"
-#include "builtins/env.h"
-#include "str_func.h"
+#include "exec_command.h"
+#include "handle_input.h"
 #include "macro_errors.h"
-#include "init.h"
 
 int loop_sh(mysh_t *mysh, char *input)
 {
