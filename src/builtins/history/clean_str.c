@@ -16,6 +16,9 @@ char *remake_command(char **tab)
     char *final_input = NULL;
     char *temp = NULL;
     int i = 3;
+
+    if (tab == NULL)
+        return NULL;
     if (length_tab(tab) < 3) {
         return strdup(tab[1]);
     }
@@ -36,6 +39,8 @@ char *clean_last_input(char **tab_alias)
     char *to_free = NULL;
     char *res = NULL;
 
+    if (tab_alias == NULL)
+        return NULL;
     if ((to_free = remake_command(tab_alias)) == NULL)
         return NULL;
     if ((res = my_strcat_dup(to_free, "\n")) == NULL)

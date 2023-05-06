@@ -19,6 +19,9 @@
 static int count_line(char *str)
 {
     int line = 0;
+
+    if (str == NULL)
+        return -1;
     for (int i = 0; str[i] != '\0'; i += 1) {
         if (str[i] == '\n')
             line += 1;
@@ -31,8 +34,11 @@ int get_nb_line(char *filepath)
 {
     struct stat file;
     char *str_file = NULL;
+    int fd = 0;
 
-    int fd = open(filepath, O_RDONLY);
+    if (filepath == NULL)
+        return ERROR;
+    fd = open(filepath, O_RDONLY);
     if (fd == -1)
         return -1;
     if (stat(filepath, &file) == -1)
@@ -48,6 +54,9 @@ int get_nb_line(char *filepath)
 static int check_syntaxe(char *line)
 {
     char **check = NULL;
+
+    if (line == NULL)
+        return ERROR;
     if ((check = my_str_to_word_array_separator(line, " \n")) == NULL)
         return ERROR;
     if (length_tab(check) < 3) {
@@ -89,16 +98,19 @@ static char **fill_tab_from_file(FILE *stream, int nb_line)
 char **file_to_tab(char *filepath)
 {
     FILE *stream;
-    int nb_line = get_nb_line(filepath);
+    int nb_line = 0;
     char **tab = NULL;
 
+    if (filepath == NULL)
+        return NULL;
+    nb_line = get_nb_line(filepath);
     if (nb_line == -1)
         return NULL;
     if ((stream = fopen(filepath, "r")) == NULL)
         return NULL;
     tab = fill_tab_from_file(stream, nb_line);
     if (tab == NULL) {
-        printf("Wrong syntaxe : None alias will be saved during \
+        printf("Wrong syntax : None alias will be saved during \
 this session\n");
         return NULL;
     }

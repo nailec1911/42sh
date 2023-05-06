@@ -15,6 +15,8 @@
 
 void write_in_file(tab_hist_t **tab, int fd, bool have_file)
 {
+    if (tab == NULL)
+        return;
     if (have_file == false)
         return;
     for (int i = 0; tab[i] != NULL; i += 1) {
@@ -24,8 +26,11 @@ void write_in_file(tab_hist_t **tab, int fd, bool have_file)
 
 int replace_last_line(history_t *history, char *input)
 {
-    int l_tab = history->len_tab_hist;
+    int l_tab = 0;
 
+    if (history == NULL || input == NULL)
+        return ERROR;
+    l_tab = history->len_tab_hist;
     free(history->tab_hist[l_tab - 1]->num);
     free(history->tab_hist[l_tab - 1]->time);
     free(history->tab_hist[l_tab - 1]->command);
@@ -43,6 +48,8 @@ int replace_last_line(history_t *history, char *input)
 
 int add_line(history_t *history, char *input)
 {
+    if (history == NULL || input == NULL)
+        return ERROR;
     if (add_elem_tab(history, input,
     history->num_cmd) == ERROR)
         return ERROR;
@@ -53,7 +60,11 @@ int add_line(history_t *history, char *input)
 
 int add_line_history(history_t *history, char *input)
 {
-    int l_tab = history->len_tab_hist;
+    int l_tab = 0;
+
+    if (history == NULL || input == NULL)
+        return ERROR;
+    l_tab = history->len_tab_hist;
     if (strcmp(input,history->tab_hist[l_tab - 1]->command) == 0) {
         return replace_last_line(history, input);
     } else {
@@ -63,7 +74,9 @@ int add_line_history(history_t *history, char *input)
 
 int check_last_command(history_t *history, char *input)
 {
-    if (history->tab_hist == NULL || history->have_hist == false) {
+    if (history == NULL || input == NULL)
+        return ERROR;
+    if (history->tab_hist == NULL && history->have_hist == false) {
         if ((history->tab_hist = malloc(sizeof(tab_hist_t *) * 2)) == NULL)
             return ERROR;
         if ((history->tab_hist[0] = malloc(sizeof(tab_hist_t))) == NULL)
@@ -78,8 +91,7 @@ int check_last_command(history_t *history, char *input)
         history->len_tab_hist = 1;
         write_in_file(history->tab_hist, history->fd_history_file,
         history->have_hist);
-    } else {
+    } else
         return add_line_history(history, input);
-    }
     return SUCCESS;
 }

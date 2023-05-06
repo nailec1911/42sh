@@ -16,6 +16,8 @@ static int fill_tab(tab_hist_t **tab_hist, int i, char **tab)
 {
     char *command = NULL;
 
+    if (tab_hist == NULL || tab == NULL)
+        return ERROR;
     if ((tab_hist[i] = malloc(sizeof(tab_hist_t))) == NULL)
         return ERROR;
     if ((tab_hist[i]->num = num_to_str(atoi(tab[0]))) == NULL)
@@ -82,6 +84,8 @@ static int fill_tab_hist_from_file(FILE *stream, history_t *history, int *i)
     char *line = NULL;
     size_t len = 0;
 
+    if (stream == NULL || history == NULL || i == NULL)
+        return ERROR;
     while (getline(&line, &len, stream) != -1) {
         if (check_and_fill_tab(line, *i, history) == ERROR) {
             free(line);
@@ -97,8 +101,11 @@ int file_to_tab_hist(char *filepath, history_t *history)
 {
     FILE *stream;
     int i = 0;
-    int nb_line = get_nb_line(filepath);
+    int nb_line = 0;
 
+    if (filepath == NULL || history == NULL)
+        return ERROR;
+    nb_line = get_nb_line(filepath);
     if (nb_line == -1)
         return ERROR;
     if ((history->tab_hist =
@@ -108,7 +115,6 @@ int file_to_tab_hist(char *filepath, history_t *history)
     if ((stream = fopen(filepath, "r")) == NULL)
         return ERROR;
     if (fill_tab_hist_from_file(stream, history, &i) == ERROR) {
-        free(history->tab_hist);
         return ERROR;
     }
     fclose(stream);

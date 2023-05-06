@@ -37,8 +37,11 @@ char *search_command(mysh_t *mysh, char *last_input)
 
 char *do_exclamation_mark(mysh_t *mysh, char *input)
 {
-    char *last_input = remove_first_char(input);
+    char *last_input = NULL;
 
+    if (mysh == NULL || input == NULL)
+        return NULL;
+    last_input = remove_first_char(input);
     if (last_input == NULL)
         return NULL;
     if (input[0] == '!' && input[1] == '\n') {

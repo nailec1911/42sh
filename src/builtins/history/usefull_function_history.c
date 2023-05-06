@@ -46,6 +46,8 @@ int length_tab_hist(tab_hist_t **tab)
 
 void free_tab_hist(tab_hist_t **tab)
 {
+    if (tab == NULL)
+        return;
     for (int i = 0; tab[i] != NULL; i += 1) {
         free(tab[i]->command);
         free(tab[i]->time);
@@ -68,6 +70,8 @@ int length_tab(char **tab)
 
 void print_tab(char **tab)
 {
+    if (tab == NULL)
+        return;
     for (int i = 0; tab[i] != NULL; i += 1) {
         printf("%s\n", tab[i]);
     }

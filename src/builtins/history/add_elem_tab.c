@@ -16,13 +16,13 @@ int add_elem_tab(history_t *history, char *to_add, int num)
 {
     int l_tab = history->len_tab_hist;
     tab_hist_t **temp = history->tab_hist;
+
     if ((history->tab_hist = malloc(sizeof(tab_hist_t *) *
     (l_tab + 2))) == NULL)
         return ERROR;
     history->tab_hist[l_tab + 1] = NULL;
-    for (int i = 0; i < l_tab; i += 1) {
+    for (int i = 0; i < l_tab; i += 1)
         history->tab_hist[i] = temp[i];
-    }
     history->tab_hist[l_tab] = malloc(sizeof(tab_hist_t));
     history->tab_hist[l_tab]->num = num_to_str(num);
     if ((history->tab_hist[l_tab]->time = create_time_line()) == NULL)
@@ -37,9 +37,13 @@ int add_elem_tab(history_t *history, char *to_add, int num)
 
 int add_elem_tab_alias(alias_t *alias, char *to_add)
 {
-    int len_tab = length_tab(alias->tab_file);
-    char **temp = alias->tab_file;
+    int len_tab = 0;
+    char **temp = NULL;
 
+    if (alias == NULL || to_add == NULL)
+        return ERROR;
+    len_tab = length_tab(alias->tab_file);
+    temp = alias->tab_file;
     if ((alias->tab_file = malloc(sizeof(char *) * (len_tab + 2))) == NULL)
         return ERROR;
     alias->tab_file[len_tab + 1] = NULL;

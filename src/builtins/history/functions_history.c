@@ -17,26 +17,31 @@
 #include <sys/stat.h>
 #include "init.h"
 #include <time.h>
-int file_to_tab_hist(char *filepath, history_t *history);
 
 int add_in_history(history_t *history, char *input)
 {
+    if (history == NULL || input == NULL)
+        return ERROR;
     if (strcmp("history\n", input) == 0)
         return SUCCESS;
-    if (history->have_hist && ftruncate(history->fd_history_file, 0) == -1) {
+    if (history->have_hist && ftruncate(history->fd_history_file, 0) == -1)
+        return ERROR;
+    if (check_last_command(history, input) == ERROR) {
+        free_tab_hist(history->tab_hist);
         return ERROR;
     }
-    if (check_last_command(history, input) == ERROR)
-        return ERROR;
     history->num_cmd += 1;
     return SUCCESS;
 }
 
 static int get_num_command(history_t *history, char *path)
 {
+    if (history == NULL || path == NULL)
+        return ERROR;
     if (file_to_tab_hist(path, history) == ERROR) {
         history->have_hist = false;
-        printf("Wrong syntaxe : The history will not be saved during \
+        history->tab_hist = NULL;
+        printf("Wrong syntax : The history will not be saved during \
 this session\n");
         return SUCCESS;
     }
@@ -48,6 +53,9 @@ this session\n");
 static char *set_all_fd(history_t *history)
 {
     char *path = NULL;
+
+    if (history == NULL)
+        return NULL;
     if ((path = get_path_home(HISTORY_FILE)) == NULL)
         return NULL;
     if ((history->fd_history_file = open(path, O_CREAT |
@@ -62,6 +70,7 @@ int init_history(history_t *history)
     struct stat file;
     history->num_cmd = 0;
     history->have_hist = true;
+
     if ((path = set_all_fd(history)) == NULL)
         return SUCCESS;
     if (stat(path, &file) == -1)

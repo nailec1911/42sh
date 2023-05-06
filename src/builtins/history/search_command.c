@@ -14,9 +14,12 @@
 char *search_by_num_command(mysh_t *mysh, char *last_input)
 {
     int num_command = 0;
+    int to_compare = 0;
     char *command = NULL;
-    int to_compare = atoi(last_input);
 
+    if (mysh == NULL || last_input == NULL)
+        return NULL;
+    to_compare = atoi(last_input);
     for (int i = 0; mysh->history.tab_hist[i] != NULL; i += 1) {
         num_command = atoi(mysh->history.tab_hist[i]->num);
         if (num_command == to_compare) {
@@ -51,8 +54,11 @@ char *search_by_name_command(mysh_t *mysh, char *last_input)
 
 char *search_by_name(mysh_t *mysh, char *last_input)
 {
-    char *to_compare = strdup(last_input);
+    char *to_compare = NULL;
 
+    if (mysh == NULL || last_input == NULL)
+        return NULL;
+    to_compare = strdup(last_input);
     if ((last_input = search_by_name_command(mysh, last_input)) == NULL) {
         free(to_compare);
         return last_input;
@@ -68,8 +74,11 @@ char *search_by_name(mysh_t *mysh, char *last_input)
 
 char *search_by_num(mysh_t *mysh, char *last_input)
 {
-    char *to_compare = strdup(last_input);
+    char *to_compare = NULL;
 
+    if (mysh == NULL || last_input == NULL)
+        return NULL;
+    to_compare = strdup(last_input);
     if ((last_input = search_by_num_command(mysh, last_input)) == NULL) {
         free(to_compare);
         return last_input;

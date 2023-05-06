@@ -37,7 +37,11 @@ int opt_clear(mysh_t *mysh)
 
 static int init_flag(history_t *history, int *step, int *i)
 {
-    int end = history->len_tab_hist;
+    int end = 0;
+
+    if (history == NULL || step == NULL || i == NULL)
+        return ERROR;
+    end = history->len_tab_hist;
     if (IS_FLAG(history->flags, FLAG_R)) {
         *step = -1;
         end = -1;
@@ -53,6 +57,7 @@ int display_history(tab_hist_t **tab, int fd, history_t *history)
     int i = 0;
     int step = 1;
     int end = init_flag(history, &step, &i);
+
     if (time == NULL || num == NULL)
         return ERROR;
     for (; i != end; i += step) {
@@ -71,6 +76,8 @@ int display_history(tab_hist_t **tab, int fd, history_t *history)
 
 int do_history(mysh_t *mysh, command_t to_exec)
 {
+    if (mysh == NULL)
+        return ERROR;
     if (to_exec.args[1] == NULL) {
         mysh->history.flags = NO_FLAG;
         return display_history(mysh->history.tab_hist, to_exec.fd_out,

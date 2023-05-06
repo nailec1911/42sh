@@ -39,6 +39,7 @@ static int add_alias_rc(alias_t *alias, char *input)
 int do_alias(mysh_t *mysh, command_t to_exec)
 {
     char *command = NULL;
+
     if (to_exec.args[1] == NULL) {
         if (mysh->alias.tab_file == NULL)
             return SUCCESS;
@@ -63,6 +64,8 @@ static char *check_is_alias(char **tab_alias, char *input, char *to_search)
 {
     char *res = input;
 
+    if (tab_alias == NULL || to_search == NULL)
+        return NULL;
     if (tab_alias[2] == NULL)
         return input;
     if (strcmp(to_search, tab_alias[1]) == 0) {
@@ -79,6 +82,8 @@ char *is_alias(alias_t *alias, char *input)
     char **tab_alias = NULL;
     char *res = NULL;
 
+    if (alias == NULL || input == NULL)
+        return NULL;
     if (alias->tab_file == NULL)
         return NULL;
     for (int i = 0; alias->tab_file[i] != NULL; i += 1) {

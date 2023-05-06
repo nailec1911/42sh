@@ -13,9 +13,12 @@
 char *remove_first_char(char *input)
 {
     int idx = 0;
-    int to_malloc = my_strlen(input);
+    int to_malloc = 0;
     char *new_input = NULL;
 
+    if (input == NULL)
+        return NULL;
+    to_malloc = my_strlen(input);
     if ((new_input = malloc(sizeof(char) * to_malloc)) == NULL)
         return NULL;
     new_input[to_malloc - 1] = '\0';

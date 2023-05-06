@@ -10,6 +10,8 @@
 
 int compare_char(char **command, int i, history_t *history)
 {
+    if (command == NULL || history == NULL)
+        return ERROR;
     if (command[i][0] != '-')
         return ERROR;
     for (int j = 1; command[i][j] != '\0'; j += 1) {
@@ -29,6 +31,8 @@ int compare_char(char **command, int i, history_t *history)
 
 int detect_flags(command_t *to_exec, history_t *history)
 {
+    if (to_exec == NULL || history == NULL)
+        return ERROR;
     for (int i = 1; to_exec->args[i] != NULL; i += 1) {
         if (compare_char(to_exec->args, i, history) == ERROR)
             return ERROR;
