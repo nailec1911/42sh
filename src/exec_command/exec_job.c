@@ -31,23 +31,34 @@ job_list *lookup_job(job_list *list, int *nb_job)
     return list;
 }
 
+static int exec_piped_process(mysh_t *mysh, and_command_t *job, int i)
+{
+    int res = 0;
+    int tube[2];
+
+    pipe(tube);
+    job->tab_command[i].fd_out = tube[1];
+    job->job_mode = PIPELINE;
+    res = exec_process(mysh, job, &job->tab_command[i], true);
+    close(tube[1]);
+    job->tab_command[i + 1].fd_in = tube[0];
+    return res;
+}
+
 int exec_job(mysh_t *mysh, and_command_t *job)
 {
-    int tube[2];
     int res = 0;
+    mode init_mode = job->job_mode;
+
     lookup_job(mysh->list, &mysh->nb_current_job);
-    for (int i = 0; i < job->nb_command - 1; ++i) {
-        pipe(tube);
-        job->tab_command[i].fd_out = tube[1];
-        res = exec_process(mysh, job, &job->tab_command[i], true);
-        close(tube[1]);
-        job->tab_command[i + 1].fd_in = tube[0];
-    }
+    for (int i = 0; i < job->nb_command - 1; ++i)
+        res = exec_piped_process(mysh, job, i);
+    job->job_mode = init_mode;
     res = exec_process(mysh, job,
         &job->tab_command[job->nb_command - 1], false);
     if (job->job_mode == BACKGROUND)
         display_background(job);
-    else {
+    else if (res == 0) {
         mysh->list = remove_job_from_list(mysh->list, job->job_id);
         mysh->nb_current_job--;
     }

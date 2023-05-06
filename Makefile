@@ -124,7 +124,8 @@ SRC	=	mysh.c		\
 		builtins/vars/vars.c		\
 		builtins/vars/set_var.c 	\
 		builtins/vars/vars_utils.c 	\
-		builtins/vars/unset_var.c
+		builtins/vars/unset_var.c 	\
+		builtins/fg/fg.c
 
 SRC_MAIN	=	src/main.c
 

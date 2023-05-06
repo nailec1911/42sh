@@ -39,10 +39,11 @@ static void launch_child(mysh_t *mysh, command_t *process)
 static int
 set_foreground_execution(mysh_t *mysh, and_command_t *job, int status)
 {
+    tcsetpgrp(mysh->shell_descriptor, job->pgid);
     if ((status = wait_job(mysh->list, job)) != SUCCESS)
         mysh->last_status = status;
     signal(SIGTTOU, SIG_IGN);
-    signal(SIGTTOU, SIG_DFL);
+    tcsetpgrp(mysh->shell_descriptor, getpid());
     return status;
 }
 
