@@ -109,6 +109,7 @@ int file_to_tab_hist(char *filepath, history_t *history)
         return ERROR;
     if (fill_tab_hist_from_file(stream, history, &i) == ERROR) {
         free(history->tab_hist);
+        history->tab_hist = NULL;
         return ERROR;
     }
     fclose(stream);
