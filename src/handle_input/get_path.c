@@ -48,7 +48,7 @@ static char *get_all_path(mysh_t *mysh)
 
     env_path = get_env_var(mysh, "PATH=");
     confstr(_CS_PATH, default_path, 1024);
-    return my_strcat_dup(env_path, default_path);
+    return my_strcat_with_char(env_path, default_path, ':');
 }
 
 int get_path(mysh_t *mysh, char **path, command_t *to_exec)
