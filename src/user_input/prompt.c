@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <errno.h>
 
 #include "color.h"
 #include "macro_errors.h"
@@ -21,18 +22,29 @@ static char *get_git_branch(void)
 {
     FILE *stream;
     char *buffer = malloc(1024);
+    int i = 0;
 
     if (!buffer)
         return NULL;
-    if (!(stream = popen("git rev-parse --abbrev-ref HEAD", "r")))
+    if (!(stream = popen("git rev-parse --abbrev-ref HEAD 2>/dev/null", "r")))
         return NULL;
-    int ch = 0;
-    size_t bytes_read = 0;
-    while ((ch = fgetc(stream)) != EOF)
-        buffer[bytes_read++] = ch;
-    buffer[bytes_read - 1] = 0;
+    if (!(fgets(buffer, 1024, stream)))
+        return 0x00000000;
+    for (; buffer[i] && buffer[i] != ' '; ++i);
+    buffer[i - 1] = 0;
     pclose(stream);
     return buffer;
+}
+
+static void
+display_prompt(mysh_t *mysh,
+        struct passwd *pw, char *git_branch, char *current_dir)
+{
+    printf(BLACK ERROR_B_COLOR " %d " TRUE_WHITE B_COLOR " %s"
+            TRUE_WHITE B_COLOR" ~%s " BLACK BRANCH_B_COLOR " %s "
+            NO_COLOR "\n", mysh->last_status, pw->pw_name,
+            &current_dir[strlen(pw->pw_dir)], git_branch ? git_branch : "");
+    printf("> ");
 }
 
 void init_prompt(mysh_t *mysh)
@@ -45,16 +57,7 @@ void init_prompt(mysh_t *mysh)
     pw = getpwuid(getuid());
     getcwd(current_dir, sizeof(current_dir));
     git_branch = get_git_branch();
-    if (git_branch)
-        printf(BLACK ERROR_B_COLOR " %d " TRUE_WHITE B_COLOR " %s"
-                TRUE_WHITE B_COLOR" ~%s " BLACK BRANCH_B_COLOR " %s "
-                NO_COLOR " ", mysh->last_status, pw->pw_name,
-                &current_dir[strlen(pw->pw_dir)], git_branch);
-    else
-        printf(BLACK ERROR_B_COLOR " %d " TRUE_WHITE B_COLOR " %s"
-                TRUE_WHITE B_COLOR" ~%s " BLACK BRANCH_B_COLOR " %s " NO_COLOR
-                " ", mysh->last_status, pw->pw_name,
-                &current_dir[strlen(pw->pw_dir)], git_branch);
+    display_prompt(mysh, pw, git_branch, current_dir);
     fflush(stdout);
     free(git_branch);
 }
