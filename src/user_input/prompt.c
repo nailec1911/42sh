@@ -4,51 +4,57 @@
 ** File description:
 ** main
 */
+
+#include <stdio.h>
 #include <pwd.h>
 #include <unistd.h>
+#include <string.h>
+#include <sys/stat.h>
+
+#include "color.h"
 #include "macro_errors.h"
 #include "str_func.h"
 #include "mysh.h"
 #include "builtins/env.h"
 
-char **set_all_for_prompt(char **user, char **pwd, int *tab_l, mysh_t *mysh)
+static char *get_git_branch(void)
 {
-    struct passwd *info;
-    char **tab = NULL;
-    *user = get_env_var(mysh, "USER=");
-    *pwd = get_env_var(mysh, "PWD=");
-    if (*pwd == NULL)
-        *pwd = getcwd(*pwd, 0);
-    tab = my_str_to_word_array_separator(*pwd, "/");
-    if (tab == NULL)
+    FILE *stream;
+    char *buffer = malloc(1024);
+
+    if (!buffer)
         return NULL;
-    *tab_l = length_tab(tab);
-    if (user == NULL) {
-        info = getpwuid(getuid());
-        *user = info->pw_name;
-    }
-    return tab;
+    if (!(stream = popen("git rev-parse --abbrev-ref HEAD", "r")))
+        return NULL;
+    int ch = 0;
+    size_t bytes_read = 0;
+    while ((ch = fgetc(stream)) != EOF)
+        buffer[bytes_read++] = ch;
+    buffer[bytes_read - 1] = 0;
+    pclose(stream);
+    return buffer;
 }
 
-int init_prompt(mysh_t *mysh)
+void init_prompt(mysh_t *mysh)
 {
-    char *pwd = NULL;
-    char *user = NULL;
-    int tab_l = 0;
-    char **tab = NULL;
-
+    struct passwd *pw;
+    char current_dir[4096];
+    char *git_branch = malloc(1024);
     if (!isatty(mysh->shell_descriptor))
-        return SUCCESS;
-    if ((tab = set_all_for_prompt(&user, &pwd, &tab_l, mysh)) == NULL)
-        return ERROR;
-    if (mysh->last_status == 0) {
-        printf("\33[37;01m%d\33[00m | \33[34;01m%s\33[00m | \
-\33[32;01m%s\33[00m > ", mysh->last_status, tab[tab_l - 1], user);
-    } else {
-        printf("\33[31;01m%d\33[00m | \33[34;01m%s\33[00m | \
-\33[32;01m%s\33[00m > ", mysh->last_status, tab[tab_l - 1], user);
-    }
+        return;
+    pw = getpwuid(getuid());
+    getcwd(current_dir, sizeof(current_dir));
+    git_branch = get_git_branch();
+    if (git_branch)
+        printf(BLACK ERROR_B_COLOR " %d " TRUE_WHITE B_COLOR " %s"
+                TRUE_WHITE B_COLOR" ~%s " BLACK BRANCH_B_COLOR " %s "
+                NO_COLOR " ", mysh->to_return, pw->pw_name,
+                &current_dir[strlen(pw->pw_dir)], git_branch);
+    else
+        printf(BLACK ERROR_B_COLOR " %d " TRUE_WHITE B_COLOR " %s"
+                TRUE_WHITE B_COLOR" ~%s " BLACK BRANCH_B_COLOR " %s " NO_COLOR
+                " ", mysh->to_return, pw->pw_name,
+                &current_dir[strlen(pw->pw_dir)], git_branch);
     fflush(stdout);
-    free_array(tab);
-    return SUCCESS;
+    free(git_branch);
 }

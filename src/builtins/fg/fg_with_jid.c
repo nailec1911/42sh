@@ -16,7 +16,8 @@ int fg_with_jid(mysh_t *mysh, int job_id)
     pid_t pid;
     and_command_t *tmp = NULL;
 
-    if (job_id > (mysh->nb_current_job - 1) || !(tmp = get_job_from_id(mysh->list, job_id))) {
+    if (job_id > (mysh->nb_current_job - 1) ||
+            !(tmp = get_job_from_id(mysh->list, job_id))) {
         fprintf(stderr, "fg: No such job.\n");
         mysh->last_status = FAILURE;
         return SUCCESS;
