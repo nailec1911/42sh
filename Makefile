@@ -90,6 +90,7 @@ SRC	=	mysh.c		\
 		user_input/choose_arrow.c	\
 		builtins/alias/init_alias.c\
 		builtins/alias/builtins_alias.c\
+		builtins/alias/is_alias.c\
 		builtins/alias/remake_input.c\
 		builtins/alias/display_alias.c\
 		builtins/unalias/remove_alias.c\
