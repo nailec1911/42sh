@@ -48,12 +48,12 @@ void init_prompt(mysh_t *mysh)
     if (git_branch)
         printf(BLACK ERROR_B_COLOR " %d " TRUE_WHITE B_COLOR " %s"
                 TRUE_WHITE B_COLOR" ~%s " BLACK BRANCH_B_COLOR " %s "
-                NO_COLOR " ", mysh->to_return, pw->pw_name,
+                NO_COLOR " ", mysh->last_status, pw->pw_name,
                 &current_dir[strlen(pw->pw_dir)], git_branch);
     else
         printf(BLACK ERROR_B_COLOR " %d " TRUE_WHITE B_COLOR " %s"
                 TRUE_WHITE B_COLOR" ~%s " BLACK BRANCH_B_COLOR " %s " NO_COLOR
-                " ", mysh->to_return, pw->pw_name,
+                " ", mysh->last_status, pw->pw_name,
                 &current_dir[strlen(pw->pw_dir)], git_branch);
     fflush(stdout);
     free(git_branch);
