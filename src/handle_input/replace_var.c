@@ -23,41 +23,58 @@ static char *insert_str(char *src, char *to_insert, int start, int end)
         res[ind ++] = src[i];
     for (int i = 0; to_insert[i]; ++ i)
         res[ind ++] = to_insert[i];
-    for (int i = start + end + 1; src[i]; ++ i)
+    for (int i = start + end; src[i]; ++ i)
         res[ind ++] = src[i];
     res[ind] = '\0';
     free(src);
     return res;
 }
 
-static char *get_new_str_value(mysh_t *mysh, char *str, int from, int to)
+static char *get_var_str(mysh_t *mysh, char *name)
 {
-    char *name = str + from + 1;
-    vars_t *var;
+    vars_t *var = get_global_var_by_name(mysh->vars, name);
 
-    if (name[0] == '{') {
-        name += 1;
-        name[to - 2] = '\0';
-    } else
-        name[to] = '\0';
-    if ((var = get_global_var_by_name(mysh->vars, name)) == NULL) {
+    if (var == NULL) {
         fprintf(stderr, "%s: Undefined variable.\n", name);
         mysh->last_status = 1;
-        return str;
+        return NULL;
     }
-    return insert_str(str, var->buffer, from, to);
+    return var->buffer;
+}
+
+static char *get_new_str_value(mysh_t *mysh, char *str, int from, int to)
+{
+    char *name = calloc(to, 0);
+    int offset = from + 1;
+    char *var_str = NULL;
+
+    if (name == NULL)
+        return str;
+    for (int i = 0; i < to - 1 && str[i + offset] != '}'; i += 1) {
+        if (str[i + offset] == '{') {
+            offset += 1;
+            to += 1;
+        }
+        name[i] = str[i + offset];
+    }
+    var_str = get_var_str(mysh, name);
+    free(name);
+    if (var_str == NULL)
+        return str;
+    return insert_str(str, var_str, from, to);
 }
 
 static char *get_index_var(mysh_t *mysh, char *str, int *i)
 {
-    int len = 0;
+    int len = 1;
 
     if (str[*i] == '\\') {
         *i += 1;
         return str;
     }
     if (str[*i] == '$') {
-        while (is_in(str[*i + len], " \t|;()}") != 0 && str[*i + len] != '\0')
+        while (is_in(str[*i + len], " \t|&$;()}<>\n") != 0
+        && str[*i + len] != '\0')
             len += 1;
         return get_new_str_value(mysh, str, *i, len);
     }
