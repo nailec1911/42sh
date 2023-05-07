@@ -74,6 +74,8 @@ SRC	=	mysh.c		\
 		str_func/insert_array_in_array.c	\
 		str_func/count_word.c 				\
 		str_func/my_str_to_word_array.c 	\
+		str_func/readfile.c 				\
+		str_func/readfile_from_stream.c 				\
 		user_input/arrows_func.c	\
 		user_input/prompt.c	\
 		user_input/get_input_line.c	\

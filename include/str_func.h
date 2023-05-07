@@ -5,6 +5,8 @@
 ** str_func
 */
 
+#include <stdio.h>
+
 #ifndef STR_FUNC_H_
     #define STR_FUNC_H_
 
@@ -28,6 +30,7 @@
     bool is_num_colon(char *str);
     char **my_str_to_word_array(char *str);
     int count_word(char const *str);
-
+    char *read_file(const char *filename);
+    char *read_file_from_stream(FILE *stream);
 
 #endif /* !STR_FUNC_H_ */

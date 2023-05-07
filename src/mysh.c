@@ -77,8 +77,7 @@ int mysh(char * const env[])
     if (init_all(&mysh, env) == ERROR)
         return ERROR;
     while (res == 0) {
-        if (init_prompt(&mysh) == ERROR)
-            return ERROR;
+        init_prompt(&mysh);
         if ((input = choose_get_line(mysh)) == NULL) {
             res = EXIT;
             break;

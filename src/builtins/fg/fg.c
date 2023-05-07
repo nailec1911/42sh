@@ -45,7 +45,6 @@ static int verif_current_job(mysh_t *mysh)
 
 int do_fg(mysh_t *mysh, command_t to_exec)
 {
-    printf("do_fg\n");
     if (verif_current_job(mysh) != SUCCESS)
         return SUCCESS;
     if (!to_exec.args[1])
