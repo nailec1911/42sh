@@ -59,6 +59,7 @@ SRC	=	mysh.c		\
 		exec_command/job_and_process_methods/get_job_status.c 		\
 		exec_command/job_and_process_methods/get_job_from_pid.c 		\
 		exec_command/job_and_process_methods/display_job.c 		\
+		exec_command/job_and_process_methods/get_last_job_pgid.c 		\
 		str_func/is_in.c			\
 		str_func/is_num.c			\
 		str_func/my_strlen.c			\
@@ -125,7 +126,11 @@ SRC	=	mysh.c		\
 		builtins/vars/set_var.c 	\
 		builtins/vars/vars_utils.c 	\
 		builtins/vars/unset_var.c 	\
-		builtins/fg/fg.c
+		builtins/fg/fg.c   			\
+		builtins/fg/fg_no_args.c   			\
+		builtins/fg/fg_with_jid.c   			\
+		builtins/fg/fg_with_pid.c   			\
+		builtins/fg/send_cont.c
 
 SRC_MAIN	=	src/main.c
 

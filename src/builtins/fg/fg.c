@@ -10,15 +10,19 @@
 #include <stdio.h>
 #include <signal.h>
 #include <string.h>
+#include <sys/wait.h>
 
 #include "job_control.h"
 #include "str_func.h"
 #include "mysh.h"
 #include "macro_errors.h"
+#include "builtins/fg.h"
 
-static void set_foreground(mysh_t *mysh, and_command_t *job, int status)
+void set_foreground(mysh_t *mysh, and_command_t *job, pid_t pid)
 {
-    tcsetpgrp(mysh->shell_descriptor, job->pgid);
+    int status = 0;
+
+    tcsetpgrp(mysh->shell_descriptor, pid);
     if ((status = wait_job(mysh->list, job)) != SUCCESS)
         mysh->last_status = status;
     else {
@@ -41,22 +45,12 @@ static int verif_current_job(mysh_t *mysh)
 
 int do_fg(mysh_t *mysh, command_t to_exec)
 {
-    pid_t pid;
-
+    printf("do_fg\n");
     if (verif_current_job(mysh) != SUCCESS)
         return SUCCESS;
-    if (!to_exec.args[1]) {
-        if (kill(mysh->list->job->pgid, SIGCONT) < 0) {
-            fprintf(stderr, "fg: No such job.\n");
-            return SUCCESS;
-        }
-        set_foreground(mysh, mysh->list->job, mysh->list->job->pgid);
-    } else {
-        if (((pid = atoi(to_exec.args[1])) <= 0) || (kill(pid, SIGCONT) < 0)) {
-            fprintf(stderr, "fg: No such job\n");
-            return SUCCESS;
-        }
-        set_foreground(mysh, get_job_from_pid(mysh->list, pid), pid);
-    }
-    return SUCCESS;
+    if (!to_exec.args[1])
+        return fg_no_args(mysh);
+    if (to_exec.args[1][0] == '%' && strlen(to_exec.args[1]) > 1)
+        return fg_with_jid(mysh, atoi(to_exec.args[1] + 1));
+    return fg_with_pid(mysh, atoi(to_exec.args[1]));
 }

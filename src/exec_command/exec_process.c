@@ -73,7 +73,7 @@ int
 exec_process(mysh_t *mysh, and_command_t *job, command_t *process, bool do_fork)
 {
     int status = 0;
-
+    
     if (process->is_ast)
         return exec_parenthesis(mysh, process);
     if (!do_fork && (status = exec_builtins(mysh, *process)) != FAILURE)
