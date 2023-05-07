@@ -78,7 +78,8 @@ exec_process(mysh_t *mysh, and_command_t *job, command_t *process, bool do_fork)
         return exec_parenthesis(mysh, process);
     if (!do_fork && (status = exec_builtins(mysh, *process)) != FAILURE)
         return status;
-    get_path(mysh, &process->path, *process);
+    if (get_path(mysh, &process->path, process) == ERROR)
+        return ERROR;
 
     return exec_fork(mysh, job, process);
 }

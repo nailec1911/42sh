@@ -19,7 +19,7 @@
     int handle_errors(int status);
     int set_fd_input(command_t *command);
     int set_fd_output(command_t *command);
-    int get_path(mysh_t *mysh, char **path, command_t to_exec);
+    int get_path(mysh_t *mysh, char **path, command_t *to_exec);
     int set_magic_quote(mysh_t *mysh, and_command_t *actual);
     void display_error_exec(int error_code, char *path);
 
