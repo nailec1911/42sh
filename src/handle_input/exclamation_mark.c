@@ -60,6 +60,7 @@ static char *get_index_change(mysh_t *mysh, char *str, int *i)
         while (is_in(str[*i + len], " \t\n$|&{};()><") != 0
         && str[*i + len] != '\0')
             len += 1;
+        mysh->display_line = true;
         return get_new_str_value(mysh, str, *i, len);
     }
     return str;

@@ -16,6 +16,7 @@ static token_t *get_list_tokens(mysh_t *mysh, char *input)
 {
     token_t *list_token = NULL;
 
+    mysh->display_line = false;
     input = replace_exclamation_mark(mysh, input);
     list_token = lexer(input);
     if (list_token == NULL)
@@ -23,7 +24,6 @@ static token_t *get_list_tokens(mysh_t *mysh, char *input)
     free(input);
     if (mysh->last_status != SUCCESS)
         return NULL;
-    mysh->display_line = false;
     if (tokens_to_history(mysh, list_token) == ERROR)
         return NULL;
     if ((list_token = loop_for_aliases(mysh, list_token)) == NULL)
