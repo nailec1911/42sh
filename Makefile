@@ -119,6 +119,7 @@ SRC	=	mysh.c		\
 		builtins/cd/get_path_to_go.c 	\
 		builtins/env/setenv.c			\
 		builtins/env/unsetenv.c			\
+		builtins/env/find_in_env.c			\
 		builtins/env/get_env_var.c		\
 		builtins/env/modify_env_var.c	\
 		builtins/env/init_mysh_env.c	\
