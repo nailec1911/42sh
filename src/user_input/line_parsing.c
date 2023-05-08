@@ -10,6 +10,7 @@
 #include <string.h>
 #include "str_func.h"
 #include "mysh.h"
+char *find_in_env(char **env, char *name);
 
 static void malloc_parsing(mysh_t *mysh, int ind, char **line, char *mid_line)
 {

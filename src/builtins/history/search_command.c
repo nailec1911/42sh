@@ -17,6 +17,8 @@ char *search_by_num_command(mysh_t *mysh, char *last_input)
     char *command = NULL;
     int to_compare = atoi(last_input);
 
+    if (mysh->history.tab_hist == NULL)
+        return last_input;
     for (int i = 0; mysh->history.tab_hist[i] != NULL; i += 1) {
         num_command = atoi(mysh->history.tab_hist[i]->num);
         if (num_command == to_compare) {
@@ -69,7 +71,7 @@ char *search_by_name(mysh_t *mysh, char *last_input)
 char *search_by_num(mysh_t *mysh, char *last_input)
 {
     char *to_compare = strdup(last_input);
-
+    printf("jjjjjjjjjj\n");
     if ((last_input = search_by_num_command(mysh, last_input)) == NULL) {
         free(to_compare);
         return last_input;
