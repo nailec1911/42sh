@@ -11,9 +11,14 @@
 
 char *remake_input(char **tab)
 {
-    char *final_input = strdup(tab[0]);
+    char *final_input = NULL;
     char *temp = NULL;
     int i = 1;
+
+    if (tab == NULL)
+        return NULL;
+    if ((final_input = strdup(tab[0])) == NULL)
+        return NULL;
     for (; tab[i] != NULL; i += 1) {
         if ((temp = my_strcat_dup(final_input, " ")) == NULL)
             return NULL;

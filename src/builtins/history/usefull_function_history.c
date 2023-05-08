@@ -38,7 +38,7 @@ int length_tab_hist(tab_hist_t **tab)
 
     if (tab == NULL || tab[0] == NULL)
         return 0;
-    for (int i = 0; tab[i] != NULL; i += 1) {
+    for (int i = 0; tab[i]; i += 1) {
         len += 1;
     }
     return len;
@@ -46,7 +46,7 @@ int length_tab_hist(tab_hist_t **tab)
 
 void free_tab_hist(tab_hist_t **tab)
 {
-    if (tab == NULL)
+    if (!tab || !tab[0])
         return;
     for (int i = 0; tab[i] != NULL; i += 1) {
         free(tab[i]->command);

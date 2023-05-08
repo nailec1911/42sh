@@ -22,7 +22,6 @@
         char **env;
         int last_status;
         int to_return;
-        bool tty;
         bool tab;
         bool enter;
         bool first_tab;
@@ -34,6 +33,7 @@
         bool display_line;
         history_t history;
         alias_t alias;
+
         pid_t shell_pgid;
         short shell_descriptor;
         job_list *list;

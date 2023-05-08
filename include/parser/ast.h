@@ -29,7 +29,8 @@
 
     typedef enum mode {
         FOREGROUND,
-        BACKGROUND
+        BACKGROUND,
+        PIPELINE
     } mode;
 
     typedef struct command_s {

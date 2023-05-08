@@ -29,7 +29,6 @@ void check_error(parser_t *parser, command_t new)
     }
     if (new.args == NULL && new.is_ast == false) {
         parser->error = 1;
-        fprintf(stderr, "Invalid null command.\n");
         return;
     }
 }

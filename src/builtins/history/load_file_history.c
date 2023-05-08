@@ -103,8 +103,6 @@ int file_to_tab_hist(char *filepath, history_t *history)
     int i = 0;
     int nb_line = 0;
 
-    if (filepath == NULL || history == NULL)
-        return ERROR;
     nb_line = get_nb_line(filepath);
     if (nb_line == -1)
         return ERROR;
@@ -115,6 +113,8 @@ int file_to_tab_hist(char *filepath, history_t *history)
     if ((stream = fopen(filepath, "r")) == NULL)
         return ERROR;
     if (fill_tab_hist_from_file(stream, history, &i) == ERROR) {
+        free(history->tab_hist);
+        history->tab_hist = NULL;
         return ERROR;
     }
     fclose(stream);

@@ -11,9 +11,10 @@
 #include "parser/parse.h"
 #include "handle_input.h"
 #include "mysh.h"
+#include "magic_quote.h"
 #include "macro_errors.h"
 
-static token_t *remove_quote(mysh_t *mysh, token_t *list, int i)
+static token_t *remove_quote(token_t *list, int i)
 {
     char type = list[i].value[0];
 
@@ -21,42 +22,21 @@ static token_t *remove_quote(mysh_t *mysh, token_t *list, int i)
     for (int j = 0; j < list[i].size_val - 1; j += 1)
         list[i].value[j] = list[i].value[j + 1];
     if (type == '`') {
-        list[i].value[strlen(list[i].value)] = '`';
-        return replace_magic(mysh, list, i);
+        list[i].value[strlen(list[i].value)] = MAGIC;
     }
     return list;
 }
 
-static int replace_var(token_t *token)
-{
-    int start = 0;
-    int end = 0;
-    if (token->value[0] == '\'' || token->value[0] == '`')
-        return SUCCESS;
-    return SUCCESS;
-    for (int i = 0; i < token->size_val; i += 1) {
-        if (token->value[i] == '$') {
-            start = i;
-            end = start;
-        }
-        while (is_in(token->value[end], " \t") != 0
-        && end < token->size_val)
-            end += 1;
-    }
-    printf("%d, %d\n", start, end);
-    return SUCCESS;
-}
-
 static token_t *remove_quote_and_inhib(mysh_t *mysh, token_t *list, int i)
 {
-    if (replace_var(&list[i]) == ERROR)
+    if (replace_var(mysh, &list[i]) == ERROR)
         return NULL;
     if (is_in(list[i].value[0], QUOTED) != 0) {
         if (remove_inhibitors(list[i].value) == ERROR)
             return NULL;
         return list;
     }
-    return remove_quote(mysh, list, i);
+    return remove_quote(list, i);
 }
 
 token_t *quote_and_inhib(mysh_t *mysh, token_t *list)

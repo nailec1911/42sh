@@ -54,12 +54,21 @@ and_command_t get_and_command(parser_t *parser)
 {
     and_command_t and_command = {0};
     int res = 0;
-
+    and_command.job_mode = FOREGROUND;
     and_command.tab_command = NULL;
     and_command.nb_command = 0;
+
+    while (PEEK(parser).type == BG)
+        parser->cursor += 1;
     if (( res = fill_tab_command(parser, &and_command)) == ERROR){
         parser->error = ERROR;
         return (and_command_t){0};
     }
+    if (PEEK(parser).type == BG) {
+        and_command.job_mode = BACKGROUND;
+        parser->cursor += 1;
+    }
+    if (parser->error == SUCCESS && !END_AND_CMD(PEEK(parser)))
+        parser->error = FAILURE;
     return and_command;
 }

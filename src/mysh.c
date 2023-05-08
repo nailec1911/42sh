@@ -19,7 +19,7 @@ static char *choose_get_line(mysh_t mysh)
     mysh.ind_history = mysh.history.len_tab_hist;
     mysh.ind_init = mysh.ind_history;
 
-    if (mysh.tty)
+    if (isatty(mysh.shell_descriptor))
         input = get_input(mysh);
     else
         input = get_input_line();
@@ -28,11 +28,11 @@ static char *choose_get_line(mysh_t mysh)
 
 static void set_main_process(mysh_t *mysh)
 {
-    mysh->tty = true;
+    signal(SIGINT, SIG_IGN);
     signal(SIGQUIT, SIG_IGN);
     signal(SIGTSTP, SIG_IGN);
     signal(SIGTTIN, SIG_IGN);
-    signal(SIGINT, SIG_IGN);
+    signal(SIGTTOU, SIG_IGN);
     mysh->shell_pgid = getpid();
     mysh->shell_descriptor = STDIN_FILENO;
     setpgid(mysh->shell_pgid, mysh->shell_pgid);
@@ -43,8 +43,6 @@ static int init_all(mysh_t *mysh, char * const env[])
 {
     mysh->vars = 0;
     mysh->list = NULL;
-    if (isatty(0) == 1)
-        mysh->tty = true;
     mysh->completion.display = false;
     mysh->completion.index = -1;
     mysh->enter = false;
@@ -79,15 +77,14 @@ int mysh(char * const env[])
     if (init_all(&mysh, env) == ERROR)
         return ERROR;
     while (res == 0) {
-        if (init_prompt(&mysh) == ERROR)
-            return ERROR;
+        init_prompt(&mysh);
         if ((input = choose_get_line(mysh)) == NULL) {
             res = EXIT;
             break;
         }
         res = loop_sh(&mysh, input);
     }
-    if (res == EXIT && mysh.tty)
+    if (res == EXIT && isatty(mysh.shell_descriptor))
         fprintf(stdout, "exit\n");
     if (res == ERROR)
         return ERROR;

@@ -50,14 +50,11 @@ char *to_compare)
         tab_alias = my_str_to_word_array_separator
         (alias->tab_file[i], " \n");
         if (strcmp(tab_alias[1], to_compare) != 0) {
-            new_tab[index] = strdup(alias->tab_file[i]);
+            new_tab[index] = alias->tab_file[i];
             index += 1;
-        } else {
-            free(alias->tab_file[i]);
         }
         free_array(tab_alias);
     }
-    free(alias->tab_file);
     return new_tab;
 }
 

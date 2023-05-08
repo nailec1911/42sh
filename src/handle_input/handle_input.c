@@ -14,13 +14,15 @@
 
 static token_t *get_list_tokens(mysh_t *mysh, char *input)
 {
-    token_t *list_token = lexer(input);
+    token_t *list_token = NULL;
 
-    free(input);
     mysh->display_line = false;
+    input = replace_exclamation_mark(mysh, input);
+    list_token = lexer(input);
     if (list_token == NULL)
         return NULL;
-    if ((list_token = loop_for_exclamation_mark(mysh, list_token)) == NULL)
+    free(input);
+    if (mysh->last_status != SUCCESS)
         return NULL;
     if (tokens_to_history(mysh, list_token) == ERROR)
         return NULL;
