@@ -69,5 +69,5 @@ void display_spaces_comp(mysh_t *mysh, int count, int *length)
     }
     mysh->completion.length_comp =
     (mysh->completion.length_comp * mysh->completion.max_size) -
-    (*length + 18 - mysh->completion.length_word);
+    (*length + 2 - mysh->completion.length_word);
 }
