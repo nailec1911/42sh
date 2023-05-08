@@ -60,10 +60,10 @@ token_t token_pipe(lexer_t *lex)
 
 token_t token_and(lexer_t *lex)
 {
-    token_t new = {0, strdup("&"), 0};
+    token_t new = {0, "&", 0};
 
     lexer_get(lex);
-    new.type = IDENTIFIER;
+    new.type = BG;
     new.size_val = 1;
     if (lexer_peek(lex) == '&') {
         lexer_get(lex);

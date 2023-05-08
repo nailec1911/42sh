@@ -66,6 +66,8 @@ token_t *lexer(char *input)
     lexer_t lex = {input, 0, 0, 0, 0};
     token_t *list_token = NULL;
 
+    if (input == NULL)
+        return NULL;
     for (; lex.input[lex.len_input] != '\n'; lex.len_input += 1);
     while ((lex.nb_token < 1 || list_token[lex.nb_token - 1].type != END_LINE)
     && lex.cursor <= lex.len_input) {

@@ -26,7 +26,8 @@
         (END_GRO_CMD(token) || (token).type == OPERATOR_OR)
 
     #define END_AND_CMD(token) \
-        (END_OR_CMD(token) || (token).type == OPERATOR_AND)
+        (END_OR_CMD(token) || (token).type == OPERATOR_AND \
+|| (token).type == BG)
 
     #define END_CMD(token) \
         (END_AND_CMD(token) || (token).type == PIPE)

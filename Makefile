@@ -12,7 +12,7 @@ SRC	=	mysh.c		\
 		handle_input/handle_input.c			\
 		handle_input/error_in_token_list.c			\
 		handle_input/tokens_to_history.c			\
-		handle_input/loop_exclamation_mark.c		\
+		handle_input/exclamation_mark.c		\
 		handle_input/loop_for_aliases.c				\
 		handle_input/remove_inhibitors.c	\
 		handle_input/quote_and_inhib.c	\
@@ -59,6 +59,7 @@ SRC	=	mysh.c		\
 		exec_command/job_and_process_methods/get_job_status.c 		\
 		exec_command/job_and_process_methods/get_job_from_pid.c 		\
 		exec_command/job_and_process_methods/display_job.c 		\
+		exec_command/job_and_process_methods/get_last_job_pgid.c 		\
 		str_func/is_in.c			\
 		str_func/is_num.c			\
 		str_func/my_strlen.c			\
@@ -71,6 +72,10 @@ SRC	=	mysh.c		\
 		str_func/input_to_array.c	\
 		str_func/my_strstrlen.c	\
 		str_func/insert_array_in_array.c	\
+		str_func/count_word.c 				\
+		str_func/my_str_to_word_array.c 	\
+		str_func/readfile.c 				\
+		str_func/readfile_from_stream.c 				\
 		user_input/arrows_func.c	\
 		user_input/prompt.c	\
 		user_input/get_input_line.c	\
@@ -87,6 +92,7 @@ SRC	=	mysh.c		\
 		user_input/choose_arrow.c	\
 		builtins/alias/init_alias.c\
 		builtins/alias/builtins_alias.c\
+		builtins/alias/is_alias.c\
 		builtins/alias/remake_input.c\
 		builtins/alias/display_alias.c\
 		builtins/unalias/remove_alias.c\
@@ -122,7 +128,12 @@ SRC	=	mysh.c		\
 		builtins/vars/vars.c		\
 		builtins/vars/set_var.c 	\
 		builtins/vars/vars_utils.c 	\
-		builtins/vars/unset_var.c
+		builtins/vars/unset_var.c 	\
+		builtins/fg/fg.c   			\
+		builtins/fg/fg_no_args.c   			\
+		builtins/fg/fg_with_jid.c   			\
+		builtins/fg/fg_with_pid.c   			\
+		builtins/fg/send_cont.c
 
 SRC_MAIN	=	src/main.c
 

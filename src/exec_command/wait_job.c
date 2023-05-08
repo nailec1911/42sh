@@ -27,7 +27,7 @@ int wait_job(job_list *list, and_command_t *job)
     short count = 0;
 
     do {
-        pid = waitpid(WAIT_ANY, &status, WUNTRACED);
+        pid = waitpid(-job->pgid, &status, WUNTRACED);
         res = handle_errors(status);
         update_process_status(list, pid, status);
         count++;

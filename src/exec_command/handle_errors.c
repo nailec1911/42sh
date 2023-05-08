@@ -14,7 +14,7 @@
 
 int handle_errors(int status)
 {
-    if (WIFSIGNALED(status)){
+    if (WIFSIGNALED(status)) {
         if (WTERMSIG(status) == SIGFPE)
             fprintf(stderr, "Floating exception");
         else

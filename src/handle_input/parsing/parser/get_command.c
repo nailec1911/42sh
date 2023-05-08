@@ -16,7 +16,7 @@ static void set_redirect(parser_t *parser,
 redirect_t *redirect, int new_type, char *name)
 {
     if (redirect->type != NO_REDIRECT) {
-        parser->error = 1;
+        parser->error = 2;
         free(name);
         return error_redirect(redirect->type);
     }
@@ -31,7 +31,7 @@ static void handle_redirect(parser_t *parser, command_t *command)
 
     if (PEEK(parser).type != IDENTIFIER){
         command->nb_command = -1;
-        parser->error = 1;
+        parser->error = 2;
         fprintf(stderr, "Missing name for redirect.\n");
         return;
     }
