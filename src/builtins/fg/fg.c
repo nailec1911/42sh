@@ -22,7 +22,7 @@ void set_foreground(mysh_t *mysh, and_command_t *job, pid_t pid)
 {
     int status = 0;
 
-    tcsetpgrp(mysh->shell_descriptor, pid);
+    tcsetpgrp(SHELL_DESCRIPTOR, pid);
     if ((status = wait_job(mysh->list, job)) != SUCCESS)
         mysh->last_status = status;
     else {
@@ -30,7 +30,7 @@ void set_foreground(mysh_t *mysh, and_command_t *job, pid_t pid)
         mysh->nb_current_job--;
     }
     signal(SIGTTOU, SIG_IGN);
-    tcsetpgrp(mysh->shell_descriptor, getpid());
+    tcsetpgrp(SHELL_DESCRIPTOR, getpid());
 }
 
 static int verif_current_job(mysh_t *mysh)

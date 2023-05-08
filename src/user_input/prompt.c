@@ -52,7 +52,7 @@ void init_prompt(mysh_t *mysh)
     struct passwd *pw;
     char current_dir[4096];
     char *git_branch = malloc(1024);
-    if (!isatty(mysh->shell_descriptor))
+    if (!isatty(SHELL_DESCRIPTOR))
         return;
     pw = getpwuid(getuid());
     getcwd(current_dir, sizeof(current_dir));

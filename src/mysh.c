@@ -19,7 +19,7 @@ static char *choose_get_line(mysh_t mysh)
     mysh.ind_history = mysh.history.len_tab_hist;
     mysh.ind_init = mysh.ind_history;
 
-    if (isatty(mysh.shell_descriptor))
+    if (isatty(SHELL_DESCRIPTOR))
         input = get_input(mysh);
     else
         input = get_input_line();
@@ -34,9 +34,8 @@ static void set_main_process(mysh_t *mysh)
     signal(SIGTTIN, SIG_IGN);
     signal(SIGTTOU, SIG_IGN);
     mysh->shell_pgid = getpid();
-    mysh->shell_descriptor = STDIN_FILENO;
     setpgid(mysh->shell_pgid, mysh->shell_pgid);
-    tcsetpgrp(mysh->shell_descriptor, mysh->shell_pgid);
+    tcsetpgrp(SHELL_DESCRIPTOR, mysh->shell_pgid);
 }
 
 static int init_all(mysh_t *mysh, char * const env[])
@@ -84,7 +83,7 @@ int mysh(char * const env[])
         }
         res = loop_sh(&mysh, input);
     }
-    if (res == EXIT && isatty(mysh.shell_descriptor))
+    if (res == EXIT && isatty(SHELL_DESCRIPTOR))
         fprintf(stdout, "exit\n");
     if (res == ERROR)
         return ERROR;

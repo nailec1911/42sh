@@ -15,6 +15,7 @@
     #include "builtins/vars.h"
     #include "tab.h"
     #include "job_control.h"
+    #define SHELL_DESCRIPTOR 0
 
     typedef struct mysh_s {
         vars_t *vars;
@@ -35,7 +36,6 @@
         alias_t alias;
 
         pid_t shell_pgid;
-        short shell_descriptor;
         job_list *list;
         int nb_current_job;
     } mysh_t;
