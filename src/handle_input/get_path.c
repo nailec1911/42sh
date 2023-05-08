@@ -47,6 +47,10 @@ static char *get_all_path(mysh_t *mysh)
     char default_path[1024];
 
     env_path = get_env_var(mysh, "PATH=");
+    if (!env_path) {
+        env_path = malloc(1);
+        env_path[0] = 0;
+    }
     confstr(_CS_PATH, default_path, 1024);
     return my_strcat_with_char(env_path, default_path, ':');
 }
