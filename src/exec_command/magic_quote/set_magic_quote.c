@@ -19,8 +19,7 @@ static int set_new_params(mysh_t *mysh, command_t *command, int to_mod)
 
     if (res_cmd == NULL)
         return ERROR;
-    if ((res_array = file_stream_to_tab(res_cmd)) == NULL)
-        return ERROR;
+    res_array = file_stream_to_tab(res_cmd);
     command->args = insert_array_in_array(res_array, command->args, to_mod);
     free(res_array);
     return SUCCESS;

@@ -10,17 +10,14 @@
 #include <errno.h>
 #include "str_func.h"
 #include "macro_errors.h"
-char **my_str_to_word_array_separator(char *str, char *separator);
 
 static char *get_file_str(FILE *file)
 {
     size_t len = 0;
     char *result = NULL;
 
-    if (getdelim(&result, &len, '\0', file) < 0) {
-        perror("getdelim");
+    if (getdelim(&result, &len, '\0', file) < 0)
         return NULL;
-    }
     return result;
 }
 
