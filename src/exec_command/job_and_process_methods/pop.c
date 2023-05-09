@@ -9,6 +9,8 @@
 
 and_command_t *pop(job_stack *stack)
 {
+    if (!stack)
+        return NULL;
     if (is_empty(stack))
         return NULL;
     return stack->job[stack->top--];

@@ -59,7 +59,6 @@ SRC	=	mysh.c		\
 		exec_command/job_and_process_methods/get_job_status.c 		\
 		exec_command/job_and_process_methods/get_job_from_pid.c 		\
 		exec_command/job_and_process_methods/display_job.c 		\
-		exec_command/job_and_process_methods/get_last_job_pgid.c 		\
 		str_func/is_in.c			\
 		str_func/is_num.c			\
 		str_func/my_strlen.c			\

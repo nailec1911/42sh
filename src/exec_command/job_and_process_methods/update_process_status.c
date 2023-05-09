@@ -11,6 +11,8 @@
 
 static void set_process_status(command_t *process, int status)
 {
+    if (!process)
+        return;
     if (WIFEXITED(status)) {
         process->process_state = DONE;
         return;
@@ -27,6 +29,8 @@ static void set_process_status(command_t *process, int status)
 
 static bool iterate_process(and_command_t *job, pid_t pid, int status)
 {
+    if (!job)
+        return true;
     for (int i = 0; i < job->nb_command; ++i) {
         if (job->tab_command[i].pid == pid) {
             set_process_status(&job->tab_command[i], status);
@@ -38,9 +42,10 @@ static bool iterate_process(and_command_t *job, pid_t pid, int status)
 
 int update_process_status(job_list *list, pid_t pid, int status)
 {
+    if (!list)
+        return ERROR;
     if (pid < 0)
         return SUCCESS;
-
     for (job_list *tmp = list; tmp; tmp = tmp->next) {
         if (iterate_process(tmp->job, pid, status)) {
             return SUCCESS;
