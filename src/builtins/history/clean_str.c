@@ -11,6 +11,20 @@
 #include "mysh.h"
 #include <string.h>
 
+int count_line(char *str)
+{
+    int line = 0;
+
+    if (!str)
+        return -1;
+    for (int i = 0; str[i] != '\0'; i += 1) {
+        if (str[i] == '\n')
+            line += 1;
+    }
+    free(str);
+    return line;
+}
+
 char *remake_command(char **tab)
 {
     char *final_input = NULL;

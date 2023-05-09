@@ -16,27 +16,13 @@
 #include <string.h>
 #include "init.h"
 
-static int count_line(char *str)
-{
-    int line = 0;
-
-    if (str == NULL)
-        return -1;
-    for (int i = 0; str[i] != '\0'; i += 1) {
-        if (str[i] == '\n')
-            line += 1;
-    }
-    free(str);
-    return line;
-}
-
 int get_nb_line(char *filepath)
 {
     struct stat file;
     char *str_file = NULL;
     int fd = 0;
 
-    if (filepath == NULL)
+    if (!filepath)
         return ERROR;
     fd = open(filepath, O_RDONLY);
     if (fd == -1)
@@ -55,19 +41,32 @@ static int check_syntaxe(char *line)
 {
     char **check = NULL;
 
-    if (line == NULL)
+    if (!line)
         return ERROR;
     if ((check = my_str_to_word_array_separator(line, " \n")) == NULL)
         return ERROR;
     if (length_tab(check) < 3) {
         free_array(check);
-        return ERROR;
+        return FAILURE;
     }
     if (strcmp(check[0], "alias") != 0) {
         free_array(check);
-        return ERROR;
+        return FAILURE;
     }
     free_array(check);
+    return SUCCESS;
+}
+
+static int check_syntaxe_and_dup(char *line, char ***tab, int *i)
+{
+    int res = 0;
+    if (!line || !tab || !i)
+        return ERROR;
+    if ((res = check_syntaxe(line)) != SUCCESS)
+        return res;
+    (*tab)[*i] = strdup(line);
+    if ((*tab)[*i] == NULL)
+        return ERROR;
     return SUCCESS;
 }
 
@@ -77,19 +76,19 @@ static char **fill_tab_from_file(FILE *stream, int nb_line)
     char **tab = NULL;
     char *line = NULL;
     size_t len = 0;
-    if ((tab = malloc(sizeof(char *) * (nb_line + 1))) == NULL)
+    int res = 0;
+    if (!stream)
+        return NULL;
+    if ((tab = calloc(nb_line + 1, sizeof(char *))) == NULL)
         return NULL;
     tab[nb_line] = NULL;
     while (getline(&line, &len, stream) != -1) {
-        if (check_syntaxe(line) == ERROR) {
+        if ((res = check_syntaxe_and_dup(line, &tab, &i)) == ERROR) {
             free(line);
             free(tab);
             return NULL;
-        }
-        tab[i] = strdup(line);
-        if (tab[i] == NULL)
-            return NULL;
-        i += 1;
+        } else
+            res == SUCCESS ? i += 1 : i;
     }
     free(line);
     return tab;

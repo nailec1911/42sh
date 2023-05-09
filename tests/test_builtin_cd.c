@@ -24,7 +24,7 @@ Test(get_path_cd1, correct_path){
     to_exec.args = (char *[2]){"cd", "tests"};
     shell.last_status = 0;
 
-    char *result = get_path_to_go(&shell, to_exec);
+    char *result = get_path_to_go(&shell, &to_exec);
     cr_assert_str_eq(result, "tests");
     cr_assert_eq(shell.last_status, 0);
 }
@@ -37,7 +37,7 @@ Test(get_path_cd2, home_path){
     to_exec.args = (char *[2]){"cd"};
     shell.last_status = 0;
 
-    char *result = get_path_to_go(&shell, to_exec);
+    char *result = get_path_to_go(&shell, &to_exec);
     cr_assert_str_eq(result, "/home/usr");
     cr_assert_eq(shell.last_status, 0);
 }
@@ -50,7 +50,7 @@ Test(get_path_cd3, home_path_wave){
     to_exec.args = (char *[2]){"cd", "~/src"};
     shell.last_status = 0;
 
-    char *result = get_path_to_go(&shell, to_exec);
+    char *result = get_path_to_go(&shell, &to_exec);
     cr_assert_str_eq(result, "/home/usr/src");
     cr_assert_eq(shell.last_status, 0);
 }
@@ -63,7 +63,7 @@ Test(get_path_cd4, get_oldpwd){
     to_exec.args = (char *[2]){"cd", "-"};
     shell.last_status = 0;
 
-    char *result = get_path_to_go(&shell, to_exec);
+    char *result = get_path_to_go(&shell, &to_exec);
     cr_assert_str_eq(result, "/src");
     cr_assert_eq(shell.last_status, 0);
 }
@@ -77,7 +77,7 @@ Test(get_path_cd4, oldpwd_not_set){
     to_exec.args = (char *[2]){"cd", "-"};
     shell.last_status = 0;
 
-    char *result = get_path_to_go(&shell, to_exec);
+    char *result = get_path_to_go(&shell, &to_exec);
     cr_assert_stderr_eq_str(": No such file or directory.\n");
     cr_assert_null(result);
     cr_assert_eq(shell.last_status, 1);
@@ -92,7 +92,7 @@ Test(get_path_cd5, home_not_set){
     to_exec.args = (char *[2]){"cd"};
     shell.last_status = 0;
 
-    char *result = get_path_to_go(&shell, to_exec);
+    char *result = get_path_to_go(&shell, &to_exec);
     cr_assert_stderr_eq_str("cd: No home directory.\n");
     cr_assert_null(result);
     cr_assert_eq(shell.last_status, 1);
@@ -106,7 +106,7 @@ Test(get_path_cd4, wrong_minishell){
     to_exec.args = (char *[2]){"cd", "-dsqdsq"};
     shell.last_status = 0;
 
-    char *result = get_path_to_go(&shell, to_exec);
+    char *result = get_path_to_go(&shell, &to_exec);
     cr_assert_str_eq(result, "-dsqdsq");
     cr_assert_eq(shell.last_status, 0);
 }

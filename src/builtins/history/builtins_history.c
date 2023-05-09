@@ -11,6 +11,7 @@
 #include "str_func.h"
 #include "macro_errors.h"
 #include "history.h"
+#include "init.h"
 
 static tab_hist_t **set_new_history(mysh_t *mysh, int ind_last)
 {
@@ -68,4 +69,3 @@ int do_history(mysh_t *mysh, command_t to_exec)
         display_history(mysh->history.tab_hist, to_exec.fd_out, &mysh->history);
     return SUCCESS;
 }
-
