@@ -15,9 +15,10 @@
 static int is_globbing(char *arg)
 {
     int has_bracket = 0;
+    char ch = 0;
 
     for (int i = 0; arg[i]; i++) {
-        char const ch = arg[i];
+        ch = arg[i];
         if (ch == '*' || ch == '?')
             return 1;
         if (ch == '[' || ch == ']')
@@ -35,17 +36,19 @@ static int get_glob_data(char *buf, glob_t *out)
     return SUCCESS;
 }
 
-static int get_new_argv_size(command_t cmd)
+static int get_new_argv_size(command_t *cmd)
 {
     int sz = 0;
     glob_t glob_data = {0};
 
-    for (int i = 0; cmd.args[i]; i++) {
-        if (!is_globbing(cmd.args[i])) {
+    if (!cmd)
+        return 0;
+    for (int i = 0; cmd->args[i]; i++) {
+        if (!is_globbing(cmd->args[i])) {
             sz++;
             continue;
         }
-        if (get_glob_data(cmd.args[i], &glob_data) == ERROR)
+        if (get_glob_data(cmd->args[i], &glob_data) == ERROR)
             continue;
         sz += glob_data.gl_pathc;
         globfree(&glob_data);
@@ -56,11 +59,11 @@ static int get_new_argv_size(command_t cmd)
 static char **get_glob_argv(command_t *cmd, int *size)
 {
     glob_t results = {0};
-    int new_argv_sz = get_new_argv_size(*cmd);
+    int new_argv_sz = get_new_argv_size(cmd);
     char **new_argv = malloc(8 * (new_argv_sz + 1));
-    if (!new_argv)
-        return 0;
 
+    if (!new_argv || !cmd)
+        return 0;
     for (int i = 0; cmd->args[i]; i++) {
         if (!is_globbing(cmd->args[i])) {
             new_argv[(*size)++] = strdup(cmd->args[i]);
@@ -82,6 +85,8 @@ int update_glob_argv(and_command_t *cmd)
     command_t *cur_cmd = 0;
     char **new_argv = 0;
 
+    if (!cmd)
+        return ERROR;
     for (int i = 0; i < cmd->nb_command; i += 1) {
         cur_cmd = &(cmd->tab_command[i]);
         if (cur_cmd->is_ast)

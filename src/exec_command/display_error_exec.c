@@ -9,6 +9,8 @@
 
 void display_error_exec(int error_code, char *path)
 {
+    if (!path)
+        return;
     switch (error_code) {
         case (2):
             fprintf(stderr, "%s: Command not found.\n", path);

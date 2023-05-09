@@ -11,7 +11,7 @@
     #include "mysh.h"
 
     int loop_grocommand(mysh_t *mysh, ast_t *ast);
-    int exec_and_command(mysh_t *mysh, and_command_t *to_exec);
+    int set_and_command(mysh_t *mysh, and_command_t *to_exec);
     int exec_parenthesis(mysh_t *mysh, command_t *to_exec);
     int exec_process
     (mysh_t *mysh, and_command_t *job, command_t *process, bool pipe);
