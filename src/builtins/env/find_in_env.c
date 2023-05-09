@@ -9,6 +9,8 @@
 
 char *find_in_env(char **env, char *name)
 {
+    if (!env || !name)
+        return NULL;
     for (int i = 0; env[i] != NULL; i += 1)
         if (strncmp(env[i], name, strlen(name)) == 0)
             return &env[i][strlen(name)];

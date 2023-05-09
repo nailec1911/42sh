@@ -51,24 +51,34 @@ static void display_error_chdir(int error_code, char *path)
     return;
 }
 
-int do_cd(mysh_t *mysh, command_t to_exec)
+static int go_to_new_dir(mysh_t *mysh, char *path, char *name)
 {
-    char *path = get_path_to_go(mysh, to_exec);
     char *old_pwd = NULL;
-    if (to_exec.args[1] != NULL && to_exec.args[2] != NULL) {
-        fprintf(stderr, "cd: Too many arguments.\n");
-        mysh->last_status = 1;
-        return SUCCESS;
-    }
-    if (path == NULL)
-        return SUCCESS;
+
     if ((old_pwd = getcwd(old_pwd, 0)) == NULL)
         return ERROR;
     if (chdir(path) == -1) {
-        display_error_chdir(errno, to_exec.args[1]);
+        display_error_chdir(errno, name);
         mysh->last_status = 1;
         free(old_pwd);
         return SUCCESS;
     }
     return update_env_var(old_pwd, mysh);
+}
+
+int do_cd(mysh_t *mysh, command_t to_exec)
+{
+    char *path = NULL;
+
+    if (!mysh)
+        return ERROR;
+    if (to_exec.args[1] != NULL && to_exec.args[2] != NULL) {
+        fprintf(stderr, "cd: Too many arguments.\n");
+        mysh->last_status = 1;
+        return SUCCESS;
+    }
+    path = get_path_to_go(mysh, &to_exec);
+    if (path == NULL)
+        return SUCCESS;
+    return go_to_new_dir(mysh, path, to_exec.args[1]);
 }
