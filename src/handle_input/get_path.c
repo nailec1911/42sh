@@ -61,6 +61,8 @@ int get_path(mysh_t *mysh, char **path, command_t *to_exec)
     char **all_prefix = NULL;
     int res_all_try = 0;
 
+    if (!mysh || !path || !to_exec || !to_exec->args)
+        return ERROR;
     if ((*path = strdup(to_exec->args[0])) == NULL)
         return ERROR;
     if (is_absolute_path(*path) == SUCCESS) {
