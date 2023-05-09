@@ -20,7 +20,7 @@ static int resize_tab_history(history_t *history)
     history->tab_hist = calloc(l_tab + 1, sizeof(tab_hist_t *));
     if (history->tab_hist == NULL)
         return ERROR;
-    for (int i = 0; i < l_tab; i += 1) {
+    for (int i = 0; i < l_tab - 1; i += 1) {
         history->tab_hist[i] = temp[i];
     }
     if (temp != NULL)
@@ -44,7 +44,7 @@ int add_elem_tab(history_t *history, char *to_add, int num)
 {
     int l_tab = 0;
 
-    if (!history || !history->tab_hist || !to_add || history->len_tab_hist < 0)
+    if (!history || !to_add || history->len_tab_hist < 0)
         return ERROR;
     history->len_tab_hist += 1;
     if (resize_tab_history(history) == ERROR)

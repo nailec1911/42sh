@@ -25,7 +25,8 @@ int add_in_history(history_t *history, char *input)
         return ERROR;
     if (strcmp("history\n", input) == 0)
         return SUCCESS;
-    if (history->have_hist && ftruncate(history->fd_history_file, 0) == -1) {
+    if (history->fd_history_file != -1
+    && ftruncate(history->fd_history_file, 0) == -1) {
         return ERROR;
     }
     if (check_last_command(history, input) == ERROR)
@@ -39,7 +40,6 @@ static int get_num_command(history_t *history, char *path)
     if (!history || !path)
         return ERROR;
     if (file_to_tab_hist(path, history) == ERROR) {
-        history->have_hist = false;
         fprintf(stderr, "Wrong syntaxe : The history will not be saved "
         "during this session\n");
         return SUCCESS;
@@ -58,8 +58,11 @@ static char *set_all_fd(history_t *history)
     if ((path = get_path_home(HISTORY_FILE)) == NULL)
         return NULL;
     if ((history->fd_history_file = open(path, O_CREAT |
-    O_APPEND | O_RDWR, 0644)) == -1)
+    O_APPEND | O_RDWR, 0644)) == -1) {
+        fprintf(stderr, ".42shhistory could not be opened, "
+        "history will not be saved for this session\n");
         return NULL;
+    }
     return path;
 }
 
@@ -67,8 +70,8 @@ int init_history(history_t *history)
 {
     char *path = NULL;
     struct stat file;
+
     history->num_cmd = 0;
-    history->have_hist = true;
     if ((path = set_all_fd(history)) == NULL)
         return SUCCESS;
     if (stat(path, &file) == -1)
