@@ -11,6 +11,7 @@
 #include "str_func.h"
 #include "init.h"
 
+
 static char *search_command(mysh_t *mysh, char *last_input)
 {
     char *replace = NULL;

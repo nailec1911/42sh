@@ -30,7 +30,7 @@ char *up_arrow_function(mysh_t *mysh, int *index, int *length, char *line)
 {
     int res = *index;
 
-    if (mysh->history.tab_hist == NULL)
+    if (!mysh->history.tab_hist)
         return line;
     if (mysh->ind_history > 0)
         mysh->ind_history -= 1;
