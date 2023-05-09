@@ -70,9 +70,9 @@ int length_tab(char **tab)
     return len;
 }
 
-void write_in_file(tab_hist_t **tab, int fd, bool have_file)
+void write_in_file(tab_hist_t **tab, int fd)
 {
-    if (have_file == false || !tab)
+    if (!tab || fd == -1)
         return;
     for (int i = 0; tab[i] != NULL; i += 1) {
         dprintf(fd, "%s  %s   %s", tab[i]->num, tab[i]->time, tab[i]->command);

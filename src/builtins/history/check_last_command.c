@@ -51,8 +51,7 @@ int check_last_command(history_t *history, char *input)
 {
     if (!history || !input)
         return ERROR;
-    if (!history->tab_hist || history->have_hist == false
-    || !history->tab_hist[0]) {
+    if (!history->tab_hist || !history->tab_hist[0]) {
         if (add_elem_tab(history, input, history->num_cmd) == ERROR)
             return ERROR;
         history->len_tab_hist = 1;
@@ -61,6 +60,6 @@ int check_last_command(history_t *history, char *input)
             return ERROR;;
     }
     write_in_file
-    (history->tab_hist, history->fd_history_file, history->have_hist);
+    (history->tab_hist, history->fd_history_file);
     return SUCCESS;
 }
