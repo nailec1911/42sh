@@ -32,7 +32,8 @@ static token_t *get_new_tab(token_t *old, token_t *to_add, int ind)
     return new;
 }
 
-static token_t *replace_if_alias(mysh_t *mysh, token_t *list, int *i)
+static token_t *replace_if_alias
+(mysh_t *mysh, token_t *list, int *i, int *nb_alias)
 {
     char *alias = NULL;
     token_t *list_alias;
@@ -50,14 +51,21 @@ static token_t *replace_if_alias(mysh_t *mysh, token_t *list, int *i)
     free(list_alias);
     free(alias);
     *i -= 1;
+    *nb_alias += 1;
     return list;
 }
 
 token_t *loop_for_aliases(mysh_t *mysh, token_t *list)
 {
-    for (int i = 0; list[i].type != END_LINE; i += 1) {
-        if ((list = replace_if_alias(mysh, list, &i)) == NULL)
+    int nb_alias = 0;
+
+    for (int i = 0; list[i].type != END_LINE && nb_alias < 1024; i += 1) {
+        if ((list = replace_if_alias(mysh, list, &i, &nb_alias)) == NULL)
             return NULL;
+    }
+    if (nb_alias >= 1024) {
+        mysh->last_status = 1;
+        fprintf(stderr, "Alias loop\n");
     }
     return list;
 }

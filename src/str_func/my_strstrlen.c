@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 
-int my_strstrlen(char *str[])
+int my_strstrlen(char *const str[])
 {
     int len = 0;
     if (!str)

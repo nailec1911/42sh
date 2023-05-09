@@ -12,7 +12,7 @@
 #include "str_func.h"
 #include "macro_errors.h"
 
-static char *get_home_path(mysh_t *mysh, command_t to_exec)
+static char *get_home_path(mysh_t *mysh, command_t *to_exec)
 {
     char *home_path = get_env_var(mysh, "HOME=");
     char *new_path;
@@ -22,24 +22,25 @@ static char *get_home_path(mysh_t *mysh, command_t to_exec)
         mysh->last_status = 1;
         return NULL;
     }
-    if (to_exec.args[1] == NULL)
+    if (to_exec->args[1] == NULL)
         return home_path;
-    if ((new_path =
-    my_strcat_dup(home_path, to_exec.args[1] + 1)) == NULL) {
+    new_path = my_strcat_dup(home_path, to_exec->args[1] + 1);
+    if (new_path == NULL) {
         mysh->last_status = FAILURE;
         return NULL;
     }
     return new_path;
 }
 
-char *get_path_to_go(mysh_t *mysh, command_t to_exec)
+char *get_path_to_go(mysh_t *mysh, command_t *to_exec)
 {
-    char *path = to_exec.args[1];
+    char *path = to_exec->args[1];
 
-    if (to_exec.args[1] == NULL || to_exec.args[1][0] == '~')
+    if (to_exec->args[1] == NULL || to_exec->args[1][0] == '~')
         return get_home_path(mysh, to_exec);
-    if (to_exec.args[1][0] == '-' && to_exec.args[1][1] == '\0')
+    if (to_exec->args[1][0] == '-' && to_exec->args[1][1] == '\0') {
         path = get_env_var(mysh, "OLDPWD=");
+    }
     if (path == NULL) {
         fprintf(stderr, ": No such file or directory.\n");
         mysh->last_status = 1;

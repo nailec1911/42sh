@@ -21,5 +21,6 @@
     vars_t *edit_global_var(vars_t *list, vars_t *new_var);
     vars_t *get_global_var_by_name(vars_t *list, char *name);
     void free_global_var(vars_t *var);
+    char **recreate_args(char **args);
 
 #endif /* !VARS_H */
