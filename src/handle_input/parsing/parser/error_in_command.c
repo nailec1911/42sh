@@ -18,16 +18,16 @@ void error_redirect(int type)
         fprintf(stderr, "Ambiguous output redirect.\n");
 }
 
-void check_error(parser_t *parser, command_t new)
+void check_error(parser_t *parser, command_t *new)
 {
-    if (parser->error != 0)
+    if (!parser || !new || parser->error != 0)
         return;
-    if (new.nb_command != 0 && new.is_ast == true) {
+    if (new->nb_command != 0 && new->is_ast == true) {
         parser->error = 1;
         fprintf(stderr, "Badly placed ()'s.\n");
         return;
     }
-    if (new.args == NULL && new.is_ast == false) {
+    if (new->args == NULL && new->is_ast == false) {
         parser->error = 1;
         return;
     }

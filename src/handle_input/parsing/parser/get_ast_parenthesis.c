@@ -10,14 +10,15 @@
 #include <stdio.h>
 #include "macro_errors.h"
 #include "parser/create_ast.h"
-int create_ast(parser_t *parser, ast_t *ast);
 
 int get_ast_parenthesis(parser_t *parser, command_t *new)
 {
+    if (!parser || !new)
+        return ERROR;
     if (new->is_ast == true) {
         parser->error = 1;
         fprintf(stderr, "Too many )'s.\n");
-        return true;
+        return SUCCESS;
     }
     if ((new->parenthesis = malloc(sizeof(ast_t))) == NULL) {
         parser->error = ERROR;
