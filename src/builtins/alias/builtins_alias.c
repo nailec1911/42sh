@@ -69,16 +69,16 @@ static int display_alias_or_specific(mysh_t *mysh, char **args, int fd_out)
     return SUCCESS;
 }
 
-int do_alias(mysh_t *mysh, command_t to_exec)
+int do_alias(mysh_t *mysh, command_t *to_exec)
 {
     char *command = NULL;
 
-    if (!mysh || !to_exec.args || !to_exec.args[0])
+    if (!mysh || !to_exec->args || !to_exec->args[0])
         return ERROR;
-    if (to_exec.args[1] == NULL || to_exec.args[2] == NULL) {
-        return display_alias_or_specific(mysh, to_exec.args, to_exec.fd_out);
+    if (to_exec->args[1] == NULL || to_exec->args[2] == NULL) {
+        return display_alias_or_specific(mysh, to_exec->args, to_exec->fd_out);
     } else {
-        command = remake_input(to_exec.args);
+        command = remake_input(to_exec->args);
         if (command == NULL || add_alias_rc(&mysh->alias, command) == ERROR)
             return ERROR;
     }

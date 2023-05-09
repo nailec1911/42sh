@@ -14,15 +14,15 @@
 #include "macro_errors.h"
 #include "str_func.h"
 
-static int print_env(mysh_t *mysh, command_t to_exec)
+static int print_env(mysh_t *mysh, command_t *to_exec)
 {
     vars_t *var = mysh->vars;
-    char print_r = to_exec.args[1] && strcmp(to_exec.args[1], "-r") == 0;
+    char print_r = to_exec->args[1] && strcmp(to_exec->args[1], "-r") == 0;
 
     for (; var; var = var->next) {
         if ((print_r && !var->read_only) || (!print_r && var->read_only))
             continue;
-        dprintf(to_exec.fd_out, "%s\t%s\n", var->name, var->buffer ?
+        dprintf(to_exec->fd_out, "%s\t%s\n", var->name, var->buffer ?
                 var->buffer : "");
     }
     return SUCCESS;
@@ -79,13 +79,13 @@ static int set_all_vars(mysh_t *mysh, command_t *to_exec, char **new_args)
     return 0;
 }
 
-int do_setvar(mysh_t *mysh, command_t to_exec)
+int do_setvar(mysh_t *mysh, command_t *to_exec)
 {
     char **new_args = NULL;
 
     if (!mysh)
         return ERROR;
-    new_args = recreate_args(to_exec.args);
+    new_args = recreate_args(to_exec->args);
     if (!new_args)
         return FAILURE;
     if (check_args(new_args) != SUCCESS) {
@@ -93,10 +93,10 @@ int do_setvar(mysh_t *mysh, command_t to_exec)
         free_array(new_args);
         return SUCCESS;
     }
-    if ((to_exec.args[1] == 0 || to_exec.args[1][0] == 0) ||
-            (strcmp(to_exec.args[1], "-r") == 0 && to_exec.args[2] == 0)) {
+    if ((to_exec->args[1] == 0 || to_exec->args[1][0] == 0) ||
+            (strcmp(to_exec->args[1], "-r") == 0 && to_exec->args[2] == 0)) {
         free_array(new_args);
         return print_env(mysh, to_exec);
     }
-    return set_all_vars(mysh, &to_exec, new_args);
+    return set_all_vars(mysh, to_exec, new_args);
 }

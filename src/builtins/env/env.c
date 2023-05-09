@@ -12,18 +12,18 @@
 #include "mysh.h"
 #include "macro_errors.h"
 
-int do_env(mysh_t *mysh, command_t to_exec)
+int do_env(mysh_t *mysh, command_t *to_exec)
 {
-    if (!mysh || !to_exec.args)
+    if (!mysh || !to_exec->args)
         return ERROR;
-    if (to_exec.args[1] != NULL) {
+    if (to_exec->args[1] != NULL) {
         fprintf(stderr, "env: ‘%s’: No such file or directory\n",
-                to_exec.args[1]);
+                to_exec->args[1]);
         mysh->last_status = 127;
         return SUCCESS;
     }
     for (int i = 0; mysh->env[i]; ++i) {
-        dprintf(to_exec.fd_out, "%s\n", mysh->env[i]);
+        dprintf(to_exec->fd_out, "%s\n", mysh->env[i]);
     }
     mysh->last_status = 0;
 

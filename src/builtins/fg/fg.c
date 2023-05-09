@@ -45,15 +45,15 @@ static int verif_current_job(mysh_t *mysh)
     return SUCCESS;
 }
 
-int do_fg(mysh_t *mysh, command_t to_exec)
+int do_fg(mysh_t *mysh, command_t *to_exec)
 {
     if (!mysh)
         return ERROR;
     if (verif_current_job(mysh) != SUCCESS)
         return SUCCESS;
-    if (!to_exec.args[1])
+    if (!to_exec->args[1])
         return fg_no_args(mysh);
-    if (to_exec.args[1][0] == '%' && strlen(to_exec.args[1]) > 1)
-        return fg_with_jid(mysh, atoi(to_exec.args[1] + 1));
-    return fg_with_pid(mysh, atoi(to_exec.args[1]));
+    if (to_exec->args[1][0] == '%' && strlen(to_exec->args[1]) > 1)
+        return fg_with_jid(mysh, atoi(to_exec->args[1] + 1));
+    return fg_with_pid(mysh, atoi(to_exec->args[1]));
 }

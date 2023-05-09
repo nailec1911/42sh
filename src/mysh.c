@@ -58,13 +58,15 @@ static int init_all(mysh_t *mysh, char * const env[])
 
 static int destroy_all(mysh_t *mysh)
 {
-    free_env(mysh);
     vars_t *vars = mysh->vars;
+    vars_t *tmp = NULL;
+
     while (vars) {
-        vars_t *tmp = vars->next;
+        tmp = vars->next;
         free_global_var(vars);
         vars = tmp;
     }
+    free_env(mysh);
     return SUCCESS;
 }
 
