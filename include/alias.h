@@ -15,9 +15,7 @@
 
     typedef struct alias_s {
         int fd_alias_file;
-        FILE *fd_file;
         char **tab_file;
-        bool have_alias;
     }alias_t;
 
     char *remake_input(char **tab);
