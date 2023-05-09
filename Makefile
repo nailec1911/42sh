@@ -130,6 +130,7 @@ SRC	=	mysh.c		\
 		builtins/vars/set_var.c 	\
 		builtins/vars/vars_utils.c 	\
 		builtins/vars/unset_var.c 	\
+		builtins/vars/recreate_args.c	\
 		builtins/fg/fg.c   			\
 		builtins/fg/fg_no_args.c   			\
 		builtins/fg/fg_with_jid.c   			\
