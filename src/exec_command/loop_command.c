@@ -33,7 +33,7 @@ static int loop_and_command(mysh_t *mysh, or_command_t *or_command)
 
     do {
         mysh->last_status = 0;
-        exec_and_command(mysh, &(or_command->tab_and_command[i]));
+        set_and_command(mysh, &(or_command->tab_and_command[i]));
         mysh->nb_current_job++;
         or_command->tab_and_command[i].job_id = mysh->nb_current_job;
         mysh->list = add_job_to_list(mysh->list,

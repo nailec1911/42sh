@@ -14,7 +14,7 @@
 #include "builtins/cd.h"
 #include "parser/ast.h"
 char **init_mysh_env(char * const env[]);
-int do_cd(mysh_t *mysh, command_t command);
+int do_cd(mysh_t *mysh, command_t *command);
 
 Test(get_path_cd1, correct_path){
     char *env[3] = {"test=12AZ", "hello=world"};
@@ -122,7 +122,7 @@ Test(cd_1, too_many_args){
     command.args = (char *[3]){"cd", "tests", "too_many"};
     command.fd_out = STDOUT_FILENO;
 
-    cr_assert_eq(do_cd(&shell, command), 0);
+    cr_assert_eq(do_cd(&shell, &command), 0);
     cr_assert_stderr_eq_str("cd: Too many arguments.\n");
     cr_assert_eq(shell.last_status, 1);
 }
@@ -138,7 +138,7 @@ Test(cd_2, no_oldpwd){
     command.args = (char *[3]){"cd", "-"};
     command.fd_out = STDOUT_FILENO;
 
-    cr_assert_eq(do_cd(&shell, command), 0);
+    cr_assert_eq(do_cd(&shell, &command), 0);
     cr_assert_stderr_eq_str(": No such file or directory.\n");
     cr_assert_eq(shell.last_status, 1);
 }
@@ -154,7 +154,7 @@ Test(cd_3, not_a_directory){
     command.args = (char *[3]){"cd", "Makefile"};
     command.fd_out = STDOUT_FILENO;
 
-    cr_assert_eq(do_cd(&shell, command), 0);
+    cr_assert_eq(do_cd(&shell, &command), 0);
     cr_assert_stderr_eq_str("Makefile: Not a directory.\n");
     cr_assert_eq(shell.last_status, 1);
 }
@@ -170,7 +170,7 @@ Test(cd_4, wrongly_named){
     command.args = (char *[3]){"cd", "YMCA"};
     command.fd_out = STDOUT_FILENO;
 
-    cr_assert_eq(do_cd(&shell, command), 0);
+    cr_assert_eq(do_cd(&shell, &command), 0);
 
     cr_assert_stderr_eq_str("YMCA: No such file or directory.\n");
     cr_assert_eq(shell.last_status, 1);
@@ -190,7 +190,7 @@ Test(cd_5, working_cd){
     command.args = (char *[3]){"cd", "tests"};
     command.fd_out = STDOUT_FILENO;
 
-    cr_assert_eq(do_cd(&shell, command), 0);
+    cr_assert_eq(do_cd(&shell, &command), 0);
 
     cr_assert_eq(shell.last_status, 0);
 
@@ -211,11 +211,11 @@ Test(cd_6, working_cd){
     command.args = (char *[3]){"cd", "tests"};
     command.fd_out = STDOUT_FILENO;
 
-    cr_assert_eq(do_cd(&shell, command), 0);
+    cr_assert_eq(do_cd(&shell, &command), 0);
 
 
     command.args = (char *[3]){"cd", "-"};
-    cr_assert_eq(do_cd(&shell, command), 0);
+    cr_assert_eq(do_cd(&shell, &command), 0);
     cr_assert_eq(shell.last_status, 0);
 
     char *new = NULL;

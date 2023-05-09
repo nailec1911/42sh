@@ -41,6 +41,7 @@ and_command_t get_and_command(parser_t *parser);
 command_t get_command(parser_t *parser);
 int get_ast_parenthesis(parser_t *parser, command_t *new);
 void error_redirect(int type);
-void check_error(parser_t *parser, command_t new);
+void check_error(parser_t *parser, command_t *new);
+int create_ast(parser_t *parser, ast_t *ast);
 
 #endif /* !CREATE_AST_H_ */

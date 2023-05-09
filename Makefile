@@ -20,6 +20,7 @@ SRC	=	mysh.c		\
 		handle_input/parsing/set_all_ast.c			\
 		handle_input/parsing/free_ast.c				\
 		handle_input/parsing/lexer/lexer.c					\
+		handle_input/parsing/lexer/peek_get.c				\
 		handle_input/parsing/lexer/single_char_tokens.c		\
 		handle_input/parsing/lexer/single_mul_char_tokens.c	\
 		handle_input/parsing/lexer/quoted_tokens.c	\
@@ -39,7 +40,7 @@ SRC	=	mysh.c		\
 		exec_command/magic_quote/get_res_command.c		\
 		exec_command/magic_quote/file_stream_to_tab.c		\
 		exec_command/exec_parenthesis/exec_parenthesis.c	\
-		exec_command/exec_pipes.c	\
+		exec_command/set_and_command.c	\
 		exec_command/exec_process.c	\
 		exec_command/exec_builtins.c	\
 		exec_command/handle_errors.c	\

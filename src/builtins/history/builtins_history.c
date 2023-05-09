@@ -48,17 +48,17 @@ static int opt_clear(mysh_t *mysh)
     return SUCCESS;
 }
 
-int do_history(mysh_t *mysh, command_t to_exec)
+int do_history(mysh_t *mysh, command_t *to_exec)
 {
     if (!mysh)
         return ERROR;
-    if (to_exec.args[1] == NULL) {
+    if (to_exec->args[1] == NULL) {
         mysh->history.flags = NO_FLAG;
-        return display_history(mysh->history.tab_hist, to_exec.fd_out,
+        return display_history(mysh->history.tab_hist, to_exec->fd_out,
         &mysh->history);
     }
     mysh->history.flags = NO_FLAG;
-    if (detect_flags(&to_exec, &mysh->history) == ERROR) {
+    if (detect_flags(to_exec, &mysh->history) == ERROR) {
         printf("Usage: history [-chrSLMT] [# number of events].\n");
         mysh->last_status = 1;
         return SUCCESS;
@@ -66,6 +66,7 @@ int do_history(mysh_t *mysh, command_t to_exec)
     if (IS_FLAG(mysh->history.flags, FLAG_C))
         opt_clear(mysh);
     else
-        display_history(mysh->history.tab_hist, to_exec.fd_out, &mysh->history);
+        display_history
+        (mysh->history.tab_hist, to_exec->fd_out, &mysh->history);
     return SUCCESS;
 }

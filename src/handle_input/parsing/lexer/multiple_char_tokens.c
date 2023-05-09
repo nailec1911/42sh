@@ -16,6 +16,8 @@ static int get_size_value(lexer_t *lex)
     int temp_cursor = lex->cursor;
     int size_val = 0;
 
+    if (!lex)
+        return 0;
     lex->context = 0;
     while (lex->cursor < lex->len_input && (lex->context == 1 ||
     is_in(lexer_peek(lex), SEPARATORS) != 0)) {
@@ -34,6 +36,10 @@ token_t multiple_char_token(lexer_t *lex)
 {
     token_t new = {IDENTIFIER, 0, get_size_value(lex)};
 
+    if (!lex) {
+        new.type = T_ERROR;
+        return new;
+    }
     if ((new.value = malloc(sizeof(char) * (new.size_val + 1))) == NULL) {
         new.type = T_ERROR;
         return new;

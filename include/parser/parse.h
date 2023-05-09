@@ -14,6 +14,6 @@
     token_t *lexer(char *input);
     int create_ast(parser_t *parser, ast_t *ast);
     int set_all_ast(ast_t *ast);
-    void free_ast(ast_t ast);
+    void free_ast(ast_t *ast);
 
 #endif /* !PARSE_H_ */

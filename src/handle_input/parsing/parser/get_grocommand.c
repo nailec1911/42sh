@@ -55,6 +55,8 @@ grocommand_t get_grocommand(parser_t *parser)
     grocommand_t grocommand = {0, 0};
     int res = 0;
 
+    if (!parser)
+        return grocommand;
     grocommand.tab_or_command = NULL;
     grocommand.nb_or_command = 0;
 
