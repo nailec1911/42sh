@@ -10,22 +10,16 @@
 #include <unistd.h>
 #include <pwd.h>
 
-char *find_in_env(char **env, char *name)
-{
-    for (int i = 0; env[i] != NULL; i += 1)
-        if (strncmp(env[i], name, strlen(name)) == 0)
-            return &env[i][strlen(name)];
-    return NULL;
-}
-
 char *get_path_home(char *filepath)
 {
     char *home = NULL;
-
     struct passwd *pwd;
-    pwd = getpwuid(getuid());
-    home = my_strcat_dup(pwd->pw_dir, filepath);
-    if (home == NULL)
+
+    if (!filepath)
         return NULL;
+    pwd = getpwuid(getuid());
+    if (!pwd)
+        return NULL;
+    home = my_strcat_dup(pwd->pw_dir, filepath);
     return home;
 }

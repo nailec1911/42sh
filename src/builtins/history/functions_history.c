@@ -21,6 +21,8 @@ int file_to_tab_hist(char *filepath, history_t *history);
 
 int add_in_history(history_t *history, char *input)
 {
+    if (!history || !input)
+        return ERROR;
     if (strcmp("history\n", input) == 0)
         return SUCCESS;
     if (history->have_hist && ftruncate(history->fd_history_file, 0) == -1) {
@@ -34,6 +36,8 @@ int add_in_history(history_t *history, char *input)
 
 static int get_num_command(history_t *history, char *path)
 {
+    if (!history || !path)
+        return ERROR;
     if (file_to_tab_hist(path, history) == ERROR) {
         history->have_hist = false;
         fprintf(stderr, "Wrong syntaxe : The history will not be saved "
@@ -48,6 +52,9 @@ static int get_num_command(history_t *history, char *path)
 static char *set_all_fd(history_t *history)
 {
     char *path = NULL;
+
+    if (!history)
+        return NULL;
     if ((path = get_path_home(HISTORY_FILE)) == NULL)
         return NULL;
     if ((history->fd_history_file = open(path, O_CREAT |

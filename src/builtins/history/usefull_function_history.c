@@ -20,6 +20,7 @@ char *create_time_line(void)
     char **tab_time = NULL;
     char *command = NULL;
     char *time_str = ctime(&timestamp);
+
     if (time_str == NULL)
         return NULL;
     tab_time = my_str_to_word_array_separator(time_str, " ");
@@ -59,18 +60,21 @@ void free_tab_hist(tab_hist_t **tab)
 
 int length_tab(char **tab)
 {
+    int len = 0;
+
     if (tab == NULL || tab[0] == NULL)
         return 0;
-    int len = 0;
     for (int i = 0; tab[i] != NULL; i += 1) {
         len += 1;
     }
     return len;
 }
 
-void print_tab(char **tab)
+void write_in_file(tab_hist_t **tab, int fd, bool have_file)
 {
+    if (have_file == false || !tab)
+        return;
     for (int i = 0; tab[i] != NULL; i += 1) {
-        printf("%s\n", tab[i]);
+        dprintf(fd, "%s  %s   %s", tab[i]->num, tab[i]->time, tab[i]->command);
     }
 }
