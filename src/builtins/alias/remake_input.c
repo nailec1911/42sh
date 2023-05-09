@@ -32,4 +32,3 @@ char *remake_input(char **tab)
     free(final_input);
     return temp;
 }
-

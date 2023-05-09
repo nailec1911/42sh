@@ -54,5 +54,3 @@ int display_specific_alias(char **tab_file, char *to_find, int fd)
     }
     return SUCCESS;
 }
-
-

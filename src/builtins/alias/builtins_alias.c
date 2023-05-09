@@ -13,7 +13,6 @@
 #include "str_func.h"
 #include "macro_errors.h"
 #include "init.h"
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -93,4 +92,3 @@ int do_alias(mysh_t *mysh, command_t to_exec)
     }
     return SUCCESS;
 }
-
