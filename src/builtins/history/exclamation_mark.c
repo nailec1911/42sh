@@ -11,25 +11,21 @@
 #include "str_func.h"
 #include "init.h"
 
-char *search_command(mysh_t *mysh, char *last_input)
+
+static char *search_command(mysh_t *mysh, char *last_input)
 {
     char *replace = NULL;
 
+    if (!mysh || !last_input)
+        return NULL;
     if (is_num(last_input)) {
-        if ((replace = search_by_num(mysh, last_input)) == NULL) {
-            free(last_input);
-            mysh->last_status = 1;
-            mysh->display_line = false;
-            return NULL;
-        }
-        free(last_input);
-        return replace;
+        replace = search_by_type(mysh, last_input, 1);
+    } else {
+        replace = search_by_type(mysh, last_input, 2);
     }
-    if ((replace = search_by_name(mysh, last_input)) == NULL) {
-        free(last_input);
+    if (!replace) {
         mysh->last_status = 1;
         mysh->display_line = false;
-        return NULL;
     }
     free(last_input);
     return replace;
@@ -39,7 +35,7 @@ char *do_exclamation_mark(mysh_t *mysh, char *input)
 {
     char *last_input = NULL;
 
-    if (mysh == NULL || input == NULL)
+    if (!mysh || !input)
         return NULL;
     last_input = remove_first_char(input);
     if (last_input == NULL)

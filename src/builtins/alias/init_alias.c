@@ -4,6 +4,7 @@
 ** File description:
 ** main
 */
+
 #include <stdlib.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -29,13 +30,10 @@ static char *set_all_fd(alias_t *alias)
     return path;
 }
 
-int init_alias(alias_t *alias)
+static int set_alias_from_file(alias_t *alias, char *path)
 {
-    char *path = NULL;
     struct stat file;
 
-    if ((path = set_all_fd(alias)) == NULL)
-        return ERROR;
     if (stat(path, &file) == -1)
         return ERROR;
     if (file.st_size == 0) {
@@ -49,4 +47,18 @@ int init_alias(alias_t *alias)
     }
     free(path);
     return SUCCESS;
+}
+
+int init_alias(alias_t *alias)
+{
+    char *path = NULL;
+
+    if (!alias)
+        return ERROR;
+    if ((path = set_all_fd(alias)) == NULL) {
+        alias->tab_file = NULL;
+        alias->have_alias = false;
+        return SUCCESS;
+    }
+    return set_alias_from_file(alias, path);
 }

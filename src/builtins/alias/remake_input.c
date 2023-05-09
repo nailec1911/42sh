@@ -4,6 +4,7 @@
 ** File description:
 ** main
 */
+
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
@@ -15,10 +16,9 @@ char *remake_input(char **tab)
     char *temp = NULL;
     int i = 1;
 
-    if (tab == NULL)
+    if (!tab || !tab[0])
         return NULL;
-    if ((final_input = strdup(tab[0])) == NULL)
-        return NULL;
+    final_input = strdup(tab[0]);
     for (; tab[i] != NULL; i += 1) {
         if ((temp = my_strcat_dup(final_input, " ")) == NULL)
             return NULL;
@@ -32,3 +32,4 @@ char *remake_input(char **tab)
     free(final_input);
     return temp;
 }
+
