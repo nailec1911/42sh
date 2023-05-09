@@ -36,7 +36,6 @@
     }history_t;
 
 
-void print_tab(char **tab);
 int length_tab(char **tab);
 char **my_str_to_word_array_separator(char *str, char *separator);
 int get_nb_line(char *filepath);
@@ -50,5 +49,8 @@ void write_in_file(tab_hist_t **tab, int fd, bool have_file);
 void free_tab_hist(tab_hist_t **tab);
 char *find_in_env(char **env, char *name);
 char *get_path_home(char *filepath);
+int display_history(tab_hist_t **tab, int fd, history_t *history);
+int detect_flags(command_t *to_exec, history_t *history);
+
 
 #endif /* !HISTORY_H_ */

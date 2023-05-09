@@ -15,6 +15,8 @@ char *get_path_home(char *filepath)
     char *home = NULL;
     struct passwd *pwd;
 
+    if (!filepath)
+        return NULL;
     pwd = getpwuid(getuid());
     if (!pwd)
         return NULL;
