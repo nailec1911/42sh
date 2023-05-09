@@ -55,6 +55,8 @@ or_command_t get_or_command(parser_t *parser)
     or_command_t or_command = {0, 0};
     int res = 0;
 
+    if (!parser)
+        return or_command;
     or_command.tab_and_command = NULL;
     or_command.nb_and_command = 0;
 

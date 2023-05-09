@@ -15,6 +15,8 @@ int loop_sh(mysh_t *mysh, char *input)
 {
     int res = 0;
 
+    if (!mysh || !input)
+        return ERROR;
     mysh->list = lookup_job(mysh->list, &mysh->nb_current_job);
     mysh->to_return = mysh->last_status;
     mysh->last_status = 0;

@@ -11,9 +11,11 @@
 #include "str_func.h"
 #include "macro_errors.h"
 
-int do_exit(mysh_t *mysh, command_t to_exec)
+int do_exit(mysh_t *mysh, command_t *to_exec)
 {
-    if (to_exec.args[1] != NULL) {
+    if (!mysh || !to_exec)
+        return ERROR;
+    if (to_exec->args[1] != NULL) {
         fprintf(stderr, "exit: Expression Syntax.\n");
         mysh->last_status = 1;
         return SUCCESS;

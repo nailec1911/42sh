@@ -11,8 +11,7 @@
 #include "macro_errors.h"
 #include "mysh.h"
 #include "str_func.h"
-
-int loop_grocommand(mysh_t *mysh, ast_t *ast);
+#include "exec_command.h"
 
 static int exec_ast(mysh_t *mysh, command_t *to_exec)
 {
@@ -28,6 +27,8 @@ int exec_parenthesis(mysh_t *mysh, command_t *to_exec)
     pid_t pid;
     int status = 0;
 
+    if (!mysh || !to_exec)
+        return ERROR;
     if ((pid = fork()) == -1)
         return ERROR;
     if (pid == 0)

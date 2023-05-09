@@ -55,7 +55,7 @@ static int exec_fork(mysh_t *mysh, and_command_t *job, command_t *process)
     if ((pid = fork()) < 0)
         return FAILURE;
     if (pid == 0) {
-        if ((status = exec_builtins(mysh, *process)) != FAILURE)
+        if ((status = exec_builtins(mysh, process)) != FAILURE)
             exit(status);
         launch_child(mysh, process);
     } else {
@@ -76,7 +76,7 @@ exec_process(mysh_t *mysh, and_command_t *job, command_t *process, bool do_fork)
 
     if (process->is_ast)
         return exec_parenthesis(mysh, process);
-    if (!do_fork && (status = exec_builtins(mysh, *process)) != FAILURE)
+    if (!do_fork && (status = exec_builtins(mysh, process)) != FAILURE)
         return status;
     if (get_path(mysh, &process->path, process) == ERROR)
         return ERROR;

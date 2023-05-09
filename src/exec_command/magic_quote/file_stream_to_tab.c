@@ -16,6 +16,8 @@ static char *get_file_str(FILE *file)
     size_t len = 0;
     char *result = NULL;
 
+    if (!file)
+        return NULL;
     if (getdelim(&result, &len, '\0', file) < 0)
         return NULL;
     return result;
@@ -26,6 +28,8 @@ char **file_stream_to_tab(FILE *file)
     char *file_str = get_file_str(file);
     char **tab = NULL;
 
+    if (!file)
+        return NULL;
     fclose(file);
     if (file_str == NULL)
         return NULL;
