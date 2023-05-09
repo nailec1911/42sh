@@ -12,7 +12,7 @@ job_stack *init_stack(job_stack *stack)
 {
     stack->job = malloc(sizeof(and_command_t*) * MAX_JOBS);
 
-    if (!stack->job)
+    if (!stack->job || !stack)
         return NULL;
     for (int i = 0; i < MAX_JOBS; ++i)
         if (!(stack->job[i] = malloc(sizeof(and_command_t))))

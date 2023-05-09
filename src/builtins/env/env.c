@@ -14,6 +14,8 @@
 
 int do_env(mysh_t *mysh, command_t to_exec)
 {
+    if (!mysh || !to_exec.args)
+        return ERROR;
     if (to_exec.args[1] != NULL) {
         fprintf(stderr, "env: ‘%s’: No such file or directory\n",
                 to_exec.args[1]);

@@ -12,10 +12,9 @@
 
 void free_env(mysh_t *mysh)
 {
-    if (mysh == NULL)
+    if (!mysh)
         return;
-
-    for (int i = 0; mysh->env[i]; ++i)
+    for (int i = 0; mysh->env && mysh->env[i]; ++i)
         free(mysh->env[i]);
     free(mysh->env);
     close(mysh->history.fd_history_file);

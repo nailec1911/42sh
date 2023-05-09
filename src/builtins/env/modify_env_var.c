@@ -44,7 +44,7 @@ static char **add_var(char **env, char *to_change, char *new_value, int len)
     return new_env;
 }
 
-static char **init_env(char *to_change, char *new_value)
+static char **init_var(char *to_change, char *new_value)
 {
     char **env = malloc(2 * sizeof(char *));
     int len = 0;
@@ -63,15 +63,18 @@ static char **init_env(char *to_change, char *new_value)
 
 int modify_env_var(char *to_change, mysh_t *mysh, char *new_value)
 {
-    int len = strlen(to_change);
+    int len = 0;
     int i = 0;
 
+    if (!to_change || !mysh || !mysh->env)
+        return ERROR;
+    len = strlen(to_change);
     for (; mysh->env[i] != NULL; ++i) {
         if (strncmp(mysh->env[i], to_change, len) == 0)
             return edit_var(to_change, new_value, &(mysh->env[i]));
     }
     if (i == 0) {
-        if ((mysh->env = init_env(to_change, new_value)) == NULL)
+        if ((mysh->env = init_var(to_change, new_value)) == NULL)
             return ERROR;
         return SUCCESS;
     }

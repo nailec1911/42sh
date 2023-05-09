@@ -53,7 +53,7 @@ vars_t *create_global_var(char *buffer, char read_only)
 {
     vars_t *new_var = malloc(sizeof(vars_t));
 
-    if (!new_var)
+    if (!new_var || !buffer)
         return 0;
 
     char *buf_name = get_var_name_from_buf(buffer);

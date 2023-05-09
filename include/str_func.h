@@ -21,7 +21,7 @@
     int char_isnum(char c);
     void free_array(char **array);
     int is_in(char c, char *str);
-    int my_strstrlen(char *str[]);
+    int my_strstrlen(char *const str[]);
     char *clean_last_input(char **tab_alias);
     bool is_num(char *str);
     int my_strlen(char *str);
