@@ -8,13 +8,11 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "mysh.h"
 #include "str_func.h"
 #include "macros_inputs.h"
-char *suppr_function(int *index, int *length, char *line);
-void choose_arrow(mysh_t *mysh, int *index, int *length, char **line);
+#include "input/get_input.h"
 
-void arrow_function(int *index, int *length, char **line, mysh_t *mysh)
+int arrow_function(int *index, int *length, char **line, mysh_t *mysh)
 {
     if (mysh->completion.display) {
         mysh->completion.display = false;
@@ -22,13 +20,17 @@ void arrow_function(int *index, int *length, char **line, mysh_t *mysh)
         mysh->completion.index = -1;
         free_array(mysh->completion.names);
     }
-    read(STDIN_FILENO, &mysh->ch, 1);
+    if (read(STDIN_FILENO, &mysh->ch, 1) == -1)
+        return EXIT_FAILURE;
     if (mysh->ch == BRACKET) {
-        read(STDIN_FILENO, &mysh->ch, 1);
+        if (read(STDIN_FILENO, &mysh->ch, 1) == -1)
+            return EXIT_FAILURE;
         choose_arrow(mysh, index, length, line);
     }
     if (mysh->ch == '3') {
-        read(STDIN_FILENO, &mysh->ch, 1);
+        if (read(STDIN_FILENO, &mysh->ch, 1) == -1)
+            return EXIT_FAILURE;
         *line = suppr_function(index, length, *line);
     }
+    return EXIT_SUCCESS;
 }

@@ -16,9 +16,9 @@
 static char *choose_get_line(mysh_t mysh)
 {
     char *input = "\0";
+
     mysh.ind_history = mysh.history.len_tab_hist;
     mysh.ind_init = mysh.ind_history;
-
     if (isatty(SHELL_DESCRIPTOR))
         input = get_input(mysh);
     else

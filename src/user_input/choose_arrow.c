@@ -6,9 +6,7 @@
 */
 
 #include <string.h>
-#include "mysh.h"
-char *remove_line(int res, int *length, int *index, char *line);
-void ctrl_functions(int *index, int *length, int ch);
+#include "input/arrow_function.h"
 
 static void left_arrow_function(int *index)
 {
