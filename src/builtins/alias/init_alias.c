@@ -24,8 +24,9 @@ static char *set_all_fd(alias_t *alias)
         return NULL;
     if ((alias->fd_alias_file = open(path, O_CREAT |
     O_APPEND | O_RDWR, 0644)) == -1) {
-        fprintf(stderr, ".42shrc failed to open, alias could not "
-        "be loaded and will not be saved\n");
+        if (isatty(SHELL_DESCRIPTOR) != 0)
+            fprintf(stderr, ".42shrc failed to open, alias could not "
+            "be loaded and will not be saved\n");
         return NULL;
     }
     return path;

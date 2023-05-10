@@ -4,20 +4,15 @@
 ** File description:
 ** main
 */
-#include "mysh.h"
-#include <sys/types.h>
-#include "history.h"
-#include "macro_errors.h"
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "str_func.h"
 #include <sys/stat.h>
 #include "init.h"
-#include <time.h>
-int file_to_tab_hist(char *filepath, history_t *history);
+#include "mysh.h"
+#include "history.h"
+#include "macro_errors.h"
 
 int add_in_history(history_t *history, char *input)
 {
@@ -59,8 +54,9 @@ static char *set_all_fd(history_t *history)
         return NULL;
     if ((history->fd_history_file = open(path, O_CREAT |
     O_APPEND | O_RDWR, 0644)) == -1) {
-        fprintf(stderr, ".42shhistory could not be opened, "
-        "history will not be saved for this session\n");
+        if (isatty(SHELL_DESCRIPTOR) != 0)
+            fprintf(stderr, ".42shhistory could not be opened, "
+            "history will not be saved for this session\n");
         return NULL;
     }
     return path;
