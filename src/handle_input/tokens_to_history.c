@@ -17,8 +17,6 @@ static int get_size_malloc(token_t *list)
     for (int i = 0; list[i].type != END_LINE; i += 1) {
         if (list[i].type == T_ERROR)
             return -1;
-        if (list[i].type == UNMATCHED_QUOTE)
-            return size + list[i].size_val;
         size += list[i].size_val + 1;
     }
     return size;
@@ -32,7 +30,7 @@ static char *get_str_for_history(token_t *list)
 
     if (size <= 0)
         return NULL;
-    if ((res = calloc(size + 1, sizeof(char))) == NULL)
+    if ((res = calloc(size + 2, sizeof(char))) == NULL)
         return NULL;
     for (int i = 0; list[i].type != END_LINE; i += 1) {
         for (int k = 0; k < list[i].size_val; k += 1) {
