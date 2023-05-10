@@ -49,6 +49,12 @@ int tokens_to_history(mysh_t *mysh, token_t *list)
 {
     char *to_history = get_str_for_history(list);
 
+    for (int i = 0; list[i].type != END_LINE; i += 1) {
+        if (list[i].type == UNMATCHED_QUOTE || list[i].type == T_ERROR) {
+            mysh->last_status = 1;
+            return SUCCESS;
+        }
+    }
     if (to_history == NULL)
         return ERROR;
     if (mysh->display_line) {
