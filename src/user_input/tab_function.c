@@ -10,19 +10,13 @@
 #include <stdlib.h>
 #include "str_func.h"
 #include "macro_errors.h"
-#include "mysh.h"
-char *find_in_env(char **env, char *name);
-void display_spaces_comp(mysh_t *mysh, int count, int *length);
-void get_name_max_size(mysh_t *mysh);
-void parse_line(mysh_t *mysh, char **line, int *length);
-void change_target_tab(mysh_t *mysh, int *index, int *length, char **line);
+#include "input/tab_function.h"
 
 static int fill_tab_list(mysh_t *mysh, DIR *dir, struct dirent *ent, int length)
 {
     int index = 0;
 
-    if ((dir = opendir(mysh->completion.path)) == NULL)
-        return ERROR;
+    rewinddir(dir);
     while ((ent = readdir(dir)) != NULL)
         if (ent->d_name[0] != '.' &&
         strncmp(mysh->completion.current, ent->d_name, length) == 0) {
@@ -49,7 +43,8 @@ static int malloc_tab_list(mysh_t *mysh)
         if (strncmp(mysh->completion.current, ent->d_name, length) == 0)
             count += 1;
     mysh->completion.names = malloc(sizeof(char *) * (count + 1));
-    closedir(dir);
+    if (mysh->completion.names == NULL)
+        return ERROR;
     return fill_tab_list(mysh, dir, ent, length);
 }
 
@@ -73,6 +68,7 @@ static bool check_if_alone(mysh_t *mysh, char **line, int *length, int *index)
 void display_completion(mysh_t *mysh, char **line, int *length)
 {
     int count = 0;
+
     mysh->completion.length_word =
     strlen(&(*line)[mysh->completion.ind_space]);
     display_spaces_comp(mysh, count, length);

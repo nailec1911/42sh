@@ -9,26 +9,30 @@
 #include <stdlib.h>
 #include <string.h>
 #include "str_func.h"
-#include "mysh.h"
-char *find_in_env(char **env, char *name);
+#include "input/tab_function.h"
 
-static void malloc_parsing(mysh_t *mysh, int ind, char **line, char *mid_line)
+static int malloc_parsing(mysh_t *mysh, int ind, char **line, char *mid_line)
 {
     mysh->completion.current =
     malloc(sizeof(char) * strlen(&((*line)[ind])) + 1);
+    if (mysh->completion.current == NULL)
+        return EXIT_FAILURE;
     mysh->completion.current = strcpy(mysh->completion.current, &(*line)[ind]);
     mysh->completion.temp = my_strcat_dup(find_in_env(mysh->env, "PWD="), "/");
     mysh->completion.path = my_strcat_dup(mysh->completion.temp, mid_line);
     free(mid_line);
     free(mysh->completion.temp);
+    return EXIT_SUCCESS;
 }
 
-void parse_line(mysh_t *mysh, char **line, int *length)
+int parse_line(mysh_t *mysh, char **line, int *length)
 {
     int ind = *length;
     int memo = 0;
     int index = 0;
     char *mid_line = malloc(sizeof(char) * (*length + 1));
+    if (mid_line == NULL)
+        return EXIT_FAILURE;
 
     for (; ind > 0 && (*line)[ind - 1] != ' ' &&
     (*line)[ind - 1] != '/'; ind -= 1);
@@ -41,4 +45,5 @@ void parse_line(mysh_t *mysh, char **line, int *length)
     }
     mid_line[index] = '\0';
     malloc_parsing(mysh, ind, line, mid_line);
+    return EXIT_SUCCESS;
 }
