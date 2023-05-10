@@ -13,6 +13,8 @@
 
 int fg_with_pid(mysh_t *mysh, pid_t pid)
 {
+    if (!mysh)
+        return ERROR;
     if (send_cont(pid) != SUCCESS) {
         mysh->last_status = FAILURE;
         return SUCCESS;

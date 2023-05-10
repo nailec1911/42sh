@@ -10,6 +10,8 @@
 
 void display_job_status(and_command_t *job)
 {
+    if (!job)
+        return;
     printf("[%d] Done", job->job_id);
     for (int i = 0; i < job->nb_command; ++i) {
         printf(" %s", job->tab_command[i].args[0]);
@@ -21,6 +23,8 @@ void display_job_status(and_command_t *job)
 
 void display_background(and_command_t *job)
 {
+    if (!job)
+        return;
     printf("[%d]", job->job_id);
     for (int i = 0; i < job->nb_command; ++i)
         printf(" %d", job->tab_command[i].pid);

@@ -5,31 +5,19 @@
 ** init_mysh_env
 */
 
-#include <stddef.h>
 #include <builtins/env.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "str_func.h"
 #include "macro_errors.h"
-
-static int get_strstr_len(char * const env[])
-{
-    int len = 0;
-
-    if (env == NULL)
-        return 0;
-    for (int i = 0; env[i] != NULL; i += 1)
-        len += 1;
-    return len;
-}
 
 char **init_mysh_env(char * const env[])
 {
-    int len = get_strstr_len(env);
+    int len = my_strstrlen(env);
     int sub_len = 0;
     char **result = malloc(sizeof(char*) * (len + 1));
 
-    if (env == NULL || result == NULL)
+    if (!env || !result || !env[0])
         return result;
     result[len] = NULL;
     for (int i = 0; i < len; i += 1) {

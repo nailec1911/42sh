@@ -69,6 +69,8 @@ command_t get_command(parser_t *parser)
     command_t new = {0, NULL, 0, NULL, NULL, false, STDIN_FILENO, STDOUT_FILENO,
     false, {NO_REDIRECT, NULL}, {NO_REDIRECT, NULL}, 0, 0};
 
+    if (!parser)
+        return new;
     while (!END_CMD(PEEK(parser)) && parser->error == SUCCESS) {
         if (PEEK(parser).type == L_PARENTHESIS
         && get_ast_parenthesis(parser, &new) != SUCCESS)
@@ -81,6 +83,6 @@ command_t get_command(parser_t *parser)
         if (IS_REDIRECT(PEEK(parser).type))
             handle_redirect(parser, &new);
     }
-    check_error(parser, new);
+    check_error(parser, &new);
     return new;
 }

@@ -10,7 +10,7 @@
 
     #include "token.h"
 
-    #define SEPARATORS ";&><| ()\t\n\0"
+    #define SEPARATORS "\"`';&><| ()\t\n\0"
     #define SINGLE_CHAR ";&><|()\n"
     #define QUOTED "'\"`"
 
@@ -22,18 +22,8 @@
         char context;
     } lexer_t;
 
-static inline char lexer_get(lexer_t *lex)
-{
-    lex->cursor += 1;
-    lex->context = 0;
-    return lex->input[lex->cursor - 1];
-}
-
-static inline char lexer_peek(lexer_t *lex)
-{
-    return lex->input[lex->cursor];
-}
-
+char lexer_get(lexer_t *lex);
+char lexer_peek(lexer_t *lex);
 token_t token_redirect_in(lexer_t *lex);
 token_t token_redirect_out(lexer_t *lex);
 token_t token_pipe(lexer_t *lex);

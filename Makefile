@@ -20,6 +20,7 @@ SRC	=	mysh.c		\
 		handle_input/parsing/set_all_ast.c			\
 		handle_input/parsing/free_ast.c				\
 		handle_input/parsing/lexer/lexer.c					\
+		handle_input/parsing/lexer/peek_get.c				\
 		handle_input/parsing/lexer/single_char_tokens.c		\
 		handle_input/parsing/lexer/single_mul_char_tokens.c	\
 		handle_input/parsing/lexer/quoted_tokens.c	\
@@ -39,7 +40,7 @@ SRC	=	mysh.c		\
 		exec_command/magic_quote/get_res_command.c		\
 		exec_command/magic_quote/file_stream_to_tab.c		\
 		exec_command/exec_parenthesis/exec_parenthesis.c	\
-		exec_command/exec_pipes.c	\
+		exec_command/set_and_command.c	\
 		exec_command/exec_process.c	\
 		exec_command/exec_builtins.c	\
 		exec_command/handle_errors.c	\
@@ -59,7 +60,6 @@ SRC	=	mysh.c		\
 		exec_command/job_and_process_methods/get_job_status.c 		\
 		exec_command/job_and_process_methods/get_job_from_pid.c 		\
 		exec_command/job_and_process_methods/display_job.c 		\
-		exec_command/job_and_process_methods/get_last_job_pgid.c 		\
 		str_func/is_in.c			\
 		str_func/is_num.c			\
 		str_func/my_strlen.c			\
@@ -131,6 +131,7 @@ SRC	=	mysh.c		\
 		builtins/vars/set_var.c 	\
 		builtins/vars/vars_utils.c 	\
 		builtins/vars/unset_var.c 	\
+		builtins/vars/recreate_args.c	\
 		builtins/fg/fg.c   			\
 		builtins/fg/fg_no_args.c   			\
 		builtins/fg/fg_with_jid.c   			\
@@ -144,6 +145,7 @@ OBJ	=	$(addprefix $(SOURCE_DIR), $(SRC:.c=.o)) $(SRC_MAIN:.c=.o)
 TO_TEST	=	tests/test_function.c	\
 			tests/test_lexer.c	\
 			tests/test_parser.c	\
+			tests/test_var.c	\
 			tests/test_builtin_cd.c		\
 			tests/test_env_handling.c		\
 			tests/test_builtins_env.c	\

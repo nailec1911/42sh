@@ -28,6 +28,8 @@ FILE *get_file_res_command(mysh_t *mysh, char *quoted)
     pid_t pid;
     FILE *res;
 
+    if (!mysh || !quoted)
+        return NULL;
     quoted[strlen(quoted) - 1] = '\n';
     if (pipe(pipefd) == -1 || (pid = fork()) == -1)
         return NULL;

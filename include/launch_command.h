@@ -12,6 +12,6 @@
 
     char *get_input(mysh_t mysh);
     char *get_input_line(void);
-    void free_ast(ast_t ast);
+    void free_ast(ast_t *ast);
 
 #endif /* !LAUNCH_COMMAND_H_ */

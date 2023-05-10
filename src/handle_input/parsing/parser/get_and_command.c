@@ -52,12 +52,11 @@ static int fill_tab_command(parser_t *parser, and_command_t *and_command)
 
 and_command_t get_and_command(parser_t *parser)
 {
-    and_command_t and_command = {0};
+    and_command_t and_command = {FOREGROUND, 0, NULL, 0, 0};
     int res = 0;
-    and_command.job_mode = FOREGROUND;
-    and_command.tab_command = NULL;
-    and_command.nb_command = 0;
 
+    if (!parser)
+        return and_command;
     while (PEEK(parser).type == BG)
         parser->cursor += 1;
     if (( res = fill_tab_command(parser, &and_command)) == ERROR){

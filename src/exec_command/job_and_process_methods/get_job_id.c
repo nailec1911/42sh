@@ -9,6 +9,8 @@
 
 static int get_job_id_loop(and_command_t *job, pid_t pid)
 {
+    if (!job)
+        return -1;
     for (int i = 0; i < job->nb_command; ++i) {
         if (job->tab_command[i].pid == pid)
             return job->job_id;
@@ -20,6 +22,8 @@ int get_job_id(job_list *list, pid_t pid)
 {
     int id = -1;
 
+    if (!list)
+        return -1;
     for (job_list *tmp = list; tmp; tmp = tmp->next) {
         if ((id = get_job_id_loop(tmp->job, pid)) != -1)
             return id;

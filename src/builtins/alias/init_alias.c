@@ -18,15 +18,17 @@
 static char *set_all_fd(alias_t *alias)
 {
     char *path = NULL;
-    alias->have_alias = true;
 
-    if ((path = get_path_home(ALIASRC_FILE)) == NULL)
+    path = get_path_home(ALIASRC_FILE);
+    if (path == NULL)
         return NULL;
     if ((alias->fd_alias_file = open(path, O_CREAT |
-    O_APPEND | O_RDWR, 0644)) == -1)
+    O_APPEND | O_RDWR, 0644)) == -1) {
+        if (isatty(SHELL_DESCRIPTOR) != 0)
+            fprintf(stderr, ".42shrc failed to open, alias could not "
+            "be loaded and will not be saved\n");
         return NULL;
-    if ((alias->fd_file = fopen(path, "a+")) == NULL)
-        return NULL;
+    }
     return path;
 }
 
@@ -39,8 +41,8 @@ static int set_alias_from_file(alias_t *alias, char *path)
     if (file.st_size == 0) {
         alias->tab_file = NULL;
     } else {
-        if ((alias->tab_file = file_to_tab(path)) == NULL) {
-            alias->have_alias = false;
+        alias->tab_file = file_to_tab(path);
+        if (alias->tab_file == NULL) {
             free(path);
             return SUCCESS;
         }
@@ -55,9 +57,9 @@ int init_alias(alias_t *alias)
 
     if (!alias)
         return ERROR;
-    if ((path = set_all_fd(alias)) == NULL) {
+    path = set_all_fd(alias);
+    if (path == NULL) {
         alias->tab_file = NULL;
-        alias->have_alias = false;
         return SUCCESS;
     }
     return set_alias_from_file(alias, path);

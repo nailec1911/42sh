@@ -9,6 +9,8 @@
 
 bool job_is_stoped(and_command_t *job)
 {
+    if (!job)
+        return true;
     for (int i = 0; i < job->nb_command; ++i) {
         if (job->tab_command[i].process_state != DONE ||
                 job->tab_command[i].process_state != SUSPENDED)
@@ -19,6 +21,8 @@ bool job_is_stoped(and_command_t *job)
 
 bool job_is_completed(and_command_t *job)
 {
+    if (!job)
+        return true;
     for (int i = 0; i < job->nb_command; ++i) {
         if (job->tab_command[i].process_state != DONE)
             return false;

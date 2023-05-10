@@ -13,6 +13,10 @@
 
 static int check_args(char **command)
 {
+    if (!command || !command[0]) {
+        fprintf(stderr, "error in command arguments.\n");
+        return FAILURE;
+    }
     if (command[1] == NULL)
         return SUCCESS;
     if (command[2] != NULL && command[3] != NULL) {
@@ -27,16 +31,18 @@ static int check_args(char **command)
     return SUCCESS;
 }
 
-int do_setenv(mysh_t *mysh, command_t to_exec)
+int do_setenv(mysh_t *mysh, command_t *to_exec)
 {
-    if (check_args(to_exec.args) != SUCCESS) {
+    if (!mysh)
+        return ERROR;
+    if (check_args(to_exec->args) != SUCCESS) {
         mysh->last_status = 1;
         return SUCCESS;
     }
-    if (to_exec.args[1] == NULL || to_exec.args[1][0] == '\0')
+    if (to_exec->args[1] == NULL || to_exec->args[1][0] == '\0')
         return do_env(mysh, to_exec);
     if (modify_env_var
-    (to_exec.args[1], mysh, to_exec.args[2]) == ERROR)
+    (to_exec->args[1], mysh, to_exec->args[2]) == ERROR)
         return ERROR;
     mysh->last_status = 0;
     return SUCCESS;

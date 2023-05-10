@@ -11,7 +11,7 @@
     #include "mysh.h"
 
     char **init_mysh_env(char * const env[]);
-    int do_env(mysh_t *mysh, command_t command);
+    int do_env(mysh_t *mysh, command_t *command);
     char *get_env_var(mysh_t *mysh, char *var);
     int modify_env_var(char *to_change, mysh_t *mysh, char *new_value);
     void free_env(mysh_t *mysh);

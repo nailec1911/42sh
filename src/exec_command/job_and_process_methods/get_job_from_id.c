@@ -9,7 +9,7 @@
 
 and_command_t *get_job_from_id(job_list *list, int job_id)
 {
-    if (job_id < 0)
+    if (job_id < 0 || !list)
         return NULL;
 
     for (job_list *tmp = list; tmp; tmp = tmp->next) {

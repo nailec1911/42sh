@@ -44,16 +44,14 @@ static int add_alias_rc(alias_t *alias, char *input)
             return ERROR;
         alias->tab_file[0] = input;
         alias->tab_file[1] = NULL;
-        if (alias->have_alias == false)
-            return SUCCESS;
-        dprintf(alias->fd_alias_file, "%s", alias->tab_file[0]);
+        if (alias->fd_alias_file != -1)
+            dprintf(alias->fd_alias_file, "%s", alias->tab_file[0]);
     } else {
         if (add_elem_tab_alias(alias, input) == ERROR)
             return ERROR;
-        if (alias->have_alias == false)
-            return SUCCESS;
-        dprintf(alias->fd_alias_file, "%s",
-        alias->tab_file[length_tab(alias->tab_file) - 1]);
+        if (alias->fd_alias_file != -1)
+            dprintf(alias->fd_alias_file, "%s",
+            alias->tab_file[length_tab(alias->tab_file) - 1]);
     }
     return SUCCESS;
 }
@@ -71,16 +69,16 @@ static int display_alias_or_specific(mysh_t *mysh, char **args, int fd_out)
     return SUCCESS;
 }
 
-int do_alias(mysh_t *mysh, command_t to_exec)
+int do_alias(mysh_t *mysh, command_t *to_exec)
 {
     char *command = NULL;
 
-    if (!mysh || !to_exec.args || !to_exec.args[0])
+    if (!mysh || !to_exec->args || !to_exec->args[0])
         return ERROR;
-    if (to_exec.args[1] == NULL || to_exec.args[2] == NULL) {
-        return display_alias_or_specific(mysh, to_exec.args, to_exec.fd_out);
+    if (to_exec->args[1] == NULL || to_exec->args[2] == NULL) {
+        return display_alias_or_specific(mysh, to_exec->args, to_exec->fd_out);
     } else {
-        command = remake_input(to_exec.args);
+        command = remake_input(to_exec->args);
         if (command == NULL || add_alias_rc(&mysh->alias, command) == ERROR)
             return ERROR;
     }

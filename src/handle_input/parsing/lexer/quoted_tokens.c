@@ -28,6 +28,10 @@ token_t quoted_tokens(lexer_t *lex)
     char quote = lexer_get(lex);
     int temp_cursor = lex->cursor;
 
+    if (!lex) {
+        new.type = T_ERROR;
+        return new;
+    }
     while (lexer_peek(lex) != quote && lexer_peek(lex) != '\n') {
         new.size_val += 1;
         lex->cursor += 1;
@@ -35,6 +39,8 @@ token_t quoted_tokens(lexer_t *lex)
     if (lexer_peek(lex) == '\n') {
         fprintf(stderr, "Unmatched '%c'.\n", quote);
         new.type = UNMATCHED_QUOTE;
+        new.value = &quote;
+        new.size_val -= 1;
     }
     new.size_val += 1;
     lex->cursor = temp_cursor;

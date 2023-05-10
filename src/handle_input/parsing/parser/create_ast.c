@@ -48,6 +48,8 @@ static int fill_tab_grocommand(parser_t *parser, ast_t *ast)
 
 int create_ast(parser_t *parser, ast_t *ast)
 {
+    if (!parser || !ast)
+        return ERROR;
     ast->nb_grocommand = 0;
     ast->tab_grocommands = NULL;
     if (fill_tab_grocommand(parser, ast) == ERROR) {

@@ -10,21 +10,21 @@
 
     #include "mysh.h"
 
-    int do_cd(mysh_t *mysh, command_t to_exec);
-    int do_env(mysh_t *mysh, command_t to_exec);
-    int do_exit(mysh_t *mysh, command_t to_exec);
-    int do_setenv(mysh_t *mysh, command_t to_exec);
-    int do_unsetenv(mysh_t *mysh, command_t to_exec);
-    int do_history(mysh_t *mysh, command_t to_exec);
-    int do_alias(mysh_t *mysh, command_t to_exec);
-    int do_unalias(mysh_t *mysh, command_t to_exec);
-    int do_setvar(mysh_t *mysh, command_t to_exec);
-    int do_unsetvar(mysh_t *mysh, command_t to_exec);
-    int do_fg(mysh_t *mysh, command_t to_exec);
+    int do_cd(mysh_t *mysh, command_t *to_exec);
+    int do_env(mysh_t *mysh, command_t *to_exec);
+    int do_exit(mysh_t *mysh, command_t *to_exec);
+    int do_setenv(mysh_t *mysh, command_t *to_exec);
+    int do_unsetenv(mysh_t *mysh, command_t *to_exec);
+    int do_history(mysh_t *mysh, command_t *to_exec);
+    int do_alias(mysh_t *mysh, command_t *to_exec);
+    int do_unalias(mysh_t *mysh, command_t *to_exec);
+    int do_setvar(mysh_t *mysh, command_t *to_exec);
+    int do_unsetvar(mysh_t *mysh, command_t *to_exec);
+    int do_fg(mysh_t *mysh, command_t *to_exec);
 
     typedef struct builtin_s{
         char *command;
-        int(*function)(mysh_t *mysh, command_t to_exec);
+        int(*function)(mysh_t *mysh, command_t *to_exec);
     } builtin_t;
 
     const struct builtin_s all_builtins[] = {

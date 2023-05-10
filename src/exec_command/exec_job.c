@@ -17,6 +17,8 @@ job_list *lookup_job(job_list *list, int *nb_job)
     pid_t pid;
     and_command_t *job;
 
+    if (!list || !nb_job)
+        return NULL;
     while ((pid = waitpid(WAIT_ANY,
                     &status, WNOHANG | WUNTRACED | WCONTINUED)) > 0) {
         update_process_status(list, pid, status);
@@ -50,6 +52,8 @@ int exec_job(mysh_t *mysh, and_command_t *job)
     int res = 0;
     mode init_mode = job->job_mode;
 
+    if (!mysh || !job)
+        return ERROR;
     lookup_job(mysh->list, &mysh->nb_current_job);
     for (int i = 0; i < job->nb_command - 1; ++i)
         res = exec_piped_process(mysh, job, i);

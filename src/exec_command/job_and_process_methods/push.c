@@ -10,6 +10,8 @@
 
 void push(job_stack *stack, and_command_t *job)
 {
+    if (!stack || !job)
+        return;
     if (is_full(stack))
         return;
     stack->job[stack->top] = job;

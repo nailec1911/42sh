@@ -37,7 +37,6 @@
     bool job_is_completed(and_command_t *job);
     int update_process_status(job_list *list, pid_t pid, int status);
     job_list *lookup_job(job_list *list, int *nb_job);
-    pid_t get_last_job_pgid(job_list *list);
 
     // stack
     job_stack *init_stack(job_stack *stack);
