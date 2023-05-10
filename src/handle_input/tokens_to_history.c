@@ -30,7 +30,7 @@ static char *get_str_for_history(token_t *list)
 
     if (size <= 0)
         return NULL;
-    if ((res = calloc(size + 1, sizeof(char))) == NULL)
+    if ((res = calloc(size + 2, sizeof(char))) == NULL)
         return NULL;
     for (int i = 0; list[i].type != END_LINE; i += 1) {
         for (int k = 0; k < list[i].size_val; k += 1) {
@@ -49,6 +49,12 @@ int tokens_to_history(mysh_t *mysh, token_t *list)
 {
     char *to_history = get_str_for_history(list);
 
+    for (int i = 0; list[i].type != END_LINE; i += 1) {
+        if (list[i].type == UNMATCHED_QUOTE || list[i].type == T_ERROR) {
+            mysh->last_status = 1;
+            return FAILURE;
+        }
+    }
     if (to_history == NULL)
         return ERROR;
     if (mysh->display_line) {

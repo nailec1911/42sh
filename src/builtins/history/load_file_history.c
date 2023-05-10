@@ -62,11 +62,11 @@ static int check_and_fill_tab(char *line, int i, history_t *history)
         return ERROR;
     if (length_tab(tab) < 3) {
         free_array(tab);
-        return ERROR;
+        return FAILURE;
     }
     if (check_syntaxe(tab) == ERROR) {
         free_array(tab);
-        return ERROR;
+        return FAILURE;
     }
     if (fill_tab(history->tab_hist, i, tab) == ERROR) {
         free_array(tab);
@@ -81,13 +81,18 @@ static int fill_tab_hist_from_file(FILE *stream, history_t *history, int *i)
 {
     char *line = NULL;
     size_t len = 0;
+    int res = 0;
 
+    if (!stream || !history || !i)
+        return ERROR;
     while (getline(&line, &len, stream) != -1) {
-        if (check_and_fill_tab(line, *i, history) == ERROR) {
+        res = check_and_fill_tab(line, *i, history);
+        if (res == ERROR) {
             free(line);
             return ERROR;
+        } else {
+            res == SUCCESS ? *i += 1 : *i;
         }
-        *i += 1;
     }
     free(line);
     return SUCCESS;
@@ -102,7 +107,7 @@ int file_to_tab_hist(char *filepath, history_t *history)
     if (nb_line == -1)
         return ERROR;
     if ((history->tab_hist =
-    malloc(sizeof(tab_hist_t *) * (nb_line + 1))) == NULL)
+    calloc(nb_line + 1, sizeof(tab_hist_t *))) == NULL)
         return ERROR;
     history->tab_hist[nb_line] = NULL;
     if ((stream = fopen(filepath, "r")) == NULL)
