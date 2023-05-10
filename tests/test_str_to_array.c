@@ -9,25 +9,25 @@
 #include <criterion/redirect.h>
 #include <string.h>
 #include "macro_errors.h"
-char **input_to_array(char const *str, char *separator);
+char **my_str_to_word_array(char const *str, char *separator);
 
-Test(input_to_array_1, two_words){
-    char **result = input_to_array("ls -l", " ");
+Test(my_str_to_word_array_1, two_words){
+    char **result = my_str_to_word_array("ls -l", " ");
 
     cr_assert_str_eq(result[0], "ls");
     cr_assert_str_eq(result[1], "-l");
     cr_assert_null(result[2]);
 }
 
-Test(input_to_array_3, one_words){
-    char **result = input_to_array("ls", " ");
+Test(my_str_to_word_array_3, one_words){
+    char **result = my_str_to_word_array("ls", " ");
 
     cr_assert_str_eq(result[0], "ls");
     cr_assert_null(result[1]);
 }
 
-Test(input_to_array_4, lot_of_words){
-    char **result = input_to_array("ls -l -a test", " ");
+Test(my_str_to_word_array_4, lot_of_words){
+    char **result = my_str_to_word_array("ls -l -a test", " ");
 
     cr_assert_str_eq(result[0], "ls");
     cr_assert_str_eq(result[1], "-l");
@@ -36,8 +36,8 @@ Test(input_to_array_4, lot_of_words){
     cr_assert_null(result[4]);
 }
 
-Test(input_to_array_5, multiple_spaces){
-    char **result = input_to_array("ls          -l  -a test\n", " ");
+Test(my_str_to_word_array_5, multiple_spaces){
+    char **result = my_str_to_word_array("ls          -l  -a test\n", " \n");
 
     cr_assert_str_eq(result[0], "ls");
     cr_assert_str_eq(result[1], "-l");
@@ -46,8 +46,8 @@ Test(input_to_array_5, multiple_spaces){
     cr_assert_null(result[4]);
 }
 
-Test(input_to_array_5, multiple_separator){
-    char **result = input_to_array("ls          -l\t-a test", " \t");
+Test(my_str_to_word_array_5, multiple_separator){
+    char **result = my_str_to_word_array("ls          -l\t-a test", " \t");
 
     cr_assert_str_eq(result[0], "ls");
     cr_assert_str_eq(result[1], "-l");

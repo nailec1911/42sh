@@ -5,9 +5,9 @@
 ** main
 */
 #include <unistd.h>
-#include <str_func.h>
 #include <stdlib.h>
 #include <string.h>
+#include "str_func.h"
 #include "mysh.h"
 #include "macro_errors.h"
 
@@ -40,8 +40,7 @@ static char *search_by_name_command(mysh_t *mysh, char *last_input)
         return last_input;
     len = strlen(last_input);
     for (int i = mysh->history.len_tab_hist - 1; i >= 0; i -= 1) {
-        tmp = my_str_to_word_array_separator
-        (mysh->history.tab_hist[i]->command, "\n");
+        tmp = my_str_to_word_array(mysh->history.tab_hist[i]->command, "\n");
         if (tmp == NULL)
             return NULL;
         if (strncmp(last_input, tmp[0], len) == 0) {

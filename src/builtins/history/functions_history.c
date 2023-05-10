@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
-#include "init.h"
+#include "str_func.h"
 #include "mysh.h"
 #include "history.h"
 #include "macro_errors.h"
@@ -40,7 +40,7 @@ static int get_num_command(history_t *history, char *path)
         return SUCCESS;
     }
     history->num_cmd += 1;
-    history->len_tab_hist = length_tab_hist(history->tab_hist);
+    history->len_tab_hist = my_strstrlen((char **)history->tab_hist);
     return SUCCESS;
 }
 

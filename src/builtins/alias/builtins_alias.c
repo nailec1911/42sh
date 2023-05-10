@@ -12,7 +12,6 @@
 #include "alias.h"
 #include "str_func.h"
 #include "macro_errors.h"
-#include "init.h"
 
 static int add_elem_tab_alias(alias_t *alias, char *to_add)
 {
@@ -21,7 +20,7 @@ static int add_elem_tab_alias(alias_t *alias, char *to_add)
 
     if (!alias || !to_add)
         return ERROR;
-    len_tab = length_tab(alias->tab_file);
+    len_tab = my_strstrlen(alias->tab_file);
     alias->tab_file = malloc(sizeof(char *) * (len_tab + 2));
     if (!alias->tab_file)
         return ERROR;
@@ -51,7 +50,7 @@ static int add_alias_rc(alias_t *alias, char *input)
             return ERROR;
         if (alias->fd_alias_file != -1)
             dprintf(alias->fd_alias_file, "%s",
-            alias->tab_file[length_tab(alias->tab_file) - 1]);
+            alias->tab_file[my_strstrlen(alias->tab_file) - 1]);
     }
     return SUCCESS;
 }

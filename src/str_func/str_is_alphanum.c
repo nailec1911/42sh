@@ -16,10 +16,3 @@ int str_is_alphanum(char *str)
     }
     return SUCCESS;
 }
-
-int char_isnum(char c)
-{
-    if (c < '0' || c > '9')
-        return 1;
-    return 0;
-}

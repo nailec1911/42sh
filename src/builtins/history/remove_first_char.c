@@ -5,10 +5,8 @@
 ** main
 */
 
-#include <unistd.h>
-#include <stddef.h>
 #include <stdlib.h>
-#include "str_func.h"
+#include <string.h>
 
 char *remove_first_char(char *input)
 {
@@ -18,7 +16,7 @@ char *remove_first_char(char *input)
 
     if (!input)
         return input;
-    to_malloc = my_strlen(input);
+    to_malloc = strlen(input);
     new_input = malloc(sizeof(char) * to_malloc);
     if (!new_input)
         return NULL;

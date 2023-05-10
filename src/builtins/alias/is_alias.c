@@ -33,7 +33,7 @@ char *is_alias(alias_t *alias, char *input)
     if (!alias || !alias->tab_file || !input)
         return NULL;
     for (int i = 0; alias->tab_file[i] != NULL; i += 1) {
-        tab_alias = my_str_to_word_array(alias->tab_file[i]);
+        tab_alias = my_str_to_word_array(alias->tab_file[i], " \t\n");
         if (tab_alias == NULL)
             return NULL;
         res = check_is_alias(tab_alias, res, input);

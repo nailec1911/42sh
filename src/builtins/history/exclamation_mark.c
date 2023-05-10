@@ -4,6 +4,7 @@
 ** File description:
 ** main
 */
+
 #include <string.h>
 #include <stdlib.h>
 #include "mysh.h"
@@ -17,7 +18,7 @@ static char *search_command(mysh_t *mysh, char *last_input)
 
     if (!mysh || !last_input)
         return NULL;
-    if (is_num(last_input)) {
+    if (is_num_char(last_input, '\0')) {
         replace = search_by_type(mysh, last_input, 1);
     } else {
         replace = search_by_type(mysh, last_input, 2);

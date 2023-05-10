@@ -10,21 +10,23 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-int count_word(char const *str);
+int count_word(char const *str, char const *separator);
 
-static int my_isalpha(char c)
+static int my_is_not_separator(char c, char const *separator)
 {
-    if (c == ' ' || c == '\t' || c == '\n') {
-        return (false);
+    for (int i = 0; separator[i] != '\0'; i += 1) {
+        if (separator[i] == c || c == '\0')
+            return false;
     }
     return (true);
 }
 
-static char *get_word(char *tab, const char *str, int i)
+static char *get_word(char *tab, const char *str, int i, char const *separator)
 {
     int len = 0;
     int index = i;
-    while (my_isalpha(str[i]) == true) {
+
+    while (my_is_not_separator(str[i], separator) == true) {
         len = len + 1;
         i = i + 1;
     }
@@ -37,18 +39,19 @@ static char *get_word(char *tab, const char *str, int i)
     return (tab);
 }
 
-static int getindex(int index, const char *str)
+static int getindex(int index, const char *str, char const *separator)
 {
     int nbr = 0;
     int i = 0;
-    while (my_isalpha(str[i]) != 1)
-        i = i + 1;
 
+    while (my_is_not_separator(str[i], separator) != 1)
+        i = i + 1;
     while (str[i] != '\0') {
         if (nbr == index) {
             return (i);
         }
-        if (my_isalpha(str[i]) == 0 && my_isalpha(str[i + 1]) == 1) {
+        if (my_is_not_separator(str[i], separator) == 0
+        && my_is_not_separator(str[i + 1], separator) == 1) {
             nbr = nbr + 1;
         }
         i = i + 1;
@@ -56,17 +59,19 @@ static int getindex(int index, const char *str)
     return (i);
 }
 
-char **my_str_to_word_array(char *str)
+char **my_str_to_word_array(char *str, char const *separator)
 {
     int index = 0;
-    int nbr_mot = count_word(str);
+    int nbr_mot = count_word(str, separator);
     char **tab = malloc(sizeof(char *) * (nbr_mot + 1));
     int i = 0;
 
+    if (!str || !separator || !tab)
+        return NULL;
     tab[nbr_mot] = NULL;
     while (i < nbr_mot) {
-        index = getindex((i), str);
-        tab[i] = get_word(tab[i], str, index);
+        index = getindex((i), str, separator);
+        tab[i] = get_word(tab[i], str, index, separator);
         i = i + 1;
     }
     return (tab);

@@ -8,10 +8,10 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "mysh.h"
 #include "str_func.h"
 #include "macro_errors.h"
-#include <unistd.h>
 
 static void write_in_file_alias(alias_t *alias)
 {
@@ -30,7 +30,7 @@ static int nb_elem_to_remove(char **tab, char *to_find)
     if (!tab || !tab)
         return ERROR;
     for (int i = 0; tab[i] != NULL; i += 1) {
-        tab_alias = my_str_to_word_array_separator(tab[i], " \n");
+        tab_alias = my_str_to_word_array(tab[i], " \n");
         if (strcmp(tab_alias[1], to_find) == 0)
             nb_elem += 1;
         free_array(tab_alias);
@@ -47,8 +47,7 @@ char *to_compare)
     if (!alias || !new_tab || !to_compare)
         return NULL;
     for (int i = 0; alias->tab_file[i] != NULL; i += 1) {
-        tab_alias = my_str_to_word_array_separator
-        (alias->tab_file[i], " \n");
+        tab_alias = my_str_to_word_array(alias->tab_file[i], " \n");
         if (strcmp(tab_alias[1], to_compare) != 0) {
             new_tab[index] = alias->tab_file[i];
             index += 1;
@@ -66,7 +65,7 @@ static int remove_alias(alias_t *alias, char *command)
 
     if (!alias || !command)
         return ERROR;
-    l_tab = length_tab(alias->tab_file);
+    l_tab = my_strstrlen(alias->tab_file);
     nb_elem = nb_elem_to_remove(alias->tab_file, command);
     if ((new_tab = malloc(sizeof(char *) * (l_tab - nb_elem + 1))) == NULL)
         return ERROR;
@@ -79,7 +78,7 @@ static int remove_alias(alias_t *alias, char *command)
 
 int do_unalias(mysh_t *mysh, command_t *to_exec)
 {
-    int l_args = length_tab(to_exec->args);
+    int l_args = my_strstrlen(to_exec->args);
 
     if (l_args == 1) {
         fprintf(stderr, "unalias: Too few arguments.\n");

@@ -4,17 +4,15 @@
 ** File description:
 ** main
 */
-#include "macro_errors.h"
-#include "mysh.h"
-#include "sys/stat.h"
-#include <stdio.h>
+
+#include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include "history.h"
-#include "str_func.h"
 #include <string.h>
-#include "init.h"
+#include "str_func.h"
+#include "mysh.h"
+#include "macro_errors.h"
 
 static int count_line(char *str)
 {

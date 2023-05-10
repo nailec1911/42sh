@@ -17,7 +17,7 @@ int display_alias(char **tab_file, int fd)
 
     if (!tab_file)
         return SUCCESS;
-    l_tab = length_tab(tab_file) - 1;
+    l_tab = my_strstrlen(tab_file) - 1;
     for (; l_tab >= 0; l_tab -= 1) {
         dprintf(fd, "%s", tab_file[l_tab]);
     }
@@ -46,7 +46,7 @@ int display_specific_alias(char **tab_file, char *to_find, int fd)
 
     if (!to_find || !tab_file)
         return ERROR;
-    l_tab = length_tab(tab_file) - 1;
+    l_tab = my_strstrlen(tab_file) - 1;
     for (;l_tab >= 0 && res == SUCCESS; l_tab -= 1) {
         res = search_specific_alias(tab_file[l_tab], to_find, fd);
         if (res == ERROR)

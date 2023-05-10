@@ -72,7 +72,7 @@ int get_path(mysh_t *mysh, char **path, command_t *to_exec)
     }
     if ((env_path = get_all_path(mysh)) == NULL)
         return ERROR;
-    if ((all_prefix = input_to_array(env_path, ":")) == NULL)
+    if ((all_prefix = my_str_to_word_array(env_path, ":\0")) == NULL)
         return ERROR;
     res_all_try = try_all_paths(all_prefix, path);
     free_array(all_prefix);
