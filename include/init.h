@@ -18,7 +18,5 @@
     char *search_by_type(mysh_t *mysh, char *last_input, int type);
     int file_to_tab_hist(char *filepath, history_t *history);
     void init_prompt(mysh_t *mysh);
-    int detect_flags(command_t *to_exec, history_t *history);
-
 
 #endif /* !INIT_H_ */

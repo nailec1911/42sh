@@ -17,7 +17,7 @@
 #include <sys/stat.h>
 #include "init.h"
 #include <time.h>
-
+int file_to_tab_hist(char *filepath, history_t *history);
 
 int add_in_history(history_t *history, char *input)
 {

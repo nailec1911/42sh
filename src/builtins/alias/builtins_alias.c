@@ -13,14 +13,6 @@
 #include "str_func.h"
 #include "macro_errors.h"
 #include "init.h"
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include "mysh.h"
-#include "alias.h"
-#include "str_func.h"
-#include "macro_errors.h"
-#include "init.h"
 
 static int add_elem_tab_alias(alias_t *alias, char *to_add)
 {
