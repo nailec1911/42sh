@@ -16,8 +16,7 @@ static int fill_tab_list(mysh_t *mysh, DIR *dir, struct dirent *ent, int length)
 {
     int index = 0;
 
-    if ((dir = opendir(mysh->completion.path)) == NULL)
-        return ERROR;
+    rewinddir(dir);
     while ((ent = readdir(dir)) != NULL)
         if (ent->d_name[0] != '.' &&
         strncmp(mysh->completion.current, ent->d_name, length) == 0) {
@@ -44,6 +43,8 @@ static int malloc_tab_list(mysh_t *mysh)
         if (strncmp(mysh->completion.current, ent->d_name, length) == 0)
             count += 1;
     mysh->completion.names = malloc(sizeof(char *) * (count + 1));
+    if (mysh->completion.names == NULL)
+        return ERROR;
     return fill_tab_list(mysh, dir, ent, length);
 }
 
