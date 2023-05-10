@@ -59,6 +59,7 @@ job_list *remove_job_from_list(job_list *list, int job_id)
         job_list *del = tmp->next;
         tmp->next = tmp->next->next;
         del->next = NULL;
+        free_and_command(del->job);
         free(del);
     }
     return list;
