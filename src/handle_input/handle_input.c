@@ -15,7 +15,6 @@
 static token_t *get_list_tokens(mysh_t *mysh, char *input)
 {
     token_t *list_token = NULL;
-    int res = 0;
 
     mysh->display_line = false;
     input = replace_exclamation_mark(mysh, input);
@@ -25,10 +24,8 @@ static token_t *get_list_tokens(mysh_t *mysh, char *input)
     free(input);
     if (mysh->last_status != SUCCESS)
         return NULL;
-    if ((res = error_in_tokens(mysh, list_token)) != SUCCESS)
-        return NULL;
-    if (tokens_to_history(mysh, list_token) == ERROR)
-        return NULL;
+    if (tokens_to_history(mysh, list_token) != SUCCESS)
+        return list_token;
     if ((list_token = loop_for_aliases(mysh, list_token)) == NULL)
         return NULL;
     if ((list_token = quote_and_inhib(mysh, list_token)) == NULL)

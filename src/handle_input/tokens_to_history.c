@@ -17,6 +17,8 @@ static int get_size_malloc(token_t *list)
     for (int i = 0; list[i].type != END_LINE; i += 1) {
         if (list[i].type == T_ERROR)
             return -1;
+        if (list[i].type == UNMATCHED_QUOTE)
+            return size + list[i].size_val;
         size += list[i].size_val + 1;
     }
     return size;
@@ -52,7 +54,7 @@ int tokens_to_history(mysh_t *mysh, token_t *list)
     for (int i = 0; list[i].type != END_LINE; i += 1) {
         if (list[i].type == UNMATCHED_QUOTE || list[i].type == T_ERROR) {
             mysh->last_status = 1;
-            return SUCCESS;
+            return FAILURE;
         }
     }
     if (to_history == NULL)
