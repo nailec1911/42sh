@@ -14,13 +14,18 @@
 static void print_history_line(history_t *history, int fd)
 {
     char *time = create_time_line();
-    char *num = num_to_str(history->num_cmd);
+    char *num = NULL;
 
-    if (!time || !num)
+    if (!time)
         return;
-    if (history->flags == NO_FLAG)
+    if (history->flags == NO_FLAG) {
+        num = num_to_str(history->num_cmd);
+        if (!num)
+            return;
         dprintf(fd, "%s  %s   %s\n", num, time, "history");
-    free(num);
+        free(num);
+        history->num_cmd += 1;
+    }
     free(time);
 }
 

@@ -45,7 +45,6 @@ void free_tab_hist(tab_hist_t **tab);
 char *find_in_env(char **env, char *name);
 char *get_path_home(char *filepath);
 int display_history(tab_hist_t **tab, int fd, history_t *history);
-int detect_flags(command_t *to_exec, history_t *history);
 int file_to_tab_hist(char *filepath, history_t *history);
 
 

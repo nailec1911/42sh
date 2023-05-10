@@ -11,6 +11,7 @@
 #include "str_func.h"
 #include "macro_errors.h"
 #include "history.h"
+#include "init.h"
 
 static tab_hist_t **set_new_history(mysh_t *mysh, int ind_last)
 {
@@ -37,7 +38,7 @@ static int opt_clear(mysh_t *mysh)
 
     if (!mysh)
         return ERROR;
-    to_free = mysh->history.tab_hist;;
+    to_free = mysh->history.tab_hist;
     l_tab = mysh->history.len_tab_hist;
     mysh->history.len_tab_hist = 1;
     mysh->history.tab_hist = set_new_history(mysh, l_tab);
