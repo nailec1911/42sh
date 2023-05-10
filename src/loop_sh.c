@@ -28,5 +28,6 @@ int loop_sh(mysh_t *mysh, char *input)
         return SUCCESS;
     if ((res = loop_grocommand(mysh, &(mysh->ast))) == ERROR)
         return ERROR;
+    free_ast(&mysh->ast);
     return res;
 }

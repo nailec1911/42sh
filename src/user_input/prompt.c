@@ -51,7 +51,7 @@ void init_prompt(mysh_t *mysh)
 {
     struct passwd *pw;
     char current_dir[4096];
-    char *git_branch = malloc(1024);
+    char *git_branch = NULL;
     if (!isatty(SHELL_DESCRIPTOR))
         return;
     pw = getpwuid(getuid());
@@ -59,5 +59,6 @@ void init_prompt(mysh_t *mysh)
     git_branch = get_git_branch();
     display_prompt(mysh, pw, git_branch, current_dir);
     fflush(stdout);
-    free(git_branch);
+    if (git_branch)
+        free(git_branch);
 }

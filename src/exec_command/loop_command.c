@@ -39,13 +39,13 @@ static int loop_and_command(mysh_t *mysh, or_command_t *or_command)
         mysh->list = add_job_to_list(mysh->list,
                 &or_command->tab_and_command[i]);
         res = exec_job(mysh, &or_command->tab_and_command[i]);
+        or_command->tab_and_command = NULL;
         if (res == ERROR)
             return ERROR;
         if (res == EXIT)
             exit = EXIT;
         i += 1;
     } while (i < or_command->nb_and_command && mysh->last_status == SUCCESS);
-
     return exit;
 }
 

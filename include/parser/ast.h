@@ -72,4 +72,5 @@
         grocommand_t *tab_grocommands;
     } ast_t;
 
+    void free_ast(ast_t *ast);
 #endif /* !AST_H_ */

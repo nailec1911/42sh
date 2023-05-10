@@ -7,6 +7,25 @@
 
 #include <stdlib.h>
 #include "job_control.h"
+#include "parser/ast.h"
+
+static void free_command(command_t *process)
+{
+    for (int i = 0; process->args[i]; ++i)
+        free(process->args[i]);
+    free(process->args);
+    free(process->path);
+    free_ast(process->parenthesis);
+}
+
+static void free_and_command(and_command_t *job)
+{
+    for (int i = 0; i < job->nb_command; ++i) {
+        free_command(&job->tab_command[i]);
+    }
+
+    free(job->tab_command);
+}
 
 static int get_job_pos(job_list *list, int job_id)
 {
@@ -32,12 +51,15 @@ job_list *remove_job_from_list(job_list *list, int job_id)
         return list;
     if (position == 0) {
         list = list->next;
+        free_and_command(tmp->job);
+        free(tmp);
     } else {
         for (int i = 0; i < position - 1; ++i)
             tmp = tmp->next;
         job_list *del = tmp->next;
         tmp->next = tmp->next->next;
         del->next = NULL;
+        free(del);
     }
     return list;
 }
