@@ -45,7 +45,7 @@ Test(parser1, only_ls){
 Test(parser2, piped_command){
     mysh_t mysh = {0};
     char *input = "ls -l -a | grep src|cat -e\n";
-    parser_t parser;
+    parser_t parser = {0};
 
     parser.list_tokens = lexer(input);
     cr_assert_not_null(parser.list_tokens);

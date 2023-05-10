@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include "parser/ast.h"
-void free_ast(ast_t *ast);
+
 
 static void free_command(command_t *command)
 {
@@ -29,6 +29,8 @@ static void free_command(command_t *command)
 
 static void free_or_command(or_command_t *or_command)
 {
+    if (!or_command->tab_and_command)
+        return;
     for (int i = 0; or_command->tab_and_command[i].nb_command != -1; i += 1) {
         for (int j = 0;
         or_command->tab_and_command[i].tab_command[j].nb_command != -1; j += 1)

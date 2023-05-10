@@ -15,7 +15,7 @@
 
 int get_ast(mysh_t *mysh, char *input)
 {
-    parser_t parser;
+    parser_t parser = {0};
     int res = 0;
 
     parser.list_tokens = lexer(input);
