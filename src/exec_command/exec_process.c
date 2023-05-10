@@ -32,6 +32,8 @@ static void launch_child(mysh_t *mysh, command_t *process)
         dup2(process->fd_in, STDIN_FILENO);
     if (execve(process->path, process->args, mysh->env) == -1) {
         display_error_exec(errno, process->args[0]);
+        if (errno == 2)
+            exit(1);
         exit(errno);
     }
 }

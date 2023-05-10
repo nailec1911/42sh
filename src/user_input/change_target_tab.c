@@ -6,6 +6,7 @@
 */
 
 #include <string.h>
+#include "str_func.h"
 #include "mysh.h"
 void display_completion(mysh_t *mysh, char **line, int *length);
 
@@ -24,7 +25,7 @@ void change_target_tab(mysh_t *mysh, int *index, int *length, char **line)
         mysh->completion.index = 0;
     else
         mysh->completion.index += 1;
-    if (mysh->completion.index == length_tab(mysh->completion.names))
+    if (mysh->completion.index == my_strstrlen(mysh->completion.names))
         mysh->completion.index = 0;
     printf("\033[0J");
     display_completion(mysh, line, length);

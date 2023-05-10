@@ -5,6 +5,7 @@
 ** set_fd_input
 */
 
+#include <string.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +26,7 @@ static int fill_file_from_input(redirect_t redirect)
     fprintf(stdout, "? ");
     getline(&line, &len, stdin);
 
-    while (my_strcmp(line, to_comp) != 0){
+    while (strcmp(line, to_comp) != 0){
         fprintf(stdout, "? ");
         dprintf(pipefd[1], line);
         getline(&line, &len, stdin);

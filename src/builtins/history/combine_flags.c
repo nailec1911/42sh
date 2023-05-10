@@ -4,8 +4,9 @@
 ** File description:
 ** main
 */
-#include "mysh.h"
+
 #include <string.h>
+#include "mysh.h"
 #include "macro_errors.h"
 
 int compare_char(char **command, int i, history_t *history)

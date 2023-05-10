@@ -52,7 +52,7 @@ static bool check_if_alone(mysh_t *mysh, char **line, int *length, int *index)
 {
     int length_word = strlen(&(*line)[mysh->completion.ind_space]);
 
-    if (length_tab(mysh->completion.names) > 1)
+    if (my_strstrlen(mysh->completion.names) > 1)
         return false;
     for (int i = mysh->completion.ind_space; i < *length; i += 1)
         printf("\033[D");

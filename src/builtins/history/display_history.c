@@ -42,7 +42,7 @@ int display_history(tab_hist_t **tab, int fd, history_t *history)
 
     if (!tab || !history)
         return ERROR;
-    end = length_tab_hist(tab);
+    end = my_strstrlen((char **)tab);
     if (IS_FLAG(history->flags, FLAG_R)) {
         i = end - 1;
         step = -1;

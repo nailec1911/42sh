@@ -62,14 +62,10 @@ SRC	=	mysh.c		\
 		exec_command/job_and_process_methods/display_job.c 		\
 		str_func/is_in.c			\
 		str_func/is_num.c			\
-		str_func/my_strlen.c			\
 		str_func/my_strcat_dup.c	\
 		str_func/my_strcat_with_char.c	\
-		str_func/my_strcmp.c		\
-		str_func/my_strncmp.c		\
 		str_func/free_array.c		\
 		str_func/str_is_alphanum.c	\
-		str_func/input_to_array.c	\
 		str_func/my_strstrlen.c	\
 		str_func/insert_array_in_array.c	\
 		str_func/count_word.c 				\
@@ -109,11 +105,6 @@ SRC	=	mysh.c		\
 		builtins/history/combine_flags.c\
 		builtins/history/check_last_command.c\
 		builtins/history/usefull_function_history.c\
-		builtins/history/word_array/find_index_separator.c\
-		builtins/history/word_array/loop_separator.c\
-		builtins/history/word_array/my_word_array_separator.c\
-		builtins/history/word_array/strlen_index_separator.c\
-		builtins/history/word_array/nbr_word_separator.c\
 		builtins/history/num_to_str.c\
 		builtins/history/file_to_tab.c\
 		builtins/cd/cd.c				\
@@ -150,9 +141,9 @@ TO_TEST	=	tests/test_function.c	\
 			tests/test_env_handling.c		\
 			tests/test_builtins_env.c	\
 			tests/test_strcat.c			\
-			tests/test_strcmp.c			\
+			tests/test_is_alpha_num.c			\
 			tests/test_handle_error.c	\
-			tests/test_input_to_array.c	\
+			tests/test_str_to_array.c	\
 			tests/test_get_path.c	\
 			tests/test_globing.c	\
 			tests/test_full_sh.c	\

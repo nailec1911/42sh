@@ -33,13 +33,13 @@ static int fill_tab(tab_hist_t **tab_hist, int i, char **tab)
 static int check_syntaxe(char **tab)
 {
     char **tab_time = NULL;
-    if ((tab_time = my_str_to_word_array_separator(tab[1], ":")) == NULL)
+    if ((tab_time = my_str_to_word_array(tab[1], ":")) == NULL)
         return ERROR;
-    if (length_tab(tab_time) < 2 || !is_num_space(tab[0])) {
+    if (my_strstrlen(tab_time) < 2 || !is_num_char(tab[0], ' ')) {
         free_array(tab_time);
         return ERROR;
     }
-    if (!is_num_colon(tab[1])) {
+    if (!is_num_char(tab[1], ':')) {
         free_array(tab_time);
         return ERROR;
     }
@@ -58,9 +58,9 @@ static int check_and_fill_tab(char *line, int i, history_t *history)
 {
     char **tab = NULL;
 
-    if ((tab = my_str_to_word_array_separator(line, " \n")) == NULL)
+    if ((tab = my_str_to_word_array(line, " \n")) == NULL)
         return ERROR;
-    if (length_tab(tab) < 3) {
+    if (my_strstrlen(tab) < 3) {
         free_array(tab);
         return FAILURE;
     }

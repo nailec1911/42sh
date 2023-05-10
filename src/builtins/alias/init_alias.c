@@ -11,7 +11,6 @@
 #include <string.h>
 #include <unistd.h>
 #include "mysh.h"
-#include "str_func.h"
 #include "alias.h"
 #include "macro_errors.h"
 

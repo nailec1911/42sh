@@ -23,7 +23,7 @@ char *create_time_line(void)
 
     if (time_str == NULL)
         return NULL;
-    tab_time = my_str_to_word_array_separator(time_str, " ");
+    tab_time = my_str_to_word_array(time_str, " ");
     if (tab_time == NULL)
         return NULL;
     tab_time[3][5] = '\0';
@@ -31,18 +31,6 @@ char *create_time_line(void)
         return NULL;
     free_array(tab_time);
     return command;
-}
-
-int length_tab_hist(tab_hist_t **tab)
-{
-    int len = 0;
-
-    if (tab == NULL || tab[0] == NULL)
-        return 0;
-    for (int i = 0; tab[i]; i += 1) {
-        len += 1;
-    }
-    return len;
 }
 
 void free_tab_hist(tab_hist_t **tab)
@@ -56,18 +44,6 @@ void free_tab_hist(tab_hist_t **tab)
         free(tab[i]);
     }
     free(tab);
-}
-
-int length_tab(char **tab)
-{
-    int len = 0;
-
-    if (tab == NULL || tab[0] == NULL)
-        return 0;
-    for (int i = 0; tab[i] != NULL; i += 1) {
-        len += 1;
-    }
-    return len;
 }
 
 void write_in_file(tab_hist_t **tab, int fd)

@@ -5,10 +5,10 @@
 ** main
 */
 #include <string.h>
-#include "macro_errors.h"
-#include "str_func.h"
 #include <unistd.h>
 #include <pwd.h>
+#include "macro_errors.h"
+#include "str_func.h"
 
 char *get_path_home(char *filepath)
 {

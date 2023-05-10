@@ -34,15 +34,12 @@
     }history_t;
 
 
-int length_tab(char **tab);
-char **my_str_to_word_array_separator(char *str, char *separator);
 int get_nb_line(char *filepath);
 int add_elem_tab(history_t *history, char *to_add, int num);
 char *num_to_str(int num);
 char **file_to_tab(char *filepath);
 char *remake_command(char **tab);
 char *create_time_line(void);
-int length_tab_hist(tab_hist_t **tab);
 void write_in_file(tab_hist_t **tab, int fd);
 void free_tab_hist(tab_hist_t **tab);
 char *find_in_env(char **env, char *name);

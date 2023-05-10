@@ -6,10 +6,10 @@
 */
 #include <unistd.h>
 #include <time.h>
-#include "str_func.h"
 #include <stdlib.h>
-#include "mysh.h"
 #include <string.h>
+#include "str_func.h"
+#include "mysh.h"
 
 char *remake_command(char **tab)
 {
@@ -19,7 +19,7 @@ char *remake_command(char **tab)
 
     if (!tab)
         return NULL;
-    if (length_tab(tab) < 3) {
+    if (my_strstrlen(tab) < 3) {
         return strdup(tab[1]);
     }
     final_input = strdup(tab[2]);
