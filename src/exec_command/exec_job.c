@@ -62,7 +62,7 @@ int exec_job(mysh_t *mysh, and_command_t *job)
         &job->tab_command[job->nb_command - 1], false);
     if (job->job_mode == BACKGROUND)
         display_background(job);
-    else if (res == 0) {
+    else if (res != 20) {
         mysh->list = remove_job_from_list(mysh->list, job->job_id);
         mysh->nb_current_job--;
     }

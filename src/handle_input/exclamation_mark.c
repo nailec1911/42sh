@@ -28,16 +28,21 @@ static char *insert_str(char *src, char *to_insert, int start, int end)
         res[ind ++] = src[i];
     res[ind] = '\0';
     free(src);
+    free(to_insert);
     return res;
 }
 
 static char *get_new_str_value(mysh_t *mysh, char *str, int from, int to)
 {
-    char *name = calloc(to + 1, 0);
+    char *name = calloc(to + 2, 1);
     char *new = NULL;
 
     if (name == NULL)
         return str;
+    if (to == 1) {
+        free(name);
+        return str;
+    }
     for (int i = 0; i < to; i += 1)
         name[i] = str[from + i];
     new = do_exclamation_mark(mysh, name);

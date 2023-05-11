@@ -46,6 +46,7 @@ static char *search_by_name_command(mysh_t *mysh, char *last_input)
         if (strncmp(last_input, tmp[0], len) == 0) {
             command = my_strcat_dup(tmp[0], "\n");
             free_array(tmp);
+            free(last_input);
             return command;
         }
         free_array(tmp);
@@ -71,5 +72,6 @@ char *search_by_type(mysh_t *mysh, char *last_input, int type)
     fprintf(stderr, "%s: Event not found.\n", last_input);
     mysh->last_status = 1;
     free(to_compare);
+    free(last_input);
     return NULL;
 }

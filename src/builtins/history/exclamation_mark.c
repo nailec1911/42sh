@@ -27,7 +27,6 @@ static char *search_command(mysh_t *mysh, char *last_input)
         mysh->last_status = 1;
         mysh->display_line = false;
     }
-    free(last_input);
     return replace;
 }
 
@@ -37,14 +36,11 @@ char *do_exclamation_mark(mysh_t *mysh, char *input)
 
     if (!mysh || !input)
         return NULL;
-    last_input = remove_first_char(input);
+    last_input = strdup(input + 1);
     if (last_input == NULL)
         return NULL;
-    if (input[0] == '!' && input[1] == '\n') {
-        mysh->last_status = 1;
-        fprintf(stderr, "!: Command not found.\n");
-        free(input);
-        return NULL;
+    if (input[0] == '\n' || input[0] == '\0') {
+        return "!";
     }
     return search_command(mysh, last_input);
 }
