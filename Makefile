@@ -152,7 +152,8 @@ TO_TEST	=	tests/test_function.c	\
 			tests/test_history.c\
 			tests/test_function_divers.c\
 			tests/test_function_str.c\
-			tests/test_alias.c
+			tests/test_alias.c\
+			tests/test_unalias.c
 
 OBJ_TEST = $(addprefix $(SOURCE_DIR), $(SRC:.c=.o)) $(TO_TEST:.c=.o)
 
