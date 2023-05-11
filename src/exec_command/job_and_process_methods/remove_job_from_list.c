@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include <fcntl.h>
 #include "job_control.h"
 #include "parser/ast.h"
 

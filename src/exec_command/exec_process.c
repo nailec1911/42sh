@@ -49,6 +49,16 @@ set_foreground_execution(mysh_t *mysh, and_command_t *job, int status)
     return status;
 }
 
+static void close_fd(command_t *process)
+{
+    if (!process)
+        return;
+    if (process->fd_in != STDIN_FILENO)
+        close(process->fd_in);
+    if (process->fd_out != STDOUT_FILENO)
+        close(process->fd_out);
+}
+
 static int exec_fork(mysh_t *mysh, and_command_t *job, command_t *process)
 {
     pid_t pid;
@@ -68,6 +78,7 @@ static int exec_fork(mysh_t *mysh, and_command_t *job, command_t *process)
         if (job->job_mode == FOREGROUND)
             status = set_foreground_execution(mysh, job, status);
     }
+    close_fd(process);
     return status;
 }
 
@@ -78,10 +89,11 @@ exec_process(mysh_t *mysh, and_command_t *job, command_t *process, bool do_fork)
 
     if (process->is_ast)
         return exec_parenthesis(mysh, process);
-    if (!do_fork && (status = exec_builtins(mysh, process)) != FAILURE)
+    if (!do_fork && (status = exec_builtins(mysh, process)) != FAILURE) {
+        close_fd(process);
         return status;
+    }
     if (get_path(mysh, &process->path, process) == ERROR)
         return ERROR;
-
     return exec_fork(mysh, job, process);
 }
