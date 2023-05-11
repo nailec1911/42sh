@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "mysh.h"
+#include "builtins/env.h"
 #include "str_func.h"
 #include "macro_errors.h"
 
@@ -33,13 +34,16 @@ static char *insert_str(char *src, char *to_insert, int start, int end)
 static char *get_var_str(mysh_t *mysh, char *name)
 {
     vars_t *var = get_global_var_by_name(mysh->vars, name);
+    char *res = NULL;
 
-    if (var == NULL) {
-        fprintf(stderr, "%s: Undefined variable.\n", name);
-        mysh->last_status = 1;
-        return NULL;
-    }
-    return var->buffer;
+    if (var)
+        return var->buffer;
+    res = get_env_var(mysh, name);
+    if (res)
+        return res;
+    fprintf(stderr, "%s: Undefined variable.\n", name);
+    mysh->last_status = 1;
+    return NULL;
 }
 
 static char *get_new_str_value(mysh_t *mysh, char *str, int from, int to)
