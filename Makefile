@@ -124,7 +124,8 @@ SRC	=	mysh.c		\
 		builtins/fg/fg_no_args.c   			\
 		builtins/fg/fg_with_jid.c   			\
 		builtins/fg/fg_with_pid.c   			\
-		builtins/fg/send_cont.c
+		builtins/fg/send_cont.c 				\
+		builtins/which/which.c
 
 SRC_MAIN	=	src/main.c
 
@@ -147,7 +148,10 @@ TO_TEST	=	tests/test_function.c	\
 			tests/test_full_sh_operators.c\
 			tests/create_history.c \
 			tests/test_history.c\
-			tests/test_function_divers.c
+			tests/test_function_divers.c\
+			tests/test_function_str.c\
+			tests/test_alias.c\
+			tests/test_unalias.c
 
 OBJ_TEST = $(addprefix $(SOURCE_DIR), $(SRC:.c=.o)) $(TO_TEST:.c=.o)
 
