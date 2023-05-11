@@ -127,7 +127,8 @@ SRC	=	mysh.c		\
 		builtins/fg/fg_no_args.c   			\
 		builtins/fg/fg_with_jid.c   			\
 		builtins/fg/fg_with_pid.c   			\
-		builtins/fg/send_cont.c
+		builtins/fg/send_cont.c 				\
+		builtins/which/which.c
 
 SRC_MAIN	=	src/main.c
 
