@@ -39,7 +39,8 @@ char *do_exclamation_mark(mysh_t *mysh, char *input)
     last_input = strdup(input + 1);
     if (last_input == NULL)
         return NULL;
-    if (input[0] == '\n' || input[0] == '\0') {
+    if (last_input[0] == '\n' || last_input[0] == '\0') {
+        mysh->display_line = false;
         return "!";
     }
     return search_command(mysh, last_input);

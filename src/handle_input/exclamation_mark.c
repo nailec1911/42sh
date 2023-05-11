@@ -41,6 +41,7 @@ static char *get_new_str_value(mysh_t *mysh, char *str, int from, int to)
         return str;
     if (to == 1) {
         free(name);
+        mysh->display_line = false;
         return str;
     }
     for (int i = 0; i < to; i += 1)

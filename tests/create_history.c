@@ -33,7 +33,7 @@ tab_hist_t **create_tab_hist(void)
 history_t create_history(void)
 {
     history_t hist = {0};
-    hist.command = NULL;
+    // hist.command = NULL;
     hist.fd_history_file = -1;
     hist.flags = NO_FLAG;
     hist.len_tab_hist = 3;
