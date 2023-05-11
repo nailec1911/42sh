@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 #include "macro_errors.h"
 #include "mysh.h"
 #include "str_func.h"
@@ -36,5 +37,9 @@ int exec_parenthesis(mysh_t *mysh, command_t *to_exec)
     waitpid(pid, &status, WUNTRACED);
     if (WIFEXITED(status))
         mysh->last_status = WEXITSTATUS(status);
+    if (to_exec->fd_in != STDIN_FILENO)
+        close(to_exec->fd_in);
+    if (to_exec->fd_out != STDOUT_FILENO)
+        close(to_exec->fd_out);
     return SUCCESS;
 }

@@ -6,12 +6,10 @@
 */
 
 #include <string.h>
-#include <stddef.h>
+#include <fcntl.h>
 #include "mysh.h"
 #include "builtins/builtins_func.h"
-#include "str_func.h"
 #include "macro_errors.h"
-#include "job_control.h"
 
 int exec_builtins(mysh_t *mysh, command_t *to_exec)
 {
