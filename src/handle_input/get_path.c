@@ -77,12 +77,10 @@ int get_path(mysh_t *mysh, char **path, command_t *to_exec)
         return ERROR;
     if ((*path = strdup(to_exec->args[0])) == NULL)
         return ERROR;
-    if (is_absolute_path(*path) == SUCCESS) {
+    if (is_absolute_path(to_exec->args[0]) == SUCCESS) {
         if (access(to_exec->args[0], F_OK) == 0)
             return SUCCESS;
         return FAILURE;
     }
-    if (try_env_paths(mysh, path) == ERROR)
-        return ERROR;
     return try_env_paths(mysh, path);
 }

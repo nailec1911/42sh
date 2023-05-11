@@ -19,6 +19,8 @@ static void free_command(command_t *command)
     for (int i = 0; i < command->nb_command; i += 1) {
         free(command->args[i]);
     }
+    if (command->path != NULL)
+        free(command->path);
     if (command->args != NULL)
         free(command->args);
     if (command->redirect_in.name != NULL)

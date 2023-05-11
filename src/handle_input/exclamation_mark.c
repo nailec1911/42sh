@@ -28,6 +28,7 @@ static char *insert_str(char *src, char *to_insert, int start, int end)
         res[ind ++] = src[i];
     res[ind] = '\0';
     free(src);
+    free(to_insert);
     return res;
 }
 
