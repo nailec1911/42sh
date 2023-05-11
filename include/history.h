@@ -26,7 +26,6 @@
 
     typedef struct histroy_s {
         int num_cmd;
-        char *command;
         int fd_history_file;
         int len_tab_hist;
         tab_hist_t **tab_hist;

@@ -67,7 +67,6 @@ int init_history(history_t *history)
     char *path = NULL;
     struct stat file;
 
-    history->num_cmd = 0;
     if ((path = set_all_fd(history)) == NULL)
         return SUCCESS;
     if (stat(path, &file) == -1)

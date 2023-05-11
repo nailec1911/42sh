@@ -237,28 +237,20 @@ Test(history19, exclamation_mark_num)
 {
     cr_redirect_stdout();
     mysh_t mysh = {0};
-    command_t to_exec = {0};
 
     mysh.history = create_history();
-    to_exec.fd_out = 1;
-    to_exec.args = (char *[2]){"!2"};
-    cr_assert_eq(do_exclamation_mark(&mysh, to_exec.args[1]), SUCCESS);
+    cr_assert_str_eq(do_exclamation_mark(&mysh, "!2"), "echo hello\n");
     cr_assert_eq(mysh.last_status, SUCCESS);
-    // cr_assert_stdout_eq_str("hello\n");
 }
 
 Test(history20, exclamation_mark_string)
 {
     cr_redirect_stdout();
     mysh_t mysh = {0};
-    command_t to_exec = {0};
 
     mysh.history = create_history();
-    to_exec.fd_out = 1;
-    to_exec.args = (char *[2]){"!echo"};
-    cr_assert_eq(do_exclamation_mark(&mysh, to_exec.args[1]), SUCCESS);
+    cr_assert_str_eq(do_exclamation_mark(&mysh, "!echo"), "echo hello\n");
     cr_assert_eq(mysh.last_status, SUCCESS);
-    // cr_assert_stdout_eq_str("hello\n");
 }
 
 Test(history21, exclamation_mark_wrong_1)
@@ -266,10 +258,10 @@ Test(history21, exclamation_mark_wrong_1)
     cr_redirect_stdout();
     cr_redirect_stderr();
     mysh_t mysh = {0};
-    char *input = strdup("!1000\n");
+    char *input = strdup("!1000");
 
     mysh.history = create_history();
-    cr_assert_eq(do_exclamation_mark(&mysh, input), SUCCESS);
+    cr_assert_null(do_exclamation_mark(&mysh, input));
     cr_assert_eq(mysh.last_status, 1);
     cr_assert_stderr_eq_str("1000: Event not found.\n");
 }
@@ -279,23 +271,20 @@ Test(history22, exclamation_mark_wrong_2)
     cr_redirect_stdout();
     cr_redirect_stderr();
     mysh_t mysh = {0};
-    char *input = strdup("!tutu\n");
+    char *input = strdup("!tutu");
 
     mysh.history = create_history();
-    cr_assert_eq(do_exclamation_mark(&mysh, input), SUCCESS);
+    cr_assert_null(do_exclamation_mark(&mysh, input));
     cr_assert_eq(mysh.last_status, 1);
     cr_assert_stderr_eq_str("tutu: Event not found.\n");
 }
 
 Test(history23, exclamation_mark_wrong_3)
 {
-    cr_redirect_stdout();
-    cr_redirect_stderr();
     mysh_t mysh = {0};
     char *str = strdup("!\n");
 
     mysh.history = create_history();
-    cr_assert_eq(do_exclamation_mark(&mysh, str), SUCCESS);
-    cr_assert_eq(mysh.last_status, 1);
-    cr_assert_stderr_eq_str("!: Command not found.\n");
+    cr_assert_str_eq(do_exclamation_mark(&mysh, str), "!");
+    cr_assert_eq(mysh.last_status, 0);
 }
