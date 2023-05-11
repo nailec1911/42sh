@@ -40,7 +40,7 @@ static char *get_var_str(mysh_t *mysh, char *name)
         return var->buffer;
     res = get_env_var(mysh, name);
     if (res)
-        return res;
+        return res + 1;
     fprintf(stderr, "%s: Undefined variable.\n", name);
     mysh->last_status = 1;
     return NULL;
