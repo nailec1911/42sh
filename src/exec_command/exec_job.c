@@ -23,7 +23,9 @@ job_list *lookup_job(job_list *list, int *nb_job)
                     &status, WNOHANG | WUNTRACED | WCONTINUED)) > 0) {
         update_process_status(list, pid, status);
         if (!(job = get_job_from_pid(list, pid)))
-            return list;
+            break;
+        for (int i = 0; i < job->nb_command; ++i)
+            update_process_status(list, pid - i, 0);
         if (job_is_completed(job)) {
             display_job_status(get_job_from_id(list, job->job_id));
             list = remove_job_from_list(list, job->job_id);
