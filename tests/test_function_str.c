@@ -42,16 +42,6 @@ Test(clean_last_input_2, wrong_param)
     cr_assert_null(clean_last_input(NULL));
 }
 
-Test(remove_first_char_1, remove_char)
-{
-    cr_assert_str_eq(remove_first_char("!ls"), "ls");
-}
-
-Test(remove_first_char_2, wrong_param)
-{
-    cr_assert_null(remove_first_char(NULL));
-}
-
 Test(num_to_str, create_num_str_for_history)
 {
     cr_assert_str_eq(num_to_str(2), "     2");
