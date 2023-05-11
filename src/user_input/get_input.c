@@ -107,10 +107,11 @@ char *get_input(mysh_t mysh)
     char *line = calloc(1024, sizeof(char));
 
     set_terminal(&o_term, &term, &mysh);
-    mysh.ch = 0;
     while (read(STDIN_FILENO, &mysh.ch, 1) > 0) {
         if ((line = ch_functions(&mysh, &index, &length, line)) == NULL)
             return NULL;
+        if (mysh.ch == '\f')
+            return strcpy(line, "clear -x\n");
         if (mysh.tab || mysh.enter)
             break;
     }
