@@ -39,11 +39,12 @@ static int exec_piped_process(mysh_t *mysh, and_command_t *job, int i)
     int tube[2];
 
     pipe(tube);
-    job->tab_command[i].fd_out = tube[1];
+    job->tab_command[i].fd_in = tube[0];
     job->job_mode = PIPELINE;
     res = exec_process(mysh, job, &job->tab_command[i], true);
-    close(tube[1]);
-    job->tab_command[i + 1].fd_in = tube[0];
+    close(tube[0]);
+    job->tab_command[i - 1].fd_out = tube[1];
+
     return res;
 }
 
@@ -55,11 +56,12 @@ int exec_job(mysh_t *mysh, and_command_t *job)
     if (!mysh || !job)
         return ERROR;
     lookup_job(mysh->list, &mysh->nb_current_job);
-    for (int i = 0; i < job->nb_command - 1; ++i)
+    for (int i = job->nb_command - 1; i >= 1; --i) {
         res = exec_piped_process(mysh, job, i);
+    }
     job->job_mode = init_mode;
     res = exec_process(mysh, job,
-        &job->tab_command[job->nb_command - 1], false);
+        &job->tab_command[0], false);
     if (job->job_mode == BACKGROUND)
         display_background(job);
     else if (res == 0) {

@@ -33,7 +33,7 @@ int wait_job(job_list *list, and_command_t *job)
         res = handle_errors(status);
         update_process_status(list, pid, status);
         count++;
-    } while (count < job->nb_command);
+    } while (count < 1);
 
     status = (res != 0) ? res : status;
 
