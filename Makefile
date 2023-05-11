@@ -147,7 +147,10 @@ TO_TEST	=	tests/test_function.c	\
 			tests/test_get_path.c	\
 			tests/test_globing.c	\
 			tests/test_full_sh.c	\
-			tests/test_full_sh_operators.c
+			tests/test_full_sh_operators.c\
+			tests/create_history.c \
+			tests/test_history.c\
+			tests/test_function_divers.c
 
 OBJ_TEST = $(addprefix $(SOURCE_DIR), $(SRC:.c=.o)) $(TO_TEST:.c=.o)
 
