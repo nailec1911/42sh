@@ -41,7 +41,7 @@ static bool is_builin(char *s)
 
 int do_which(mysh_t *mysh, command_t *to_exec)
 {
-    char *path;
+    char *path = "";
     if (!mysh || !to_exec)
         return SUCCESS;
     if (!to_exec->args[1]) {
