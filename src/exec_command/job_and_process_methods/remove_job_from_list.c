@@ -11,11 +11,14 @@
 
 static void free_command(command_t *process)
 {
+    if (process->is_ast) {
+        free_ast(process->parenthesis);
+        return;
+    }
     for (int i = 0; process->args[i]; ++i)
         free(process->args[i]);
     free(process->args);
     free(process->path);
-    free_ast(process->parenthesis);
 }
 
 static void free_and_command(and_command_t *job)
