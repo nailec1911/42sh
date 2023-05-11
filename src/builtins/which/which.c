@@ -39,26 +39,26 @@ static bool is_builin(char *s)
     return false;
 }
 
-int do_which(mysh_t *mysh, command_t *to_exec)
+int do_which(mysh_t *mysh, command_t *c)
 {
     char *path = "";
-    if (!mysh || !to_exec)
+    if (!mysh || !c)
         return SUCCESS;
-    if (!to_exec->args[1]) {
+    if (!c->args[1]) {
         fprintf(stderr, "which: Too few arguments.\n");
         return SUCCESS;
     }
-    for (int i = 1; to_exec->args[i]; ++i) {
-        if (is_builin(to_exec->args[i])) {
-            fprintf(stderr, "%s: shell built-in command.\n", to_exec->args[i]);
+    for (int i = 1; c->args[i]; ++i) {
+        if (is_builin(c->args[i])) {
+            dprintf(c->fd_out, "%s: shell built-in command.\n", c->args[i]);
             continue;
         }
-        to_exec->args[0] = strdup(to_exec->args[i]);
-        if (get_path(mysh, &path, to_exec) != SUCCESS) {
-            fprintf(stderr, "%s: Command not found.\n", to_exec->args[i]);
+        c->args[0] = strdup(c->args[i]);
+        if (get_path(mysh, &path, c) != SUCCESS) {
+            dprintf(c->fd_out, "%s: Command not found.\n", c->args[i]);
             continue;
         }
-        printf("%s\n", path);
+        dprintf(c->fd_out, "%s\n", path);
     }
     return SUCCESS;
 }
