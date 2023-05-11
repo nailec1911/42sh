@@ -21,6 +21,7 @@
     int do_setvar(mysh_t *mysh, command_t *to_exec);
     int do_unsetvar(mysh_t *mysh, command_t *to_exec);
     int do_fg(mysh_t *mysh, command_t *to_exec);
+    int do_which(mysh_t *mysh, command_t *to_exec);
 
     typedef struct builtin_s{
         char *command;
@@ -39,6 +40,7 @@
         {"set", &do_setvar},
         {"unset", &do_unsetvar},
         {"fg", &do_fg},
+        {"which", &do_which},
         {"\0", NULL}
     };
 
