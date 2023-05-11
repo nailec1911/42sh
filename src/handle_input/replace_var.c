@@ -44,7 +44,7 @@ static char *get_var_str(mysh_t *mysh, char *name)
 
 static char *get_new_str_value(mysh_t *mysh, char *str, int from, int to)
 {
-    char *name = calloc(to, 0);
+    char *name = calloc(to, 1);
     int offset = from + 1;
     char *var_str = NULL;
 

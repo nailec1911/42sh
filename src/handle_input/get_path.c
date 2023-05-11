@@ -55,12 +55,24 @@ static char *get_all_path(mysh_t *mysh)
     return my_strcat_with_char(env_path, default_path, ':');
 }
 
-int get_path(mysh_t *mysh, char **path, command_t *to_exec)
+static int try_env_paths(mysh_t *mysh, char **path)
 {
     char *env_path = NULL;
     char **all_prefix = NULL;
     int res_all_try = 0;
 
+    if ((env_path = get_all_path(mysh)) == NULL)
+        return ERROR;
+    if ((all_prefix = my_str_to_word_array(env_path, ":\0")) == NULL)
+        return ERROR;
+    free(env_path);
+    res_all_try = try_all_paths(all_prefix, path);
+    free_array(all_prefix);
+    return res_all_try;
+}
+
+int get_path(mysh_t *mysh, char **path, command_t *to_exec)
+{
     if (!mysh || !path || !to_exec || !to_exec->args)
         return ERROR;
     if ((*path = strdup(to_exec->args[0])) == NULL)
@@ -70,11 +82,7 @@ int get_path(mysh_t *mysh, char **path, command_t *to_exec)
             return SUCCESS;
         return FAILURE;
     }
-    if ((env_path = get_all_path(mysh)) == NULL)
+    if (try_env_paths(mysh, path) == ERROR)
         return ERROR;
-    if ((all_prefix = my_str_to_word_array(env_path, ":\0")) == NULL)
-        return ERROR;
-    res_all_try = try_all_paths(all_prefix, path);
-    free_array(all_prefix);
-    return res_all_try;
+    return try_env_paths(mysh, path);
 }
