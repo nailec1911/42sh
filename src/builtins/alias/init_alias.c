@@ -56,6 +56,10 @@ int init_alias(alias_t *alias)
 
     if (!alias)
         return ERROR;
+    alias->fd_alias_file = -1;
+    alias->tab_file = NULL;
+    if (isatty(SHELL_DESCRIPTOR) == 0)
+        return SUCCESS;
     path = set_all_fd(alias);
     if (path == NULL) {
         alias->tab_file = NULL;

@@ -62,11 +62,26 @@ static char *set_all_fd(history_t *history)
     return path;
 }
 
+static int set_default(history_t *history)
+{
+    if (!history)
+        return ERROR;
+    history->num_cmd = 0;
+    history->fd_history_file = -1;
+    history->tab_hist = NULL;
+    history->len_tab_hist = 0;
+    if (isatty(SHELL_DESCRIPTOR) == 0)
+        return ERROR;
+    return SUCCESS;
+}
+
 int init_history(history_t *history)
 {
     char *path = NULL;
     struct stat file;
 
+    if (set_default(history) != SUCCESS)
+        return SUCCESS;
     if ((path = set_all_fd(history)) == NULL)
         return SUCCESS;
     if (stat(path, &file) == -1)
