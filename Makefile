@@ -134,8 +134,6 @@ SRC_MAIN	=	src/main.c
 OBJ	=	$(addprefix $(SOURCE_DIR), $(SRC:.c=.o)) $(SRC_MAIN:.c=.o)
 
 TO_TEST	=	tests/test_function.c	\
-			tests/create_history.c \
-			tests/test_history.c\
 			tests/test_lexer.c	\
 			tests/test_parser.c	\
 			tests/test_var.c	\
@@ -150,8 +148,11 @@ TO_TEST	=	tests/test_function.c	\
 			tests/test_globing.c	\
 			tests/test_full_sh.c	\
 			tests/test_full_sh_operators.c\
+			tests/create_history.c \
+			tests/test_history.c\
 			tests/test_function_divers.c\
-			tests/test_function_str.c
+			tests/test_function_str.c\
+			tests/test_alias.c
 
 OBJ_TEST = $(addprefix $(SOURCE_DIR), $(SRC:.c=.o)) $(TO_TEST:.c=.o)
 
